@@ -68,6 +68,7 @@ jobs:
           APNS_KEY: ${{ secrets.APNS_KEY }}
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
           BETTER_AUTH_URL: ${{ secrets.BETTER_AUTH_URL }}
+          BULKVIN_API_KEY: ${{ secrets.BULKVIN_API_KEY }}
           CLOUDFLARE_R2_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY }}
           CLOUDFLARE_R2_ENDPOINT: ${{ secrets.CLOUDFLARE_R2_ENDPOINT }}
           CLOUDFLARE_R2_PUBLIC_URL: ${{ secrets.CLOUDFLARE_R2_PUBLIC_URL }}
@@ -80,9 +81,15 @@ jobs:
           DEPLOY_DB: ${{ secrets.DEPLOY_DB }}
           ONE_SERVER_URL: ${{ secrets.ONE_SERVER_URL }}
           POSTMARK_SERVER_TOKEN: ${{ secrets.POSTMARK_SERVER_TOKEN }}
+          POLAR_ACCESS_TOKEN: ${{ secrets.POLAR_ACCESS_TOKEN }}
+          POLAR_MODE: ${{ secrets.POLAR_MODE }}
+          POLAR_WEBHOOK_SECRET: ${{ secrets.POLAR_WEBHOOK_SECRET }}
+          REVENUECAT_API_KEY: ${{ secrets.REVENUECAT_API_KEY }}
+          REVENUECAT_WEBHOOK_AUTH: ${{ secrets.REVENUECAT_WEBHOOK_AUTH }}
           VITE_DEMO_MODE: ${{ secrets.VITE_DEMO_MODE }}
           VITE_POSTHOG_API_KEY: ${{ secrets.VITE_POSTHOG_API_KEY }}
           VITE_POSTHOG_HOST: ${{ secrets.VITE_POSTHOG_HOST }}
+          VITE_REVENUECAT_API_PUBLIC: ${{ secrets.VITE_REVENUECAT_API_PUBLIC }}
           VITE_ZERO_HOSTNAME: ${{ secrets.VITE_ZERO_HOSTNAME }}
           VITE_WEB_HOSTNAME: ${{ secrets.VITE_WEB_HOSTNAME }}
           ZERO_NUM_SYNC_WORKERS: ${{ secrets.ZERO_NUM_SYNC_WORKERS }}

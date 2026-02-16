@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 import { DEMO_EMAIL } from '~/constants/app'
 import { getDb } from '~/database'
 import { user as userTable, whitelist } from '~/database/schema-private'
-import { userPublic, userState } from '~/database/schema-public'
+import { userCredits, userPublic, userState } from '~/database/schema-public'
 
 export async function afterCreateUser(user: { id: string; email: string }) {
   try {
@@ -56,6 +56,21 @@ export async function afterCreateUser(user: { id: string; email: string }) {
         locale: 'en',
         timeZone: 'UTC',
         onlineStatus: 'online',
+      })
+    }
+
+    // initialize user credits if not exists
+    const existingCredits = await db
+      .select()
+      .from(userCredits)
+      .where(eq(userCredits.userId, userId))
+      .limit(1)
+
+    if (existingCredits.length === 0) {
+      await db.insert(userCredits).values({
+        id: crypto.randomUUID(),
+        userId,
+        balance: 0,
       })
     }
 

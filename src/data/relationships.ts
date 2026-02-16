@@ -8,6 +8,11 @@ export const userRelationships = relationships(tables.userPublic, ({ many, one }
     destSchema: tables.userState,
     destField: ['userId'],
   }),
+  credits: one({
+    sourceField: ['id'],
+    destSchema: tables.userCredits,
+    destField: ['userId'],
+  }),
   posts: many({
     sourceField: ['id'],
     destSchema: tables.post,
@@ -31,6 +36,11 @@ export const userRelationships = relationships(tables.userPublic, ({ many, one }
   devices: many({
     sourceField: ['id'],
     destSchema: tables.device,
+    destField: ['userId'],
+  }),
+  vehicleReports: many({
+    sourceField: ['id'],
+    destSchema: tables.vehicleReport,
     destField: ['userId'],
   }),
 }))
@@ -135,6 +145,38 @@ export const notificationRelationships = relationships(
   })
 )
 
+export const vehicleReportRelationships = relationships(
+  tables.vehicleReport,
+  ({ one }) => ({
+    user: one({
+      sourceField: ['userId'],
+      destSchema: tables.userPublic,
+      destField: ['id'],
+    }),
+    vehicle: one({
+      sourceField: ['vehicleId'],
+      destSchema: tables.vehicle,
+      destField: ['id'],
+    }),
+  })
+)
+
+export const vehicleRelationships = relationships(tables.vehicle, ({ many }) => ({
+  reports: many({
+    sourceField: ['id'],
+    destSchema: tables.vehicleReport,
+    destField: ['vehicleId'],
+  }),
+}))
+
+export const userCreditsRelationships = relationships(tables.userCredits, ({ one }) => ({
+  user: one({
+    sourceField: ['userId'],
+    destSchema: tables.userPublic,
+    destField: ['id'],
+  }),
+}))
+
 export const allRelationships = [
   userRelationships,
   postRelationships,
@@ -144,4 +186,7 @@ export const allRelationships = [
   userStateRelationships,
   commentRelationships,
   notificationRelationships,
+  vehicleReportRelationships,
+  vehicleRelationships,
+  userCreditsRelationships,
 ]

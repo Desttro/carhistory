@@ -144,10 +144,53 @@ const user = {
   ),
 }
 
+const userCredits = {
+  userCreditsByUserId: defineQuery(
+    v.object({
+      userId: v.string(),
+    }),
+    ({ args }) => Queries.userCredits.userCreditsByUserId(args)
+  ),
+}
+
+const vehicleReport = {
+  vehicleReportById: defineQuery(
+    v.object({
+      reportId: v.string(),
+    }),
+    ({ args }) => Queries.vehicleReport.vehicleReportById(args)
+  ),
+  vehicleReportsByUserId: defineQuery(
+    v.object({
+      userId: v.string(),
+      limit: v.optional(v.number()),
+    }),
+    ({ args }) => Queries.vehicleReport.vehicleReportsByUserId(args)
+  ),
+  vehicleReportsPaginated: defineQuery(
+    v.object({
+      userId: v.optional(v.string()),
+      pageSize: v.number(),
+      cursor: v.optional(
+        v.union([
+          v.object({
+            id: v.string(),
+            purchasedAt: v.number(),
+          }),
+          v.null(),
+        ])
+      ),
+    }),
+    ({ args }) => Queries.vehicleReport.vehicleReportsPaginated(args)
+  ),
+}
+
 export const queries = defineQueries({
   block,
   comment,
   notification,
   post,
   user,
+  userCredits,
+  vehicleReport,
 })

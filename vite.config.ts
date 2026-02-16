@@ -91,6 +91,8 @@ export default {
       // og image generation - native node addons
       '@resvg/resvg-js',
       'satori',
+      // cheerio has CommonJS deps (boolbase) that don't work with SSR bundling
+      'cheerio',
     ],
   },
 

@@ -22,5 +22,14 @@ export type ReportUpdate = TableUpdateRow<typeof schema.report>
 export type User = TableInsertRow<typeof schema.userPublic>
 export type UserUpdate = TableUpdateRow<typeof schema.userPublic>
 
+export type UserCredits = TableInsertRow<typeof schema.userCredits>
+export type UserCreditsUpdate = TableUpdateRow<typeof schema.userCredits>
+
 export type UserState = TableInsertRow<typeof schema.userState>
 export type UserStateUpdate = TableUpdateRow<typeof schema.userState>
+
+export type Vehicle = TableInsertRow<typeof schema.vehicle>
+export type VehicleUpdate = TableUpdateRow<typeof schema.vehicle>
+
+export type VehicleReport = TableInsertRow<typeof schema.vehicleReport>
+export type VehicleReportUpdate = TableUpdateRow<typeof schema.vehicleReport>

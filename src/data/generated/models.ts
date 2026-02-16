@@ -6,7 +6,10 @@ import * as notification from '../models/notification'
 import * as post from '../models/post'
 import * as report from '../models/report'
 import * as userPublic from '../models/user'
+import * as userCredits from '../models/userCredits'
 import * as userState from '../models/userState'
+import * as vehicle from '../models/vehicle'
+import * as vehicleReport from '../models/vehicleReport'
 
 export const models = {
   block,
@@ -15,8 +18,11 @@ export const models = {
   notification,
   post,
   report,
+  userCredits,
   userPublic,
   userState,
+  vehicle,
+  vehicleReport,
 }
 
 if (import.meta.hot) {

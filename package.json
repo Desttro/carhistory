@@ -1,5 +1,5 @@
 {
-  "name": "takeout",
+  "name": "carhistory",
   "version": "0.0.0",
   "private": true,
   "sideEffects": false,
@@ -241,7 +241,7 @@
     "access": "public"
   },
   "takeout": {
-    "onboarded": false
+    "onboarded": true
   },
   "upgradeSets": {
     "takeout": [
@@ -264,5 +264,6 @@
       "better-auth",
       "@better-auth/*"
     ]
-  }
+  },
+  "description": "carhistory - Built with Takeout starter kit"
 }

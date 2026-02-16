@@ -43,7 +43,7 @@ export default {
           return ''
       }
     })()}`,
-    slug: 'takeout',
+    slug: 'carhistory',
     owner: 'takeout',
     scheme: appId,
     version,

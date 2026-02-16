@@ -1,0 +1,47 @@
+{
+  "name": "@take-out/scripts",
+  "version": "0.1.26",
+  "type": "module",
+  "main": "./src/run.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/run.ts",
+      "default": "./src/run.ts"
+    },
+    "./package.json": "./package.json",
+    "./helpers/*": {
+      "types": "./src/helpers/*.ts",
+      "default": "./src/helpers/*.ts"
+    },
+    "./*": {
+      "types": "./src/*.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "lint": "oxlint src",
+    "lint:fix": "oxfmt src && oxlint --fix --fix-suggestions src",
+    "typecheck": "tko run typecheck"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "@lydell/node-pty": "^1.2.0-beta.3",
+    "@take-out/helpers": "workspace:*",
+    "picocolors": "^1.1.1"
+  },
+  "peerDependencies": {
+    "vxrn": "^1.6.16"
+  },
+  "peerDependenciesMeta": {
+    "vxrn": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "vxrn": "1.6.16"
+  }
+}

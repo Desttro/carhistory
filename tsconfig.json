@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+    // blocked by expo-modules-core
+    // "erasableSyntaxOnly": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "target": "ES2022",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "rewriteRelativeImportExtensions": true,
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noImplicitAny": false,
+    "jsx": "react-jsx",
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveConstEnums": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "types": ["node", "react", "vite/client", "bun", "one/env"],
+    "lib": ["dom", "esnext"]
+  },
+  "include": ["./src", "./scripts", "./app", "./sst-env.d.ts"],
+  "exclude": ["./packages"],
+  "typeAcquisition": {
+    "enable": true
+  }
+}

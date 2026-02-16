@@ -1,0 +1,67 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "rules": {
+    "files": "off",
+    "exports": "off",
+    "types": "off",
+    "duplicates": "off",
+    "optionalPeerDependencies": "off",
+    "binaries": "off",
+    "unresolved": "off",
+    "unlisted": "off"
+  },
+  "workspaces": {
+    ".": {
+      "entry": [
+        "app/**/*.{ts,tsx}",
+        "src/**/*.{ts,tsx}",
+        "scripts/**/*.ts",
+        "*.config.ts"
+      ],
+      "ignore": ["src/data/generated/**", "**/*.d.ts"],
+      "ignoreDependencies": [
+        "@types/*",
+        "@react-native-menu/menu",
+        "jsonwebtoken",
+        "motion",
+        "postmark",
+        "react-native-ios-context-menu",
+        "react-native-ios-utilities",
+        "zeego"
+      ]
+    },
+    "packages/cli": {
+      "entry": ["src/cli.ts"],
+      "project": ["src/**/*.ts"],
+      "ignoreDependencies": ["bun-types"]
+    },
+    "packages/helpers": {
+      "entry": ["src/*.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/hooks": {
+      "project": ["src/**/*.ts"]
+    },
+    "packages/postgres": {
+      "entry": ["src/cli.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/better-auth-utils": {
+      "project": ["src/**/*.ts"]
+    },
+    "packages/on-zero": {
+      "entry": ["src/index.ts", "src/cli.ts", "src/server.ts"],
+      "project": ["src/**/*.ts"],
+      "ignoreDependencies": ["valibot", "@sinclair/typebox"]
+    },
+    "packages/native-hot-update": {
+      "project": ["src/**/*.ts"]
+    },
+    "packages/scripts": {
+      "entry": ["src/*.ts", "src/helpers/*.ts"],
+      "project": ["src/**/*.ts"],
+      "ignore": ["src/build-initial.ts"]
+    }
+  },
+  "ignoreWorkspaces": ["packages/docs"]
+}

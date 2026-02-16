@@ -1,9 +1,9 @@
 // Brand
-export const APP_NAME = 'Takeout'
-export const APP_NAME_LOWERCASE = 'takeout'
+export const APP_NAME = 'CarHistory'
+export const APP_NAME_LOWERCASE = 'carhistory'
 
 // Domain
-export const DOMAIN = 'takeout.tamagui.dev'
+export const DOMAIN = 'carhistory.io'
 
 // Paths
 export const HELP_REQUESTS_PATH = '/requests'

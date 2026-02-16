@@ -11,7 +11,7 @@ await cmd`set up cloudflare dev tunnel for local development`
 
     handleProcessExit()
 
-    const TUNNEL_CONFIG_DIR = path.join(os.homedir(), '.onechat-tunnel')
+    const TUNNEL_CONFIG_DIR = path.join(os.homedir(), '.carhistory-tunnel')
     const TUNNEL_ID_FILE = path.join(TUNNEL_CONFIG_DIR, 'tunnel-id.txt')
 
     async function ensureCloudflared(): Promise<boolean> {
@@ -54,7 +54,7 @@ await cmd`set up cloudflare dev tunnel for local development`
         return tunnelId
       }
 
-      const tunnelName = `onechat-dev-${process.env.USER || 'tunnel'}`
+      const tunnelName = `carhistory-dev-${process.env.USER || 'tunnel'}`
 
       try {
         const { stdout, stderr } = await run(`cloudflared tunnel create ${tunnelName}`, {

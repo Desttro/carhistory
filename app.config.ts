@@ -1,6 +1,6 @@
 import type { ExpoConfig } from 'expo/config'
 
-const appName = 'Takeout'
+const appName = 'CarHistory'
 const appId = appName.toLowerCase()
 
 const { APP_VARIANT = 'development' } = process.env
@@ -16,13 +16,13 @@ if (
 const IS_DEV = APP_VARIANT === 'development'
 
 const getBundleId = () => {
-  // use tamagui bundle ids for production/preview, takeout for dev
+  // use tamagui bundle ids for production/preview, carhistory for dev
   if (APP_VARIANT === 'development') {
-    return 'dev.tamagui.takeout.dev'
+    return 'io.carhistory.app.dev'
   } else if (APP_VARIANT === 'preview') {
-    return 'dev.tamagui.takeout.preview'
+    return 'io.carhistory.app.preview'
   }
-  return 'dev.tamagui.takeout'
+  return 'io.carhistory.app'
 }
 
 const getAppIcon = () => {
@@ -44,7 +44,7 @@ export default {
       }
     })()}`,
     slug: 'carhistory',
-    owner: 'takeout',
+    owner: 'carverify',
     scheme: appId,
     version,
     runtimeVersion: version, // must be set to use hot-updater "appVersion" update strategy
@@ -169,7 +169,7 @@ export default {
     ],
     extra: {
       eas: {
-        projectId: '9c6754b4-4688-4f51-8c28-55f0b018bc32',
+        projectId: 'c41791cd-523b-440c-b05d-2a06ca9ce8ee',
       },
     },
   } satisfies ExpoConfig,

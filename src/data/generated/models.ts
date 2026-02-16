@@ -18,3 +18,7 @@ export const models = {
   userPublic,
   userState,
 }
+
+if (import.meta.hot) {
+  import.meta.hot.accept()
+}

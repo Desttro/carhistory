@@ -1,8 +1,8 @@
 import { H2, ScrollView, SizableText, YStack } from 'tamagui'
 
+import { useAuth } from '~/features/auth/client/authClient'
 import { CreditBalanceDisplay } from '~/features/credits/ui/CreditBalanceDisplay'
 import { PricingSheet } from '~/features/credits/ui/PricingSheet'
-import { useAuth } from '~/features/auth/client/authClient'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 import { PageLayout } from '~/interface/pages/PageLayout'
 

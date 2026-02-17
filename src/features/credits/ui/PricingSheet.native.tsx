@@ -7,11 +7,10 @@ import { SizableText, Spinner, XStack, YStack } from 'tamagui'
 import { useAuth } from '~/features/auth/client/authClient'
 import { useCredits } from '~/features/credits/useCredits'
 import { CREDIT_PACKAGES } from '~/features/payments/constants'
+import { PACKAGE_METADATA } from '~/features/payments/constants'
 import { useRevenueCat } from '~/features/payments/revenuecat'
 import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
-
-import { PACKAGE_METADATA } from '~/features/payments/constants'
 
 import { PackageCard } from './components/PackageCard'
 
@@ -93,20 +92,20 @@ export const PricingSheet = memo(
       }
     }
 
-    const handleRestore = async () => {
-      setIsPurchasing(true)
-      try {
-        const customerInfo = await Purchases.restorePurchases()
-        console.info('[Restore] success:', customerInfo.originalAppUserId)
-        await refreshCustomerInfo()
-        Alert.alert('Restore Complete', 'Your purchases have been restored.')
-      } catch (error: any) {
-        console.info('[Restore] error:', error)
-        Alert.alert('Restore Failed', error.message || 'Could not restore purchases')
-      } finally {
-        setIsPurchasing(false)
-      }
-    }
+    // const handleRestore = async () => {
+    //   setIsPurchasing(true)
+    //   try {
+    //     const customerInfo = await Purchases.restorePurchases()
+    //     console.info('[Restore] success:', customerInfo.originalAppUserId)
+    //     await refreshCustomerInfo()
+    //     Alert.alert('Restore Complete', 'Your purchases have been restored.')
+    //   } catch (error: any) {
+    //     console.info('[Restore] error:', error)
+    //     Alert.alert('Restore Failed', error.message || 'Could not restore purchases')
+    //   } finally {
+    //     setIsPurchasing(false)
+    //   }
+    // }
 
     return (
       <YStack gap="$4">
@@ -180,7 +179,7 @@ export const PricingSheet = memo(
           )}
         </YStack>
 
-        {isLoggedIn && (
+        {/* {isLoggedIn && (
           <Button
             variant="transparent"
             size="small"
@@ -189,7 +188,7 @@ export const PricingSheet = memo(
           >
             Restore Purchases
           </Button>
-        )}
+        )} */}
 
         <SizableText size="$2" color="$color9" text="center">
           Credits never expire.{' '}

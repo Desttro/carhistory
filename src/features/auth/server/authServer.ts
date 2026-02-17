@@ -53,7 +53,7 @@ export const authServer = betterAuth({
     ...(BETTER_AUTH_URL.includes(DOMAIN) && {
       crossSubDomainCookies: {
         enabled: true,
-        domain: '.tamagui.dev',
+        domain: '.carhistory.io',
       },
     }),
     ipAddress: {

@@ -16,6 +16,5 @@ export const plugins = [
   emailOTPClient(),
   phoneNumberClient(),
   platformClient(),
-  // @ts-expect-error polar plugin type mismatch with better-auth version
   polarClient(),
 ] satisfies BetterAuthClientPlugin[]

@@ -3,11 +3,6 @@ import { useState } from 'react'
 import { authClient } from '~/features/auth/client/authClient'
 import { CREDIT_PACKAGES } from '~/features/payments/constants'
 
-// type for polar checkout method (added by polarClient plugin)
-type AuthClientWithPolar = typeof authClient & {
-  checkout: (params: { slug?: string; products?: string[] }) => Promise<void>
-}
-
 export function usePurchaseCredits() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -18,7 +13,7 @@ export function usePurchaseCredits() {
 
     try {
       // this redirects to Polar checkout
-      await (authClient as AuthClientWithPolar).checkout({ slug })
+      await authClient.checkout({ slug })
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Purchase failed'
       setError(message)

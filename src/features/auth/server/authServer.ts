@@ -143,7 +143,6 @@ export const authServer = betterAuth({
     }),
 
     // polar payments integration
-    // @ts-expect-error polar plugin type mismatch with better-auth version
     polar({
       client: polarClient,
       createCustomerOnSignUp: true,

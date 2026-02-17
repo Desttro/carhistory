@@ -18,6 +18,11 @@ const PRIVATE_TABLES = [
   'verification',
   'whitelist',
   'migrations',
+  'reportHtml',
+  'parsedReport',
+  'timelineEvent',
+  'creditTransaction',
+  'promo',
 ]
 
 async function ensureZeroPublication() {

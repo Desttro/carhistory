@@ -1,3 +1,4 @@
+import { polarClient } from '@polar-sh/better-auth/client'
 import {
   adminClient,
   emailOTPClient,
@@ -15,4 +16,5 @@ export const plugins = [
   emailOTPClient(),
   phoneNumberClient(),
   platformClient(),
+  polarClient(),
 ] satisfies BetterAuthClientPlugin[]

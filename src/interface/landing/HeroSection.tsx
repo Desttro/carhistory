@@ -171,35 +171,37 @@ const HistoryEntry = memo(function HistoryEntry({
 
 const steps: CommandStep[] = [
   {
-    command: 'bun create takeout',
+    command: 'lookup 1HGBH41JXMN109186',
     output: [
-      '  Creating new Takeout app...',
-      '  Installing dependencies...',
-      '  Setting up Zero sync...',
-      '  Configuring auth...',
-      '  Done!',
+      '  Decoding VIN...',
+      '  2021 Honda Civic EX identified',
+      '  Searching USA records...',
+      '  Searching Europe records...',
     ],
   },
   {
-    command: 'cd my-app && bun onboard',
-    output: ['  (multi-step onboarding wizard 🧙‍♂️...)'],
-  },
-  {
-    command: 'bun dev',
+    command: 'check accidents',
     output: [
-      '  Starting development server...',
-      '  Vite: http://localhost:5173',
-      '  Expo: http://localhost:8081',
-      '  Ready in 1.2s',
+      '  Scanning accident databases...',
+      '  0 accidents found',
+      '  No structural damage reported',
     ],
   },
   {
-    command: 'bun ops release',
+    command: 'check title',
     output: [
-      '  Building for production...',
-      '  Running migrations...',
-      '  Deploying...',
-      '  Live at https://my-app.com',
+      '  Verifying title history...',
+      '  Clean title confirmed',
+      '  No salvage or flood brands',
+      '  2 owners reported',
+    ],
+  },
+  {
+    command: 'generate report',
+    output: [
+      '  Compiling 47 records...',
+      '  Report ready',
+      '  carhistory.io/reports/ch_r91x',
     ],
   },
 ]
@@ -302,7 +304,7 @@ function HeroTerminal() {
           mr="$8"
           select="none"
         >
-          takeout-cli
+          CarHistory
         </Paragraph>
       </TerminalHeader>
 
@@ -359,7 +361,7 @@ function HeroTerminal() {
   )
 }
 
-const INSTALL_COMMAND = 'bun create takeout'
+const INSTALL_COMMAND = '1HGBH41JXMN109186'
 
 function PhoneMockup() {
   return (
@@ -513,34 +515,33 @@ export function HeroSection() {
         >
           <YStack gap="$1">
             <HeroTitle>
-              The <Span $max-xl={{ display: 'none' }}>startup</Span> starter that{' '}
-              <HighlightText fontStyle="italic">actually</HighlightText> delivers.
+              Check any car's <Span $max-xl={{ display: 'none' }}>complete </Span>
+              <HighlightText fontStyle="italic">history</HighlightText> before you buy.
             </HeroTitle>
           </YStack>
 
           <HeroSubtitle>
             <Strong color="$color11">
-              Most starter kits <HighlightText fontWeight="700">suck</HighlightText>
+              Buying a used car is <HighlightText fontWeight="700">risky</HighlightText>
             </Strong>
-            . <Strong color="$color11">Takeout sucks less.</Strong> We&nbsp;took
-            novel&nbsp;tech, made it work well, then&nbsp;added CI/CD, IaC, UI, lots of
-            “agent” stuff, and <Link href="/docs/changelog">a changelog</Link> —
-            it's&nbsp;what we use for ourselves, and our{' '}
-            <Link href="https://addeven.com">clients</Link>.
+            . <Strong color="$color11">CarHistory makes it safer.</Strong>{' '}
+            Get&nbsp;detailed vehicle&nbsp;history reports powered by USA and EU databases
+            — covering accidents, title&nbsp;records, odometer&nbsp;checks,
+            service&nbsp;history, and <Link href="/help">more</Link>.
           </HeroSubtitle>
 
           <HeroSubtitle>
-            It's the{' '}
+            The{' '}
             <Strong fontWeight="600" color="$color11">
-              fastest way to build something&nbsp;great
+              fastest and most affordable way to run a VIN&nbsp;check
             </Strong>{' '}
-            on both React Native and web. <BetaBadge x={9} display="inline-flex" />
+            — reports start at just $4.99 per check.
           </HeroSubtitle>
 
           <XStack maxW="100%" gap="$3" mt="$2" items="center">
-            <Link href="/docs/introduction">
+            <Link href="/home/vin-lookup">
               <Button theme="accent" size="large" icon={ArrowRightIcon} iconAfter>
-                Docs
+                Check a VIN
               </Button>
             </Link>
 
@@ -548,13 +549,13 @@ export function HeroSection() {
           </XStack>
 
           <Paragraph size="$6" $lg={{ size: '$7' }} color="$color9">
-            Check the{' '}
-            <Link href="https://tamagui.dev/takeout" target="_blank">
-              <Span color="$color12">pro version</Span>
+            See{' '}
+            <Link href="/pricing" target="_blank">
+              <Span color="$color12">pricing and credits</Span>
             </Link>{' '}
-            or the{' '}
-            <Link href="https://github.com/tamagui/takeout-free" target="_blank">
-              <Span color="$color12">free one</Span>
+            or check out our{' '}
+            <Link href="/help" target="_blank">
+              <Span color="$color12">help center</Span>
             </Link>
             .
           </Paragraph>

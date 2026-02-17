@@ -2,11 +2,14 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgTable,
   text,
   timestamp,
   unique,
 } from 'drizzle-orm/pg-core'
+
+import type { CanonicalReport } from '~/features/reports/types'
 
 export const userPublic = pgTable('userPublic', {
   id: text('id').primaryKey(),
@@ -160,4 +163,82 @@ export const notification = pgTable(
     index('notification_userId_read_idx').on(table.userId, table.read),
     index('notification_createdAt_idx').on(table.createdAt),
   ]
+)
+
+// vehicle - stores canonical vehicle identity by VIN
+export const vehicle = pgTable(
+  'vehicle',
+  {
+    id: text('id').primaryKey(), // use VIN as ID
+    vin: text('vin').notNull().unique(),
+    year: integer('year'),
+    make: text('make'),
+    model: text('model'),
+    trim: text('trim'),
+    bodyStyle: text('bodyStyle'),
+    engine: text('engine'),
+    transmission: text('transmission'),
+    drivetrain: text('drivetrain'),
+    fuelType: text('fuelType'),
+    vehicleClass: text('vehicleClass'),
+    countryOfAssembly: text('countryOfAssembly'),
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt', { mode: 'string' }),
+  },
+  (table) => [index('vehicle_make_model_idx').on(table.make, table.model)]
+)
+
+// vehicleReport - ONE REPORT PER PURCHASE (not per VIN)
+// this is the main report entity that users purchase access to
+export const vehicleReport = pgTable(
+  'vehicleReport',
+  {
+    id: text('id').primaryKey(),
+    vehicleId: text('vehicleId').notNull(), // VIN (links to vehicle table)
+    userId: text('userId').notNull(),
+
+    // purchase/access tracking
+    purchasedAt: timestamp('purchasedAt', { mode: 'string' }).defaultNow().notNull(),
+    expiresAt: timestamp('expiresAt', { mode: 'string' }).notNull(), // purchasedAt + 30 days
+
+    // merged summary from all sources at time of purchase
+    estimatedOwners: integer('estimatedOwners'),
+    accidentCount: integer('accidentCount'),
+    odometerLastReported: integer('odometerLastReported'),
+    odometerLastDate: text('odometerLastDate'),
+    odometerIssues: boolean('odometerIssues').default(false),
+    titleBrands: jsonb('titleBrands').$type<string[]>(),
+    totalLoss: boolean('totalLoss').default(false),
+    openRecallCount: integer('openRecallCount'),
+
+    // counts
+    eventCount: integer('eventCount').default(0),
+    serviceRecordCount: integer('serviceRecordCount').default(0),
+
+    // which sources were used
+    sourceProviders: jsonb('sourceProviders').$type<string[]>(),
+
+    // full canonical JSON for API response
+    canonicalJson: jsonb('canonicalJson').$type<CanonicalReport>(),
+
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+  },
+  (table) => [
+    index('vehicleReport_vehicleId_idx').on(table.vehicleId),
+    index('vehicleReport_userId_idx').on(table.userId),
+    index('vehicleReport_expiresAt_idx').on(table.expiresAt),
+  ]
+)
+
+// userCredits - user credit balance for purchasing reports
+export const userCredits = pgTable(
+  'userCredits',
+  {
+    id: text('id').primaryKey(),
+    userId: text('userId').notNull().unique(),
+    balance: integer('balance').notNull().default(0),
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt', { mode: 'string' }),
+  },
+  (table) => [index('userCredits_userId_idx').on(table.userId)]
 )

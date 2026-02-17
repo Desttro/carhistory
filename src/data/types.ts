@@ -1,4 +1,13 @@
-import type { Block, Comment, Post, Report, User, UserState } from './generated/types'
+import type {
+  Block,
+  Comment,
+  Post,
+  Report,
+  User,
+  UserState,
+  Vehicle,
+  VehicleReport,
+} from './generated/types'
 
 export type * from './generated/types'
 
@@ -28,6 +37,7 @@ export type UserWithRelations = User & {
   posts?: readonly Post[]
   blocking?: readonly Block[]
   blockedBy?: readonly Block[]
+  vehicleReports?: readonly VehicleReport[]
 }
 
 export type ReportWithRelations = Report & {
@@ -35,4 +45,12 @@ export type ReportWithRelations = Report & {
   reportedUser?: User
   reportedPost?: Post
   reviewer?: User
+}
+
+export type VehicleReportWithVehicle = VehicleReport & {
+  vehicle?: Vehicle
+}
+
+export type VehicleWithReports = Vehicle & {
+  reports?: readonly VehicleReport[]
 }

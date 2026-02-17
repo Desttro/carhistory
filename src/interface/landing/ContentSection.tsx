@@ -1,9 +1,10 @@
 import { H1, H2, H3, H4, Paragraph, styled, Text, XStack, YStack } from 'tamagui'
 
 import { Link } from '~/interface/app/Link'
-import { OneLogo } from '~/interface/icons/logos/OneLogo'
-import { TamaguiLogo } from '~/interface/icons/logos/TamaguiLogo'
-import { ZeroLogo } from '~/interface/icons/logos/ZeroLogo'
+import { DatabaseIcon } from '~/interface/icons/phosphor/DatabaseIcon'
+import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
+import { MagnifyingGlassIcon } from '~/interface/icons/phosphor/MagnifyingGlassIcon'
+import { ShieldCheckIcon } from '~/interface/icons/phosphor/ShieldCheckIcon'
 import { Em, InlineLink, Strong } from '~/interface/text/Text'
 
 const SectionContainer = styled(YStack, {
@@ -34,16 +35,6 @@ const TechTitle = styled(H3, {
   fontWeight: '700',
 })
 
-const CodeInline = styled(Text, {
-  fontFamily: '$mono',
-  bg: '$color3',
-  render: 'code',
-  px: '$2',
-  py: '$1',
-  rounded: '$3',
-  color: '$color11',
-})
-
 const SectionDivider = styled(XStack, {
   items: 'center',
   gap: '$4',
@@ -63,12 +54,6 @@ const GoalItem = styled(YStack, {
   borderLeftWidth: 2,
   ml: -2,
   borderLeftColor: '$color5',
-})
-
-const SubGoalItem = styled(YStack, {
-  gap: '$1',
-  pl: '$4',
-  mt: '$3',
 })
 
 const TechCard = styled(YStack, {
@@ -115,250 +100,184 @@ export function ContentSection() {
     <SectionContainer gap="$6">
       {/* title */}
       <ContentTitle>
-        <GradientText>Ultra high quality</GradientText> apps on every platform shipped{' '}
-        <GradientText>faster than slop</GradientText>
+        <GradientText>Every accident.</GradientText> Every owner. Every mile.{' '}
+        <GradientText>One report.</GradientText>
       </ContentTitle>
 
       {/* tldr */}
       <ContentParagraph color="$color12">
-        Takeout is the result of a many-year effort to create{' '}
+        CarHistory gives you{' '}
         <Strong>
-          a new stack, with some new frontend tech that dramatically simplifies
-          cross-platform development
+          comprehensive vehicle history reports combining data from Carfax and AutoCheck
         </Strong>
-        . It makes three things simpler and faster than before: framework, data, and UI.
+        . One VIN check reveals accident records, title history, odometer readings,
+        service logs, and ownership changes.
       </ContentParagraph>
 
       <ContentParagraph>
-        Today,{' '}
-        <Link href="https://tamagui.dev/takeout" hideExternalIcon>
-          <InlineLink fontWeight="600">we're releasing Takeout 2 RC 1</InlineLink>
-        </Link>
-        , bringing a more Rails-like cohesion to cross-platform React and React Native.
+        Every report pulls from{' '}
+        <Strong color="$color11">industry-leading automotive databases</Strong>, covering
+        DMV records, insurance claims, auction results, dealer service records, recall
+        notices, and inspection history — all cross-referenced to flag discrepancies.
       </ContentParagraph>
 
       <ContentParagraph>
-        Even when sharing a lot of code you can easily get 90+ Lighthouse performance
-        scores, like this very page, thanks to our libraries{' '}
-        <Link href="https://tamagui.dev" target="_blank" hideExternalIcon>
-          <InlineLink>Tamagui</InlineLink>
+        Whether you're <Strong color="$color11">buying a used car</Strong>, selling your
+        vehicle, or just curious about its past — a{' '}
+        <Link href="/home/vin-lookup">
+          <InlineLink fontWeight="600">CarHistory report</InlineLink>
         </Link>{' '}
-        and{' '}
-        <Link href="https://onestack.dev" target="_blank" hideExternalIcon>
-          <InlineLink>One</InlineLink>
-        </Link>
-        . Then, make your app come alive better and easier than ever before with{' '}
-        <Link href="https://zero.rocicorp.dev" target="_blank" hideExternalIcon>
-          <InlineLink>Zero</InlineLink>
-        </Link>
-        .
+        shows you what the seller might not.
       </ContentParagraph>
 
       {/* goals section */}
       <SectionDivider>
         <DividerLine />
-        <SectionHeading>Goals</SectionHeading>
+        <SectionHeading>What every report covers</SectionHeading>
         <DividerLine />
       </SectionDivider>
 
       <YStack gap="$8">
         <GoalItem>
-          <GoalTitle>Universal</GoalTitle>
+          <GoalTitle>Accident and damage history</GoalTitle>
           <ContentParagraph>
-            Target iOS, Android, Web and Desktop using React and React Native with fully
-            shared code <Em>that feels native and runs fast</Em>. You don't have to share
-            everything, you don't have to target every platform - but you can, with ease.
+            Find out if a vehicle has been in any collisions — including{' '}
+            <Em>severity, structural damage, airbag deployment, and repair records</Em>.
+            Reports include visual damage mapping so you can see exactly where impact
+            occurred.
           </ContentParagraph>
         </GoalItem>
 
         <GoalItem>
-          <GoalTitle>DRY and simple</GoalTitle>
+          <GoalTitle>Title and ownership records</GoalTitle>
           <ContentParagraph>
-            A single repo, <CodeInline>package.json</CodeInline>, bundler, framework, and
-            router. A single set of routes, hooks, and helpers. A single way to do
-            styling, UI, and data. All of your backend, frontend, and infrastructure,
-            defined in code, deployed with a push. Data queried and mutated quickly,
-            safely, simply, and optimistically, with no glue.
+            Check for <Em>salvage, rebuilt, flood, and lemon title brands</Em> that can
+            drastically reduce a car's value and safety. Know how many people have owned
+            the car and trace the full chain of registration history.
           </ContentParagraph>
         </GoalItem>
 
         <GoalItem>
-          <GoalTitle>Platform-native</GoalTitle>
+          <GoalTitle>Odometer verification</GoalTitle>
           <ContentParagraph>
-            A top-tier experience on every platform, served from a single Vite app and
-            file system route setup:
-          </ContentParagraph>
-
-          <SubGoalItem>
-            <ContentParagraph>
-              A <Strong>website</Strong> with great Lighthouse scores, all the latest CSS
-              features, and perfectly hydrated static or server rendered pages (even when
-              using spring animations, media queries, and light/dark mode, etc).
-            </ContentParagraph>
-          </SubGoalItem>
-
-          <SubGoalItem>
-            <ContentParagraph>
-              A <Strong>web app</Strong> that can be client-only and look and feel great
-              despite having fully shared code with a performant site.
-            </ContentParagraph>
-          </SubGoalItem>
-
-          <SubGoalItem>
-            <ContentParagraph>
-              And of course, <Strong>native iOS and Android apps</Strong> with native UI
-              and navigation, Liquid Glass, Material UI, etc.
-            </ContentParagraph>
-          </SubGoalItem>
-        </GoalItem>
-
-        <GoalItem>
-          <GoalTitle>Fast, both ways</GoalTitle>
-          <ContentParagraph>
-            Fast in both development speed and runtime performance.
+            Detect odometer rollbacks and mileage discrepancies by cross-referencing{' '}
+            <Em>inspection records, service visits, and title transfers</Em>. Odometer
+            fraud affects hundreds of thousands of vehicles every year — our reports flag
+            it automatically.
           </ContentParagraph>
         </GoalItem>
 
         <GoalItem>
-          <GoalTitle>Low risk</GoalTitle>
+          <GoalTitle>Service and maintenance history</GoalTitle>
           <ContentParagraph>
-            Self host or deploy to the cloud. Runs on Postgres. Unplug parts you don't
-            like. Libraries chosen for being OSS, popular, single-purpose, and well
-            maintained and documented.
+            See a vehicle's maintenance timeline including{' '}
+            <Em>
+              oil changes, brake repairs, tire rotations, and dealer service records
+            </Em>
+            . A well-maintained car is a better buy — and a missing service history is a
+            red flag.
           </ContentParagraph>
         </GoalItem>
 
         <GoalItem>
-          <GoalTitle>AI-native</GoalTitle>
+          <GoalTitle>Recall and safety alerts</GoalTitle>
           <ContentParagraph>
-            Point a coding agent at Takeout and prompt an entire app into production in
-            hours. <Strong>Over 25 hand-written skills,</Strong> essential MCP
-            integrations, integration tests, an amazing <CodeInline>takeout</CodeInline>{' '}
-            CLI, and a ton of well-structured scripts make Claude Code amazing at
-            one-shotting almost anything.
+            Check for open manufacturer recalls and safety defects. Know whether{' '}
+            <Em>recall repairs have been completed or are still outstanding</Em> before
+            you drive off the lot.
+          </ContentParagraph>
+        </GoalItem>
+
+        <GoalItem>
+          <GoalTitle>Auction and listing history</GoalTitle>
+          <ContentParagraph>
+            See if a vehicle has been through{' '}
+            <Em>wholesale auctions, dealer lots, or multiple listings</Em>. Auction data
+            reveals pricing trends and can detect vehicles being flipped quickly — a
+            common sign of hidden problems.
           </ContentParagraph>
         </GoalItem>
       </YStack>
 
-      {/* in the box section */}
+      {/* how it works section */}
       <SectionDivider>
         <DividerLine />
-        <SectionHeading>In the box</SectionHeading>
+        <SectionHeading>How it works</SectionHeading>
         <DividerLine />
       </SectionDivider>
 
       <YStack gap="$5">
         <TechCard>
           <XStack items="center" gap="$3">
-            <LogoWrapper bg="rgba(245, 202, 5, 0.15)">
-              <OneLogo size={24} />
-            </LogoWrapper>
-            <Link href="https://onestack.dev" target="_blank" hideExternalIcon>
-              <TechTitle color="$color12">One</TechTitle>
-            </Link>
-          </XStack>
-
-          <ContentParagraph>
-            Vite is the best bundler for web. One ported Expo Router to Vite, then added a
-            lot of stuff needed for high performance web: loaders, render modes, smart
-            preloading and prefetching, and bundle size improvements. And a whole bunch
-            more than that.
-          </ContentParagraph>
-
-          <ContentParagraph>
-            The new <Strong>Metro-mode</Strong> gives you Vite's simplicity for web, and
-            Metro's maturity on native. One is stable for production use, and{' '}
-            <Link href="https://onestack.dev/blog/version-one-rc1" hideExternalIcon>
-              <InlineLink fontWeight="600">read our v1 RC1 releae post here</InlineLink>
-            </Link>
-            .
-          </ContentParagraph>
-        </TechCard>
-
-        <TechCard>
-          <XStack items="center" gap="$3">
-            <LogoWrapper bg="rgba(236, 210, 10, 0.15)">
-              <TamaguiLogo size={24} />
-            </LogoWrapper>
-            <Link href="https://tamagui.dev" target="_blank" hideExternalIcon>
-              <TechTitle color="$color12">Tamagui</TechTitle>
-            </Link>
-          </XStack>
-
-          <ContentParagraph>
-            Tamagui just gives you{' '}
-            <Strong color="$color11">
-              so much good stuff in a vertically integrated package
-            </Strong>
-            , it's hard to beat. With version two, a lot of hard work is finally paying
-            off.
-          </ContentParagraph>
-
-          <ContentParagraph>
-            Native feels amazing, and web catches up with all the latest styling features.
-            It's also <Strong color="$color11">great for LLMs</Strong>, and generates
-            customized skills.
-          </ContentParagraph>
-
-          <ContentParagraph>
-            <Link
-              href="https://tamagui.dev/blog/version-two"
-              target="_blank"
-              hideExternalIcon
-            >
-              <InlineLink fontWeight="600">Version 2 RC1 is out now</InlineLink>
-            </Link>{' '}
-            with too much to list.
-          </ContentParagraph>
-        </TechCard>
-
-        <TechCard>
-          <XStack items="center" gap="$3">
             <LogoWrapper bg="rgba(59, 130, 246, 0.15)">
-              <ZeroLogo size={24} />
+              <MagnifyingGlassIcon size={24} color="$blue10" />
             </LogoWrapper>
-            <Link href="https://zero.rocicorp.dev" target="_blank" hideExternalIcon>
-              <TechTitle color="$blue11">Zero</TechTitle>
-            </Link>
+            <TechTitle color="$color12">Enter your VIN</TechTitle>
           </XStack>
 
           <ContentParagraph>
-            <Strong color="$color12">
-              Zero solves the worst area of frontend development today
+            Every vehicle has a unique 17-character Vehicle Identification Number. You'll
+            find it on the{' '}
+            <Strong color="$color11">
+              driver's side dashboard, door jamb, or vehicle registration
             </Strong>
-            : getting data to the client, keeping it in sync, and mutating it instantly.
-            It's{' '}
-            <Strong>
-              like Firebase, but open source, on Postgres, with relations, types, and
-              optimistic mutations built in
-            </Strong>
-            .
-          </ContentParagraph>
-
-          <ContentParagraph>
-            Our <CodeInline>on-zero</CodeInline>
-            {/* <Link
-              href="https://github.com/tamagui/takeout-free/blob/main/packages/on-zero/readme.md"
-              target="_blank"
-              hideExternalIcon
-            >
-              <InlineLink fontWeight="600">on-zero</InlineLink>
-            </Link>{' '} */}{' '}
-            library (repo coming) makes it feel like Rails, and auto generating
-            boilerplate, gluing things together, giving you simple CRUD and permissions,
-            and more.
+            . Paste it into our{' '}
+            <Link href="/home/vin-lookup">
+              <InlineLink fontWeight="600">VIN lookup tool</InlineLink>
+            </Link>{' '}
+            and we'll start searching instantly.
           </ContentParagraph>
         </TechCard>
 
         <TechCard>
-          <TechTitle>And a bunch of things we use</TechTitle>
+          <XStack items="center" gap="$3">
+            <LogoWrapper bg="rgba(34, 197, 94, 0.15)">
+              <DatabaseIcon size={24} color="$green10" />
+            </LogoWrapper>
+            <TechTitle color="$color12">We search the databases</TechTitle>
+          </XStack>
+
           <ContentParagraph>
-            This isn't just some thrown together starter, it's extracted from the stack
-            we've always wanted, and we use it ourselves to start new projects.{' '}
-            <Strong color="$color12">There's 50+ interface folders alone</Strong>. Plus
-            the best libraries we can find, like{' '}
-            <Strong color="$color12">Better Auth</Strong> for auth, or{' '}
-            <Strong>Uncloud</Strong> and <Strong>SST</Strong> options for production.
+            Your VIN is checked against{' '}
+            <Strong color="$color11">both Carfax and AutoCheck</Strong> databases
+            simultaneously. We cross-reference DMV records, insurance claims, auction
+            results, dealer service records, law enforcement reports, and more to build a
+            complete picture.
+          </ContentParagraph>
+        </TechCard>
+
+        <TechCard>
+          <XStack items="center" gap="$3">
+            <LogoWrapper bg="rgba(168, 85, 247, 0.15)">
+              <FileTextIcon size={24} color="$purple10" />
+            </LogoWrapper>
+            <TechTitle color="$color12">Get your report</TechTitle>
+          </XStack>
+
+          <ContentParagraph>
+            Your report is ready in seconds — complete with visual damage mapping,
+            timeline view, and easy-to-read summaries. One credit gets you one full
+            report, starting at just{' '}
+            <Link href="/home/pricing">
+              <InlineLink fontWeight="600">$4.99</InlineLink>
+            </Link>
+            .
+          </ContentParagraph>
+        </TechCard>
+
+        <TechCard>
+          <XStack items="center" gap="$3">
+            <LogoWrapper bg="rgba(234, 179, 8, 0.15)">
+              <ShieldCheckIcon size={24} color="$yellow10" />
+            </LogoWrapper>
+            <TechTitle color="$color12">Buy with confidence</TechTitle>
+          </XStack>
+
+          <ContentParagraph>
+            Hidden accidents, salvage titles, odometer fraud — a CarHistory report helps
+            you{' '}
+            <Strong color="$color11">avoid surprises and negotiate a fair price</Strong>.
+            Know exactly what you're buying before you sign.
           </ContentParagraph>
         </TechCard>
       </YStack>
@@ -370,15 +289,15 @@ export function ContentSection() {
 
       <YStack gap="$4">
         <ContentParagraph>
-          We built Takeout for ourselves, much like Tamagui and One. They're passion
-          projects born out of stubbornly wanting better things. We hope you enjoy this
-          somewhat early version of our new stack.
+          We built CarHistory because buying a used car shouldn't be a gamble. Every
+          vehicle has a story — and you deserve to read it before you sign. Our mission is
+          to bring transparency to the used car market, one VIN at a time.
         </ContentParagraph>
 
         <ContentParagraph>
           -{' '}
-          <Link href="https://x.com/natebirdman" target="_blank" hideExternalIcon>
-            <InlineLink>Nate</InlineLink>
+          <Link href="/help">
+            <InlineLink>The CarHistory Team</InlineLink>
           </Link>
         </ContentParagraph>
       </YStack>

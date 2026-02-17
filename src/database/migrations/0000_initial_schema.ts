@@ -1,4 +1,4 @@
-import sql from './0001_initial_schema.sql?raw'
+import sql from './0000_initial_schema.sql?raw'
 
 import type { PoolClient } from 'pg'
 

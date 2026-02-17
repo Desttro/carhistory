@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { useAuth } from '~/features/auth/client/authClient'
+import { RevenueCatProvider } from '~/features/payments/revenuecat'
 
 import { Splash } from '../splash/splash'
 
@@ -37,16 +38,18 @@ export function PlatformSpecificRootProvider({ children }: { children: ReactNode
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardProvider>
-        {showSplash && (
-          <Splash
-            isReady={true}
-            onAnimationEnd={() => {
-              splashHasBeenShown = true
-              setShowSplash(false)
-            }}
-          />
-        )}
-        {children}
+        <RevenueCatProvider>
+          {showSplash && (
+            <Splash
+              isReady={true}
+              onAnimationEnd={() => {
+                splashHasBeenShown = true
+                setShowSplash(false)
+              }}
+            />
+          )}
+          {children}
+        </RevenueCatProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
   )

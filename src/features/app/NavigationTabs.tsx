@@ -2,8 +2,9 @@ import { usePathname } from 'one'
 import { useMedia } from 'tamagui'
 
 import { Link } from '~/interface/app/Link'
-import { HouseIcon } from '~/interface/icons/phosphor/HouseIcon'
-import { SparkleIcon } from '~/interface/icons/phosphor/SparkleIcon'
+import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
+import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
+import { MagnifyingGlassIcon } from '~/interface/icons/phosphor/MagnifyingGlassIcon'
 import { UserCircleIcon } from '~/interface/icons/phosphor/UserCircleIcon'
 import { RovingTabs } from '~/interface/tabs/RovingTabs'
 
@@ -17,8 +18,9 @@ type TabRoute = {
 }
 
 const routes: TabRoute[] = [
-  { name: 'home', href: '/home/feed', icon: HouseIcon },
-  { name: 'ai', href: '/home/ai', icon: SparkleIcon },
+  { name: 'vin-lookup', href: '/home/vin-lookup', icon: MagnifyingGlassIcon },
+  { name: 'reports', href: '/home/reports', icon: FileTextIcon },
+  { name: 'pricing', href: '/home/pricing', icon: CoinsIcon },
   { name: 'profile', href: '/home/profile', icon: UserCircleIcon },
 ]
 
@@ -28,7 +30,7 @@ export function NavigationTabs() {
   const iconSize = media.sm ? 24 : 20
 
   const currentTab =
-    routes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ?? 'home'
+    routes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ?? 'vin-lookup'
 
   return (
     <RovingTabs value={currentTab} indicatorStyle="underline">

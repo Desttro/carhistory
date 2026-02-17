@@ -22,11 +22,10 @@ import {
   rigidImpact,
   softImpact,
 } from '~/interface/haptics/haptics'
+import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
+import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
 import { GearIcon } from '~/interface/icons/phosphor/GearIcon'
-import { HouseIcon } from '~/interface/icons/phosphor/HouseIcon'
 import { MagnifyingGlassIcon } from '~/interface/icons/phosphor/MagnifyingGlassIcon'
-import { PencilSimpleIcon } from '~/interface/icons/phosphor/PencilSimpleIcon'
-import { SparkleIcon } from '~/interface/icons/phosphor/SparkleIcon'
 import { UserIcon } from '~/interface/icons/phosphor/UserIcon'
 
 import { Pressable } from '../../interface/buttons/Pressable'
@@ -48,15 +47,13 @@ export interface ExpandedMenuItemType {
 }
 
 const EXPANDED_MENU_ITEMS: ExpandedMenuItemType[] = [
-  { icon: PencilSimpleIcon, label: 'Create Post', route: 'create-post' },
-  { icon: MagnifyingGlassIcon, label: 'Search', route: 'search' },
   { icon: GearIcon, label: 'Settings', route: 'settings' },
 ]
 
 const ALL_TABS = [
-  { name: 'feed', icon: HouseIcon, hideTabBar: false },
-  { name: 'ai', icon: SparkleIcon, hideTabBar: true },
-  { name: 'search', icon: MagnifyingGlassIcon, hideTabBar: false },
+  { name: 'vin-lookup', icon: MagnifyingGlassIcon, hideTabBar: false },
+  { name: 'reports', icon: FileTextIcon, hideTabBar: false },
+  { name: 'pricing', icon: CoinsIcon, hideTabBar: false },
   { name: 'profile', icon: UserIcon, hideTabBar: false },
 ]
 

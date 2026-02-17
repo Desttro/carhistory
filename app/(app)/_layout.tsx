@@ -30,7 +30,7 @@ export function AppLayout() {
       return <Redirect href="/auth/login" />
     }
     if (isLoggedIn && pathname.startsWith('/auth')) {
-      return <Redirect href="/home/feed" />
+      return <Redirect href="/home/vin-lookup" />
     }
   }
 

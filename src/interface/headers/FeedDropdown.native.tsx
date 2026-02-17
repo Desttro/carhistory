@@ -23,13 +23,10 @@ import { SizableText, View, XStack, YStack } from 'tamagui'
 
 import { BlurView } from '~/interface/effects/BlurView'
 import { lightImpact, mediumImpact } from '~/interface/haptics/haptics'
-import { BellIcon } from '~/interface/icons/phosphor/BellIcon'
-import { BookmarkIcon } from '~/interface/icons/phosphor/BookmarkIcon'
+import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
+import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
 import { GearIcon } from '~/interface/icons/phosphor/GearIcon'
-import { HeartIcon } from '~/interface/icons/phosphor/HeartIcon'
-import { HouseIcon } from '~/interface/icons/phosphor/HouseIcon'
 import { MagnifyingGlassIcon } from '~/interface/icons/phosphor/MagnifyingGlassIcon'
-import { SparkleIcon } from '~/interface/icons/phosphor/SparkleIcon'
 import { UserIcon } from '~/interface/icons/phosphor/UserIcon'
 
 import { Pressable } from '../buttons/Pressable'
@@ -65,13 +62,10 @@ interface QuickMenuItem {
 }
 
 const QUICK_MENU_ITEMS: QuickMenuItem[] = [
-  { icon: HouseIcon, label: 'Home', id: 'home' },
-  { icon: SparkleIcon, label: 'AI Assistant', id: 'ai' },
-  { icon: MagnifyingGlassIcon, label: 'Search', id: 'search' },
+  { icon: MagnifyingGlassIcon, label: 'VIN Lookup', id: 'vin-lookup' },
+  { icon: FileTextIcon, label: 'Reports', id: 'reports' },
+  { icon: CoinsIcon, label: 'Pricing', id: 'pricing' },
   { icon: UserIcon, label: 'Profile', id: 'profile' },
-  { icon: BellIcon, label: 'Notifications', id: 'notifications' },
-  { icon: BookmarkIcon, label: 'Saved', id: 'saved' },
-  { icon: HeartIcon, label: 'Favorites', id: 'favorites' },
   { icon: GearIcon, label: 'Settings', id: 'settings' },
 ]
 
@@ -119,14 +113,14 @@ export const FeedDropdown = memo(({ isOpen, onClose }: FeedDropdownProps) => {
       onClose()
 
       switch (id) {
-        case 'home':
-          router.push('/home/feed')
+        case 'vin-lookup':
+          router.push('/home/vin-lookup')
           break
-        case 'ai':
-          router.push('/home/ai')
+        case 'reports':
+          router.push('/home/reports')
           break
-        case 'search':
-          router.push('/home/search')
+        case 'pricing':
+          router.push('/home/pricing')
           break
         case 'profile':
           router.push('/home/profile')

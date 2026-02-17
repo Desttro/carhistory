@@ -30,15 +30,15 @@ export function TabsLayout() {
   return (
     <>
       <Tabs
-        initialRouteName="feed"
+        initialRouteName="vin-lookup"
         tabBar={(props) => <TabBar {...props} />}
         screenOptions={{
           headerShown: false,
         }}
       >
-        <Tabs.Screen name="feed" />
-        <Tabs.Screen name="ai" />
-        <Tabs.Screen name="search" />
+        <Tabs.Screen name="vin-lookup" />
+        <Tabs.Screen name="reports" />
+        <Tabs.Screen name="pricing" />
         <Tabs.Screen name="profile" />
       </Tabs>
 

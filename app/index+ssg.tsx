@@ -10,8 +10,8 @@ export function IndexPage() {
   return (
     <YStack position="relative">
       <HeadInfo
-        title="Takeout"
-        description="The production-ready starter for building real-time, cross-platform apps with React and React Native."
+        title="CarHistory - Vehicle History Reports"
+        description="Get comprehensive vehicle history reports combining Carfax & AutoCheck data. Check any VIN instantly."
         openGraph={{
           url: process.env.ONE_SERVER_URL,
           images: [{ url: ogImageUrl, width: 1200, height: 630 }],

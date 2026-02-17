@@ -4,15 +4,67 @@
     "appVersionSource": "remote"
   },
   "build": {
+    "base": {
+      "android": {
+        "bun": "1.3.9"
+      },
+      "ios": {
+        "bun": "1.3.9"
+      },
+      "env": {
+        "APP_VARIANT": "development",
+        "VITE_ZERO_HOSTNAME": "https://carhistory-dev-saby.carhistory.io",
+        "VITE_WEB_HOSTNAME": "https://carhistory-dev-saby.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "test_YdhUttgtlMcWaNHudizpxsdTfhT"
+      }
+    },
     "development": {
+      "extends": "base",
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "development",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true,
+        "image": "latest"
+      },
+      "env": {
+        "APP_VARIANT": "development",
+        "VITE_ZERO_HOSTNAME": "https://carhistory-dev-saby.carhistory.io",
+        "VITE_WEB_HOSTNAME": "https://carhistory-dev-saby.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "test_YdhUttgtlMcWaNHudizpxsdTfhT"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "extends": "base",
+      "distribution": "store",
+      "channel": "preview",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "APP_VARIANT": "preview",
+        "VITE_ZERO_HOSTNAME": "https://zero-preview.carhistory.io",
+        "VITE_WEB_HOSTNAME": "https://preview.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "test_YdhUttgtlMcWaNHudizpxsdTfhT"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "extends": "base",
+      "channel": "production",
+      "distribution": "store",
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "APP_VARIANT": "production",
+        "VITE_ZERO_HOSTNAME": "https://zero.carhistory.io",
+        "VITE_WEB_HOSTNAME": "https://carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      }
     }
   },
   "submit": {

@@ -12,7 +12,12 @@
         "bun": "1.3.9"
       },
       "env": {
-        "APP_VARIANT": "development"
+        "APP_VARIANT": "development",
+        "NODE_ENV": "development",
+        "VITE_ZERO_HOSTNAME": "carhistory-dev-saby.carhistory.io",
+        "VITE_WEB_HOSTNAME": "carhistory-dev-saby.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "test_YdhUttgtlMcWaNHudizpxsdTfhT"
+
       }
     },
     "development": {
@@ -28,7 +33,11 @@
         "image": "latest"
       },
       "env": {
-        "APP_VARIANT": "development"
+        "APP_VARIANT": "development",
+        "NODE_ENV": "development",
+        "VITE_ZERO_HOSTNAME": "carhistory-dev-saby.carhistory.io",
+        "VITE_WEB_HOSTNAME": "carhistory-dev-saby.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "test_YdhUttgtlMcWaNHudizpxsdTfhT"
       }
     },
     "preview": {
@@ -39,7 +48,11 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_VARIANT": "preview"
+        "APP_VARIANT": "preview",
+        "NODE_ENV": "preview",
+        "VITE_ZERO_HOSTNAME": "zero-preview.carhistory.io",
+        "VITE_WEB_HOSTNAME": "preview.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "appl_BrTtKDBvFRvVDoalyblWOYPVEvk"
       }
     },
     "production": {
@@ -51,7 +64,11 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_VARIANT": "production"
+        "APP_VARIANT": "production",
+        "NODE_ENV": "production",
+        "VITE_ZERO_HOSTNAME": "zero.carhistory.io",
+        "VITE_WEB_HOSTNAME": "carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "appl_MFfHjduTDWrIxZhFmhLkBwCVUUc"
       }
     }
   },

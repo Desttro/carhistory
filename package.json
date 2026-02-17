@@ -51,7 +51,7 @@
     "repl": "tko run repl",
     "run:env": "bun env bun run",
     "run:dev": "NODE_ENV=development bun env:dev bun run",
-    "run:preview": "NODE_ENV=production bun env:preview bun run",
+    "run:preview": "NODE_ENV=preview bun env:preview bun run",
     "run:prod": "NODE_ENV=production bun env:prod bun run",
     "test:integration": "bun run env:dev bun --cwd=./src/test playwright test",
     "test:unit": "bun run:dev vitest run -c ./src/test/vitest.config.ts",

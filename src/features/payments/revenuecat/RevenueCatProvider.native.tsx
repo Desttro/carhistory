@@ -5,6 +5,7 @@ import Purchases, {
 } from 'react-native-purchases'
 
 import { useAuth } from '~/features/auth/client/authClient'
+import { VITE_REVENUECAT_API_PUBLIC } from '~/server/env-server'
 
 export interface RevenueCatContextValue {
   offerings: PurchasesOfferings | null
@@ -22,9 +23,6 @@ export const RevenueCatContext = createContext<RevenueCatContextValue>({
   refreshCustomerInfo: async () => {},
 })
 
-// const REVENUECAT_API_KEY = import.meta.env.VITE_REVENUECAT_API_PUBLIC || ''
-const REVENUECAT_API_KEY = 'test_YdhUttgtlMcWaNHudizpxsdTfhT'
-
 export function RevenueCatProvider({ children }: { children: ReactNode }) {
   const { user, state } = useAuth()
   const [isConfigured, setIsConfigured] = useState(false)
@@ -34,7 +32,7 @@ export function RevenueCatProvider({ children }: { children: ReactNode }) {
 
   // configure sdk on mount
   useEffect(() => {
-    if (!REVENUECAT_API_KEY) {
+    if (!VITE_REVENUECAT_API_PUBLIC) {
       console.info('[RevenueCat] no API key configured, skipping initialization')
       setIsLoading(false)
       return
@@ -42,7 +40,7 @@ export function RevenueCatProvider({ children }: { children: ReactNode }) {
 
     const configure = async () => {
       try {
-        Purchases.configure({ apiKey: REVENUECAT_API_KEY })
+        Purchases.configure({ apiKey: VITE_REVENUECAT_API_PUBLIC })
         setIsConfigured(true)
         console.info('[RevenueCat] SDK configured')
       } catch (error) {

@@ -124,7 +124,7 @@ export function ContentSection() {
       <ContentParagraph>
         Whether you're <Strong color="$color11">buying a used car</Strong>, selling your
         vehicle, or just curious about its past — a{' '}
-        <Link href="/home/vehicle-history-report">
+        <Link href="/home/vin-lookup">
           <InlineLink fontWeight="600">CarHistory report</InlineLink>
         </Link>{' '}
         shows you what the seller might not.
@@ -222,7 +222,7 @@ export function ContentSection() {
               driver's side dashboard, door jamb, or vehicle registration
             </Strong>
             . Paste it into our{' '}
-            <Link href="/home/vehicle-history-report">
+            <Link href="/home/vin-lookup">
               <InlineLink fontWeight="600">VIN lookup tool</InlineLink>
             </Link>{' '}
             and we'll start searching instantly.

@@ -24,7 +24,3 @@ export const models = {
   vehicle,
   vehicleReport,
 }
-
-if (import.meta.hot) {
-  import.meta.hot.accept()
-}

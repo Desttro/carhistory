@@ -38,7 +38,7 @@ export const PricingSheet = memo(
 
     const handleLoginClick = () => {
       const returnUrl = vin
-        ? `/home/vehicle-history-report?vin=${encodeURIComponent(vin)}`
+        ? `/home/vin-lookup?vin=${encodeURIComponent(vin)}`
         : '/home/pricing'
       router.push(href(`/auth/login?returnTo=${encodeURIComponent(returnUrl)}`))
     }

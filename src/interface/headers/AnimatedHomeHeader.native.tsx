@@ -139,7 +139,7 @@ export const AnimatedHomeHeader = memo(({ scrollY }: AnimatedHomeHeaderProps) =>
             gap="$2"
           >
             <SizableText fontSize="$6" fontWeight="700" color="$color">
-              Takeout
+              CarHistory
             </SizableText>
             <Animated.View style={animatedCaretStyle}>
               <CaretDownIcon size={16} color="$color12" />

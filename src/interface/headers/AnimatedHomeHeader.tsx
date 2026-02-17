@@ -40,7 +40,7 @@ export const AnimatedHomeHeader = memo(
           </Pressable>
 
           <SizableText fontSize="$6" fontWeight="700" color="$color">
-            Takeout
+            CarHistory
           </SizableText>
 
           <Pressable width={40} height={40} items="center" justify="center">

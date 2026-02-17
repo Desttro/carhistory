@@ -25,7 +25,7 @@ const EmptyState = memo(
       </Animated.View>
       <YStack items="center">
         <SizableText size="$6" fontWeight="700">
-          Takeout
+          CarHistory
         </SizableText>
         <SizableText size="$4" color="$color10" px="$6" text="center">
           Your AI-powered assistant

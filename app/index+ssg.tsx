@@ -10,8 +10,8 @@ export function IndexPage() {
   return (
     <YStack position="relative">
       <HeadInfo
-        title="CarHistory - Vehicle History Reports"
-        description="Get comprehensive vehicle history reports combining Carfax & AutoCheck data. Check any VIN instantly."
+        title="CarHistory | Vehicle History Reports"
+        description="CarHistory is a platform for managing your car history and maintenance records."
         openGraph={{
           url: process.env.ONE_SERVER_URL,
           images: [{ url: ogImageUrl, width: 1200, height: 630 }],

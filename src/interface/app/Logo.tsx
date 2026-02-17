@@ -16,7 +16,7 @@ export const Logo = ({ height = 24 }: { height?: number }) => {
         letterSpacing={0.5}
         $max-md={{ display: 'none' }}
       >
-        Takeout
+        CarHistory
       </SizableText>
       <BetaBadge />
     </XStack>

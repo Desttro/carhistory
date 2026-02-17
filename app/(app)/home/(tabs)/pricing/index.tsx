@@ -1,4 +1,4 @@
-import { H2, ScrollView, SizableText, YStack } from 'tamagui'
+import { H2, SizableText, YStack } from 'tamagui'
 
 import { useAuth } from '~/features/auth/client/authClient'
 import { CreditBalanceDisplay } from '~/features/credits/ui/CreditBalanceDisplay'
@@ -12,27 +12,25 @@ export function PricingPage() {
 
   return (
     <PageLayout>
-      <ScrollView flex={1}>
-        <YStack flex={1} gap="$6" px="$4" py="$6" maxW={900} width="100%" self="center">
-          <YStack gap="$2" items="center">
-            <CoinsIcon size={32} color="$color10" />
-            <H2 size="$8" fontWeight="700" text="center">
-              Credits & Pricing
-            </H2>
-            <SizableText size="$4" color="$color10" text="center">
-              Purchase credits to get vehicle history reports
-            </SizableText>
-          </YStack>
-
-          {isLoggedIn && (
-            <YStack items="center">
-              <CreditBalanceDisplay size="large" />
-            </YStack>
-          )}
-
-          <PricingSheet context="pricing-page" />
+      <YStack flex={1} gap="$6" px="$4" py="$6" maxW={900} width="100%" self="center">
+        <YStack gap="$2" items="center">
+          <CoinsIcon size={32} color="$color10" />
+          <H2 size="$8" fontWeight="700" text="center">
+            Credits & Pricing
+          </H2>
+          <SizableText size="$4" color="$color10" text="center">
+            Purchase credits to get vehicle history reports
+          </SizableText>
         </YStack>
-      </ScrollView>
+
+        {isLoggedIn && (
+          <YStack items="center">
+            <CreditBalanceDisplay size="large" />
+          </YStack>
+        )}
+
+        <PricingSheet context="pricing-page" />
+      </YStack>
     </PageLayout>
   )
 }

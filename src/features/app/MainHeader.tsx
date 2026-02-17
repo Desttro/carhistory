@@ -2,6 +2,7 @@ import { Link, router, usePathname } from 'one'
 import { memo, useState } from 'react'
 import { H3, Separator, Sheet, Spacer, View, XStack, YStack } from 'tamagui'
 
+import { useAuth } from '~/features/auth/client/authClient'
 import { useLogout } from '~/features/auth/useLogout'
 import { useUser } from '~/features/user/useUser'
 import { Logo } from '~/interface/app/Logo'
@@ -20,6 +21,8 @@ import { NavigationTabs } from './NavigationTabs'
 
 export const MainHeader = () => {
   const { user } = useUser()
+  const { state } = useAuth()
+  const isLoggedIn = state === 'logged-in'
   const pathname = usePathname()
   const isOnSettings = pathname.startsWith('/home/settings')
 
@@ -51,29 +54,42 @@ export const MainHeader = () => {
             </XStack>
 
             <XStack gap="$2.5" items="center" display="none" $md={{ display: 'flex' }}>
-              {user && (
-                <UserProfilePopover
-                  trigger={
-                    <Button size="medium" circular cursor="pointer">
-                      <Avatar
-                        size={28}
-                        image={user.image}
-                        name={user.name ?? user.username ?? 'User'}
-                      />
-                    </Button>
-                  }
-                />
-              )}
+              {isLoggedIn ? (
+                <>
+                  {user && (
+                    <UserProfilePopover
+                      trigger={
+                        <Button size="medium" circular cursor="pointer">
+                          <Avatar
+                            size={28}
+                            image={user.image}
+                            name={user.name ?? user.username ?? 'User'}
+                          />
+                        </Button>
+                      }
+                    />
+                  )}
 
-              <ThemeSwitch />
-              <Button
-                size="medium"
-                circular
-                onPress={() => router.push('/home/settings')}
-                icon={<GearIcon size={18} />}
-                aria-label="Settings"
-                disabled={isOnSettings}
-              />
+                  <ThemeSwitch />
+                  <Button
+                    size="medium"
+                    circular
+                    onPress={() => router.push('/home/settings')}
+                    icon={<GearIcon size={18} />}
+                    aria-label="Settings"
+                    disabled={isOnSettings}
+                  />
+                </>
+              ) : (
+                <>
+                  <ThemeSwitch />
+                  <Link href="/auth/login">
+                    <Button theme="accent" size="medium">
+                      Log In
+                    </Button>
+                  </Link>
+                </>
+              )}
             </XStack>
 
             <MainHeaderMenu />
@@ -86,6 +102,8 @@ export const MainHeader = () => {
 
 export const MainHeaderMenu = memo(() => {
   const { user } = useUser()
+  const { state } = useAuth()
+  const isLoggedIn = state === 'logged-in'
   const [open, setOpen] = useState(false)
   const { logout } = useLogout()
 
@@ -131,21 +149,34 @@ export const MainHeaderMenu = memo(() => {
             <Separator />
 
             <YStack flex={1} p="$3" gap="$2">
-              <Link href="/home/settings" asChild>
-                <ListItem onPress={() => setOpen(false)}>
-                  <ListItem.Icon>
-                    <GearIcon />
-                  </ListItem.Icon>
-                  <ListItem.Text>Settings</ListItem.Text>
-                </ListItem>
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  <Link href="/home/settings" asChild>
+                    <ListItem onPress={() => setOpen(false)}>
+                      <ListItem.Icon>
+                        <GearIcon />
+                      </ListItem.Icon>
+                      <ListItem.Text>Settings</ListItem.Text>
+                    </ListItem>
+                  </Link>
 
-              <ListItem onPress={handleLogout}>
-                <ListItem.Icon>
-                  <DoorIcon />
-                </ListItem.Icon>
-                <ListItem.Text>Logout</ListItem.Text>
-              </ListItem>
+                  <ListItem onPress={handleLogout}>
+                    <ListItem.Icon>
+                      <DoorIcon />
+                    </ListItem.Icon>
+                    <ListItem.Text>Logout</ListItem.Text>
+                  </ListItem>
+                </>
+              ) : (
+                <Link href="/auth/login" asChild>
+                  <ListItem onPress={() => setOpen(false)}>
+                    <ListItem.Icon>
+                      <DoorIcon />
+                    </ListItem.Icon>
+                    <ListItem.Text>Log In</ListItem.Text>
+                  </ListItem>
+                </Link>
+              )}
             </YStack>
 
             {user && (

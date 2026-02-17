@@ -3,12 +3,14 @@ import { memo, useState } from 'react'
 import { SizableText, XStack, YStack } from 'tamagui'
 
 import { useAuth } from '~/features/auth/client/authClient'
+import { returnToStorage } from '~/features/auth/returnToStorage'
 import { useCredits } from '~/features/credits/useCredits'
 import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 
-import { PACKAGE_METADATA, PRICE_DISPLAY } from './constants'
-import { CreditPackageCard } from './CreditPackageCard'
+import { PACKAGE_METADATA, PRICE_DISPLAY } from '~/features/payments/constants'
+
+import { PackageCard } from './components/PackageCard'
 import { usePurchaseCredits } from './usePurchaseCredits'
 
 export interface PricingSheetProps {
@@ -40,7 +42,8 @@ export const PricingSheet = memo(
       const returnUrl = vin
         ? `/home/vin-lookup?vin=${encodeURIComponent(vin)}`
         : '/home/pricing'
-      router.push(href(`/auth/login?returnTo=${encodeURIComponent(returnUrl)}`))
+      returnToStorage.set(returnUrl)
+      router.push(href('/auth/login'))
     }
 
     const handlePurchase = async (slug: string) => {
@@ -98,7 +101,7 @@ export const PricingSheet = memo(
             $md={{
               flexDirection: inline ? 'column' : 'row',
               gap: '$4',
-              maxW: inline ? 400 : 800,
+              maxW: inline ? 400 : 900,
             }}
           >
             {packages.map((pkg) => {
@@ -107,7 +110,7 @@ export const PricingSheet = memo(
 
               return (
                 <YStack key={pkg.slug} $md={{ flex: inline ? undefined : 1 }}>
-                  <CreditPackageCard
+                  <PackageCard
                     credits={pkg.credits}
                     price={priceData?.price || 'See price'}
                     pricePerCredit={priceData?.pricePerCredit}

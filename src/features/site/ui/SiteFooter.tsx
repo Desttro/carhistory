@@ -9,6 +9,22 @@ export const SiteFooter = () => {
       <PageContainer>
         <YStack mx="auto" width="100%" maxW={840} px="$4" gap="$4">
           <XStack gap="$4" flexWrap="wrap" justify="center">
+            <Link href="/home/vin-lookup">
+              <SizableText size="$3" color="$color11" hoverStyle={{ color: '$color12' }}>
+                VIN Lookup
+              </SizableText>
+            </Link>
+            <SizableText size="$3" color="$color8">
+              •
+            </SizableText>
+            <Link href="/home/pricing">
+              <SizableText size="$3" color="$color11" hoverStyle={{ color: '$color12' }}>
+                Pricing
+              </SizableText>
+            </Link>
+            <SizableText size="$3" color="$color8">
+              •
+            </SizableText>
             <Link href="/privacy-policy">
               <SizableText size="$3" color="$color11" hoverStyle={{ color: '$color12' }}>
                 Privacy Policy

@@ -12,7 +12,7 @@ export function PricingPage() {
 
   return (
     <PageLayout>
-      <YStack flex={1} gap="$6" px="$4" py="$6" maxW={700} width="100%" self="center">
+      <YStack flex={1} gap="$6" px="$4" py="$6" maxW={900} width="100%" self="center">
         <YStack gap="$2" items="center">
           <CoinsIcon size={32} color="$color10" />
           <H2 size="$8" fontWeight="700" text="center">
@@ -29,7 +29,7 @@ export function PricingPage() {
           </YStack>
         )}
 
-        <PricingSheet inline context="pricing-page" />
+        <PricingSheet context="pricing-page" />
       </YStack>
     </PageLayout>
   )

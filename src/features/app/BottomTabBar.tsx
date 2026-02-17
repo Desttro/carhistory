@@ -1,6 +1,7 @@
 import { usePathname, type Href } from 'one'
 import { View, XStack } from 'tamagui'
 
+import { useAuth } from '~/features/auth/client/authClient'
 import { Link } from '~/interface/app/Link'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
@@ -22,8 +23,13 @@ const routes: TabRoute[] = [
 
 export function BottomTabBar() {
   const pathname = usePathname()
+  const { state } = useAuth()
+  const isLoggedIn = state === 'logged-in'
+  const visibleRoutes = isLoggedIn
+    ? routes
+    : routes.filter((r) => r.name === 'vin-lookup' || r.name === 'pricing')
   const currentTab =
-    routes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ?? 'vin-lookup'
+    visibleRoutes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ?? 'vin-lookup'
 
   return (
     <View
@@ -42,7 +48,7 @@ export function BottomTabBar() {
       }}
     >
       <XStack justify="space-around" height={60} items="center" px="$4">
-        {routes.map((route) => {
+        {visibleRoutes.map((route) => {
           const Icon = route.icon
           const isActive = currentTab === route.name
 

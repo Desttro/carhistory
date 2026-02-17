@@ -1,6 +1,7 @@
 import { usePathname } from 'one'
 import { useMedia } from 'tamagui'
 
+import { useAuth } from '~/features/auth/client/authClient'
 import { Link } from '~/interface/app/Link'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
@@ -27,10 +28,15 @@ const routes: TabRoute[] = [
 export function NavigationTabs() {
   const pathname = usePathname()
   const media = useMedia()
+  const { state } = useAuth()
+  const isLoggedIn = state === 'logged-in'
   const iconSize = media.sm ? 24 : 20
 
+  const visibleRoutes = isLoggedIn
+    ? routes
+    : routes.filter((r) => r.name === 'vin-lookup' || r.name === 'pricing')
   const currentTab =
-    routes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ?? 'vin-lookup'
+    visibleRoutes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ?? 'vin-lookup'
 
   return (
     <RovingTabs value={currentTab} indicatorStyle="underline">
@@ -39,7 +45,7 @@ export function NavigationTabs() {
       }: {
         handleOnInteraction: TabsTabProps['onInteraction']
       }) =>
-        routes.map((route) => {
+        visibleRoutes.map((route) => {
           const Icon = route.icon
 
           return (

@@ -33,6 +33,13 @@ export function VinLookupPage() {
     }
   }, [vinParam, vin, setVin])
 
+  // auto-check when VIN was set from URL param
+  useEffect(() => {
+    if (vinParam && vin === vinParam.toUpperCase().trim() && !checkResult && !isChecking) {
+      checkVin()
+    }
+  }, [vinParam, vin, checkResult, isChecking, checkVin])
+
   return (
     <PageLayout>
       <YStack flex={1} gap="$6" px="$4" py="$6" maxW={600} width="100%" self="center">

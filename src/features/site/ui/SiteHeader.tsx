@@ -1,21 +1,18 @@
-import { usePathname } from 'one'
 import { memo, useState } from 'react'
 import { ScrollView, Separator, Sheet, Spacer, XStack, YStack } from 'tamagui'
 
 import { LoginButton } from '~/features/auth/ui/LoginButton'
 import { LoginListItem } from '~/features/auth/ui/LoginListItem'
-import { DocsMenuContents } from '~/features/docs/DocsMenuContents'
 import { SocialLinksRow } from '~/features/site/ui/SocialLinksRow'
 import { Link } from '~/interface/app/Link'
 import { Logo } from '~/interface/app/Logo'
 import { Button } from '~/interface/buttons/Button'
 import { ScrollHeader } from '~/interface/headers/ScrollHeader'
-import { FileIcon } from '~/interface/icons/phosphor/FileIcon'
+import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 import { ListIcon } from '~/interface/icons/phosphor/ListIcon'
-import { PromoLinksRow } from '~/interface/landing/PromoLinksRow'
+import { MagnifyingGlassIcon } from '~/interface/icons/phosphor/MagnifyingGlassIcon'
 import { PageContainer } from '~/interface/layout/PageContainer'
 import { ListItem } from '~/interface/lists/ListItem'
-import { SepHeading } from '~/interface/text/Headings'
 import { ThemeSwitch } from '~/interface/theme/ThemeSwitch'
 
 export const SiteHeader = memo(() => {
@@ -26,7 +23,6 @@ export const SiteHeader = memo(() => {
           <XStack position="relative" width="100%" items="center" $md={{ px: '$4' }}>
             <XStack display="none" $lg={{ display: 'flex' }} gap="$2" items="center">
               <SocialLinksRow />
-              <PromoLinksRow />
             </XStack>
 
             <Spacer flex={1} />
@@ -46,11 +42,19 @@ export const SiteHeader = memo(() => {
             </XStack>
 
             <XStack gap="$2" items="center" display="none" $md={{ display: 'flex' }}>
+              <Link href="/home/vin-lookup">
+                <Button icon={<MagnifyingGlassIcon size={16} />}>VIN Lookup</Button>
+              </Link>
+
+              <Link href="/home/pricing">
+                <Button icon={<CoinsIcon size={16} />}>Pricing</Button>
+              </Link>
+
               <LoginButton />
 
-              <Link href="/docs/introduction">
+              {/* <Link href="/docs/introduction">
                 <Button>Docs</Button>
-              </Link>
+              </Link> */}
 
               <ThemeSwitch />
             </XStack>
@@ -65,8 +69,10 @@ export const SiteHeader = memo(() => {
 
 const SiteHeaderMenu = memo(() => {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname()
-  const isDocsPage = pathname.startsWith('/docs')
+
+  const closeMenu = () => {
+    setTimeout(() => setOpen(false), 250)
+  }
 
   return (
     <>
@@ -86,7 +92,7 @@ const SiteHeaderMenu = memo(() => {
         transition="quickLessBouncy"
         modal
         dismissOnSnapToBottom
-        snapPoints={[isDocsPage ? 85 : 50]}
+        snapPoints={[50]}
       >
         <Sheet.Overlay
           bg="$background"
@@ -101,7 +107,7 @@ const SiteHeaderMenu = memo(() => {
             <XStack p="$4" pb="$3" justify="space-between" items="center">
               <Logo />
               <XStack gap="$2" items="center">
-                <PromoLinksRow />
+                {/* <PromoLinksRow /> */}
                 <ThemeSwitch />
               </XStack>
             </XStack>
@@ -109,36 +115,34 @@ const SiteHeaderMenu = memo(() => {
             <Separator />
 
             <ScrollView group="frame" flex={1} px="$4" pt="$4" gap="$2">
-              <LoginListItem
-                onPressOut={() => {
-                  setTimeout(() => {
-                    setOpen(false)
-                  }, 250)
-                }}
-              />
-              {/* <Link href="/docs/introduction"> */}
-              <ListItem
-                onPressOut={() => {
-                  setTimeout(() => {
-                    setOpen(false)
-                  }, 250)
-                }}
-              >
-                <ListItem.Icon>
-                  <FileIcon />
-                </ListItem.Icon>
-                <ListItem.Text>Docs</ListItem.Text>
-              </ListItem>
-              {/* </Link> */}
+              <Link href="/home/vin-lookup" asChild>
+                <ListItem onPressOut={closeMenu}>
+                  <ListItem.Icon>
+                    <MagnifyingGlassIcon />
+                  </ListItem.Icon>
+                  <ListItem.Text>VIN Lookup</ListItem.Text>
+                </ListItem>
+              </Link>
 
-              {isDocsPage && (
-                <>
-                  <SepHeading size="$5">Menu</SepHeading>
-                  <YStack onPress={() => setOpen(false)}>
-                    <DocsMenuContents />
-                  </YStack>
-                </>
-              )}
+              <Link href="/home/pricing" asChild>
+                <ListItem onPressOut={closeMenu}>
+                  <ListItem.Icon>
+                    <CoinsIcon />
+                  </ListItem.Icon>
+                  <ListItem.Text>Pricing</ListItem.Text>
+                </ListItem>
+              </Link>
+
+              <LoginListItem onPressOut={closeMenu} />
+
+              {/* <Link href="/docs/introduction" asChild>
+                <ListItem onPressOut={closeMenu}>
+                  <ListItem.Icon>
+                    <FileIcon />
+                  </ListItem.Icon>
+                  <ListItem.Text>Docs</ListItem.Text>
+                </ListItem>
+              </Link> */}
             </ScrollView>
 
             <YStack p="$4" pt="$2">

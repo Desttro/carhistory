@@ -1,13 +1,10 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { H1, Paragraph, Text, View, XStack, YStack, styled } from 'tamagui'
 
+import { LandingVinCheck } from '~/features/vin-lookup/LandingVinCheck'
 import { Link } from '~/interface/app/Link'
-import { ArrowRightIcon } from '~/interface/icons/phosphor/ArrowRightIcon'
-import { CheckIcon } from '~/interface/icons/phosphor/CheckIcon'
-import { CopyIcon } from '~/interface/icons/phosphor/CopyIcon'
 
 import { BetaBadge } from '../app/BetaBadge'
-import { Button } from '../buttons/Button'
 import { Span, Strong } from '../text/Text'
 
 const HeroTitle = styled(H1, {
@@ -42,33 +39,6 @@ const HighlightText = styled(Text, {
   '$platform-web': {
     backgroundClip: 'text',
     WebkitBackgroundClip: 'text',
-  },
-})
-
-const CommandBox = styled(XStack, {
-  rounded: '$6',
-  px: '$4',
-  py: '$3',
-  bg: '$color3',
-  items: 'center',
-  flex: 1,
-  mr: -20,
-  gap: '$3',
-  overflow: 'hidden',
-  cursor: 'pointer',
-  borderWidth: 1,
-  borderColor: '$color5',
-  style: {
-    transition: 'background-color 200ms ease, border-color 200ms ease',
-  },
-
-  hoverStyle: {
-    bg: '$backgroundHover',
-    borderColor: '$color6',
-  },
-
-  pressStyle: {
-    bg: '$color5',
   },
 })
 
@@ -361,8 +331,6 @@ function HeroTerminal() {
   )
 }
 
-const INSTALL_COMMAND = '1HGBH41JXMN109186'
-
 function PhoneMockup() {
   return (
     <YStack
@@ -435,44 +403,6 @@ function PhoneMockup() {
   )
 }
 
-function CopyCommand() {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(INSTALL_COMMAND)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // fallback for older browsers
-      const textArea = document.createElement('textarea')
-      textArea.value = INSTALL_COMMAND
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    }
-  }
-
-  return (
-    <CommandBox onPress={handleCopy} display="none" $sm={{ display: 'flex' }}>
-      <Paragraph fontFamily="$mono" fontSize={14} color="$color11">
-        $
-      </Paragraph>
-      <Paragraph pr="$4" flex={1} ellipsis fontFamily="$mono" fontWeight="700">
-        {INSTALL_COMMAND}
-      </Paragraph>
-      {copied ? (
-        <CheckIcon size={18} color="$color10" />
-      ) : (
-        <CopyIcon size={18} color="$color10" />
-      )}
-    </CommandBox>
-  )
-}
-
 export function HeroSection() {
   return (
     <YStack
@@ -538,15 +468,9 @@ export function HeroSection() {
             — reports start at just $4.99 per check.
           </HeroSubtitle>
 
-          <XStack maxW="100%" gap="$3" mt="$2" items="center">
-            <Link href="/home/vin-lookup">
-              <Button theme="accent" size="large" icon={ArrowRightIcon} iconAfter>
-                Check a VIN
-              </Button>
-            </Link>
-
-            <CopyCommand />
-          </XStack>
+          <YStack width="100%" maxW={480} mt="$2">
+            <LandingVinCheck />
+          </YStack>
 
           <Paragraph size="$6" $lg={{ size: '$7' }} color="$color9">
             See{' '}

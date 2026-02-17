@@ -2,6 +2,7 @@ import { Protected, Redirect, Slot, Stack, usePathname } from 'one'
 import { Configuration, isWeb, SizableText } from 'tamagui'
 
 import { useAuth } from '~/features/auth/client/authClient'
+import { returnToStorage } from '~/features/auth/returnToStorage'
 import { ZeroTestUI } from '~/features/devtools/ZeroTestUI'
 import { Dialogs } from '~/interface/dialogs/Dialogs'
 import { Gallery } from '~/interface/gallery/Gallery'
@@ -27,10 +28,18 @@ export function AppLayout() {
   // Redirect for auth routing
   if (isWeb) {
     if (!isLoggedIn && pathname.startsWith('/home')) {
-      return <Redirect href="/auth/login" />
+      const isPublicPath = ['/home/vin-lookup', '/home/pricing'].some((p) =>
+        pathname.startsWith(p)
+      )
+      if (!isPublicPath) {
+        returnToStorage.set(pathname + (typeof window !== 'undefined' ? window.location.search : ''))
+        return <Redirect href="/auth/login" />
+      }
     }
     if (isLoggedIn && pathname.startsWith('/auth')) {
-      return <Redirect href="/home/vin-lookup" />
+      const returnTo = returnToStorage.get()
+      returnToStorage.remove()
+      return <Redirect href={(returnTo as any) || '/home/vin-lookup'} />
     }
   }
 

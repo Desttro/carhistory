@@ -11,8 +11,9 @@ import { useRevenueCat } from '~/features/payments/revenuecat'
 import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 
-import { PACKAGE_METADATA } from './constants'
-import { CreditPackageCard } from './CreditPackageCard'
+import { PACKAGE_METADATA } from '~/features/payments/constants'
+
+import { PackageCard } from './components/PackageCard'
 
 import type { PurchasesPackage } from 'react-native-purchases'
 
@@ -156,7 +157,7 @@ export const PricingSheet = memo(
                 const metadata = PACKAGE_METADATA[pkg.slug]
 
                 return (
-                  <CreditPackageCard
+                  <PackageCard
                     key={pkg.slug}
                     credits={pkg.credits}
                     price={price}

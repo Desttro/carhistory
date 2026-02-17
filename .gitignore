@@ -24,6 +24,7 @@ dist
 
 .env
 .env.production
+.env.preview
 .env.hotupdater
 .env.bak
 

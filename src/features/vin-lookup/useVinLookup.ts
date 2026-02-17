@@ -93,7 +93,11 @@ export function useVinLookup() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ vin: normalizedVin }),
+        body: JSON.stringify({
+          vin: normalizedVin,
+          carfaxRecords: checkResult?.carfaxRecords,
+          autocheckRecords: checkResult?.autocheckRecords,
+        }),
       })
 
       const data = (await res.json()) as PurchaseResult
@@ -115,7 +119,7 @@ export function useVinLookup() {
     } finally {
       setIsPurchasing(false)
     }
-  }, [vin, user, balance])
+  }, [vin, user, balance, checkResult])
 
   const reset = useCallback(() => {
     setVin('')

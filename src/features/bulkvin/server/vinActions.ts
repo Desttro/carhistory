@@ -34,7 +34,8 @@ async function checkVin(vin: string): Promise<VinCheckResult> {
 
 async function purchaseReport(
   authData: AuthData,
-  vin: string
+  vin: string,
+  knownCounts?: { carfaxRecords?: number; autocheckRecords?: number }
 ): Promise<PurchaseReportResult> {
   if (!authData?.id) {
     return { success: false, error: 'Authentication required' }
@@ -69,20 +70,34 @@ async function purchaseReport(
     }
   }
 
-  // verify data exists via check endpoint
-  const checkResult = await bulkvinClient.checkVin(normalizedVin)
-  if (!checkResult.success) {
-    return {
-      success: false,
-      error: checkResult.error || 'No records available for this VIN',
+  const purchaseStart = Date.now()
+
+  // use frontend-provided counts if available, otherwise fall back to checkVin
+  let expectCarfax: boolean
+  let expectAutocheck: boolean
+
+  if (
+    knownCounts &&
+    (knownCounts.carfaxRecords !== undefined || knownCounts.autocheckRecords !== undefined)
+  ) {
+    expectCarfax = (knownCounts.carfaxRecords ?? 0) > 0
+    expectAutocheck = (knownCounts.autocheckRecords ?? 0) > 0
+    console.info('[vinActions] using frontend counts, skipping checkVin:', {
+      expectCarfax,
+      expectAutocheck,
+    })
+  } else {
+    const checkResult = await bulkvinClient.checkVin(normalizedVin)
+    if (!checkResult.success) {
+      return {
+        success: false,
+        error: checkResult.error || 'No records available for this VIN',
+      }
     }
+    expectCarfax = (checkResult.carfaxRecords ?? 0) > 0
+    expectAutocheck = (checkResult.autocheckRecords ?? 0) > 0
+    console.info('[vinActions] checked via API:', { expectCarfax, expectAutocheck })
   }
-
-  // determine which reports we expect based on check result
-  const expectCarfax = (checkResult.carfaxRecords ?? 0) > 0
-  const expectAutocheck = (checkResult.autocheckRecords ?? 0) > 0
-
-  console.info('[vinActions] expecting reports:', { expectCarfax, expectAutocheck })
 
   // fetch both reports (queue handles rate limiting)
   const htmlContents: string[] = []
@@ -159,5 +174,6 @@ async function purchaseReport(
     return { success: false, error: createResult.error || 'Failed to create report' }
   }
 
+  console.info(`[vinActions] purchaseReport completed in ${Date.now() - purchaseStart}ms`)
   return { success: true, reportId: createResult.reportId }
 }

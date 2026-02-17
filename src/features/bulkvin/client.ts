@@ -30,10 +30,11 @@ class RequestQueue {
             await new Promise((r) => setTimeout(r, waitTime))
           }
 
-          this.lastRequestTime = Date.now()
           const result = await fn()
+          this.lastRequestTime = Date.now()
           resolve(result)
         } catch (error) {
+          this.lastRequestTime = Date.now()
           reject(error)
         }
       })
@@ -61,27 +62,48 @@ const requestQueue = new RequestQueue()
 
 async function fetchWithRetry<T>(
   url: string,
-  options: { maxRetries?: number; baseDelay?: number } = {}
+  options: { maxRetries?: number; baseDelay?: number; endpoint?: string } = {}
 ): Promise<T> {
-  const { maxRetries = 5, baseDelay = 3000 } = options
+  const { maxRetries = 4, baseDelay = 6000, endpoint = 'unknown' } = options
+  const operationStart = Date.now()
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const attemptStart = Date.now()
     const res = await fetch(url)
+    const responseTime = Date.now() - attemptStart
     const data = (await res.json()) as T & { error?: string; message?: string }
+
+    console.info(`[bulkvin] ${endpoint} attempt ${attempt + 1}/${maxRetries}:`, {
+      status: res.status,
+      responseTime: `${responseTime}ms`,
+      error: data.error || data.message || null,
+    })
 
     const errorText = data.error || data.message || ''
     if (!errorText.includes('Server is busy')) {
+      if (attempt > 0) {
+        console.info(
+          `[bulkvin] ${endpoint} succeeded after ${attempt + 1} attempts (${Date.now() - operationStart}ms total)`
+        )
+      }
       return data
     }
 
     if (attempt === maxRetries - 1) {
+      console.info(
+        `[bulkvin] ${endpoint} exhausted retries after ${Date.now() - operationStart}ms`
+      )
       return data
     }
 
-    // exponential backoff: 3s, 6s, 12s, 24s
-    const delay = baseDelay * Math.pow(2, attempt)
+    // respect Retry-After header if present
+    const retryAfter = res.headers.get('Retry-After')
+    const retryAfterMs = retryAfter ? Number.parseInt(retryAfter, 10) * 1000 : 0
+
+    // exponential backoff: 6s, 12s, 24s, 48s
+    const delay = Math.max(baseDelay * Math.pow(2, attempt), retryAfterMs)
     console.info(
-      `[bulkvin] server busy, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`
+      `[bulkvin] ${endpoint} server busy, retrying in ${delay}ms (attempt ${attempt + 1}/${maxRetries})`
     )
     await new Promise((resolve) => setTimeout(resolve, delay))
   }
@@ -91,7 +113,7 @@ async function fetchWithRetry<T>(
 
 async function queuedFetch<T>(
   url: string,
-  options: { maxRetries?: number; baseDelay?: number } = {}
+  options: { maxRetries?: number; baseDelay?: number; endpoint?: string } = {}
 ): Promise<T> {
   return requestQueue.enqueue(() => fetchWithRetry<T>(url, options))
 }
@@ -100,7 +122,8 @@ export const bulkvinClient = {
   async checkVin(vin: string): Promise<VinCheckResult> {
     try {
       const data = await queuedFetch<BulkVinCheckResponse>(
-        `${BASE_URL}/check/?key=${BULKVIN_API_KEY}&vin=${vin}`
+        `${BASE_URL}/check/?key=${BULKVIN_API_KEY}&vin=${vin}`,
+        { endpoint: 'check' }
       )
 
       if (!data.status) {
@@ -123,7 +146,8 @@ export const bulkvinClient = {
   async getCarfaxReport(vin: string): Promise<VinReportResult> {
     try {
       const data = await queuedFetch<BulkVinReportResponse>(
-        `${BASE_URL}/carfax/?key=${BULKVIN_API_KEY}&vin=${vin}`
+        `${BASE_URL}/carfax/?key=${BULKVIN_API_KEY}&vin=${vin}`,
+        { endpoint: 'carfax' }
       )
 
       console.info('[bulkvin] carfax response:', {
@@ -153,7 +177,8 @@ export const bulkvinClient = {
   async getAutocheckReport(vin: string): Promise<VinReportResult> {
     try {
       const data = await queuedFetch<BulkVinReportResponse>(
-        `${BASE_URL}/autocheck/?key=${BULKVIN_API_KEY}&vin=${vin}`
+        `${BASE_URL}/autocheck/?key=${BULKVIN_API_KEY}&vin=${vin}`,
+        { endpoint: 'autocheck' }
       )
 
       console.info('[bulkvin] autocheck response:', {
@@ -186,22 +211,30 @@ export const bulkvinClient = {
     options: { requireBoth?: boolean } = {}
   ): Promise<{ carfax: VinReportResult; autocheck: VinReportResult }> {
     const { requireBoth = true } = options
+    const maxOuterRetries = 2
 
     let carfax = await this.getCarfaxReport(vin)
     let autocheck = await this.getAutocheckReport(vin)
 
-    // if one failed but other succeeded, retry the failed one
+    // retry partial failures — up to 2 outer retries with 10s gaps
     if (requireBoth) {
-      if (!carfax.success && autocheck.success) {
+      for (let retry = 0; retry < maxOuterRetries; retry++) {
+        const carfaxOk = carfax.success
+        const autocheckOk = autocheck.success
+
+        // both succeeded or both failed — no point retrying
+        if ((carfaxOk && autocheckOk) || (!carfaxOk && !autocheckOk)) break
+
         console.info(
-          '[bulkvin] carfax failed but autocheck succeeded, retrying carfax...'
+          `[bulkvin] partial failure (retry ${retry + 1}/${maxOuterRetries}): carfax=${carfaxOk}, autocheck=${autocheckOk}`
         )
-        carfax = await this.getCarfaxReport(vin)
-      } else if (carfax.success && !autocheck.success) {
-        console.info(
-          '[bulkvin] autocheck failed but carfax succeeded, retrying autocheck...'
-        )
-        autocheck = await this.getAutocheckReport(vin)
+        await new Promise((r) => setTimeout(r, 10_000))
+
+        if (!carfaxOk) {
+          carfax = await this.getCarfaxReport(vin)
+        } else {
+          autocheck = await this.getAutocheckReport(vin)
+        }
       }
     }
 

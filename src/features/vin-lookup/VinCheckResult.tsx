@@ -121,7 +121,7 @@ export const VinCheckResult = memo(
               </Button>
               {isPurchasing && (
                 <SizableText size="$1" color="$color8" text="center">
-                  This may take up to 15 seconds
+                  This may take up to 30 seconds
                 </SizableText>
               )}
             </YStack>

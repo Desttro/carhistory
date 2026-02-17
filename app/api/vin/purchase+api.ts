@@ -6,7 +6,11 @@ import type { Endpoint } from 'one'
 export const POST: Endpoint = async (req) => {
   try {
     const session = await ensureAuth(req)
-    const body = (await req.json()) as { vin?: string }
+    const body = (await req.json()) as {
+      vin?: string
+      carfaxRecords?: number
+      autocheckRecords?: number
+    }
 
     if (!body.vin) {
       return Response.json({ success: false, error: 'Missing vin in request body' }, { status: 400 })
@@ -19,7 +23,12 @@ export const POST: Endpoint = async (req) => {
       email: session.user.email,
     }
 
-    const result = await vinActions.purchaseReport(authData, body.vin)
+    const knownCounts =
+      body.carfaxRecords !== undefined || body.autocheckRecords !== undefined
+        ? { carfaxRecords: body.carfaxRecords, autocheckRecords: body.autocheckRecords }
+        : undefined
+
+    const result = await vinActions.purchaseReport(authData, body.vin, knownCounts)
     return Response.json(result)
   } catch (err) {
     // ensureAuth throws Response objects for 401/403

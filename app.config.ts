@@ -29,7 +29,8 @@ const getAppIcon = () => {
   return './assets/icon.png'
 }
 
-const version = '0.0.1'
+const appVersion = '3.0.0'
+const buildVersion = '40'
 
 export default {
   expo: {
@@ -46,13 +47,19 @@ export default {
     slug: 'carhistory',
     owner: 'carverify',
     scheme: appId,
-    version,
-    runtimeVersion: version, // must be set to use hot-updater "appVersion" update strategy
+    version: appVersion,
+    // runtimeVersion: version, // must be set to use hot-updater "appVersion" update strategy
+    // Strongly recommended for EAS Update / OTA
+    runtimeVersion: {
+      policy: 'appVersion', // auto-uses expo.version → safest & simplest
+      // OR: runtimeVersion: appVersion        // explicit string also fine
+    },
     newArchEnabled: true,
     platforms: ['ios', 'android', 'web'],
     userInterfaceStyle: 'automatic',
     icon: getAppIcon(),
     ios: {
+      buildNumber: buildVersion,
       supportsTablet: false,
       bundleIdentifier: getBundleId(),
       icon: getAppIcon(),
@@ -73,15 +80,16 @@ export default {
       },
     },
     android: {
+      versionCode: Number(buildVersion),
       package: getBundleId().replaceAll('-', '_'),
       icon: getAppIcon(),
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#e6dac1',
+        backgroundColor: '##ffffff',
       },
       permissions: ['android.permission.RECORD_AUDIO'],
     },
-    primaryColor: '#e6dac1',
+    primaryColor: '##ffffff',
     plugins: [
       'vxrn/expo-plugin',
       'expo-web-browser',
@@ -153,7 +161,7 @@ export default {
       [
         'expo-splash-screen',
         {
-          backgroundColor: '#e6dac1',
+          backgroundColor: '##ffffff',
           image: './assets/logo.png',
           imageWidth: 80,
           imageHeight: 80,
@@ -175,6 +183,6 @@ export default {
   } satisfies ExpoConfig,
   experiments: {
     typedRoutes: true,
-    reactCompiler: true,
+    // reactCompiler: true,
   },
 }

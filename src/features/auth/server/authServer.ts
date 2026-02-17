@@ -76,6 +76,7 @@ export const authServer = betterAuth({
     `http://localhost:${process.env.VITE_PORT_WEB || '8081'}`,
     `http://host.docker.internal:${process.env.VITE_PORT_WEB || '8081'}`,
     `${APP_SCHEME}://`,
+    'https://carhistory-dev-saby.carhistory.io',
   ],
 
   databaseHooks: {

@@ -29,7 +29,7 @@ export default {
   },
 
   server: {
-    allowedHosts: ['host.docker.internal'],
+    allowedHosts: ['host.docker.internal', 'carhistory.io', '.carhistory.io'],
   },
 
   optimizeDeps: {

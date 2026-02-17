@@ -1,3 +1,4 @@
+import { polarClient } from '@polar-sh/better-auth/client'
 import {
   adminClient,
   emailOTPClient,
@@ -15,4 +16,6 @@ export const plugins = [
   emailOTPClient(),
   phoneNumberClient(),
   platformClient(),
+  // @ts-expect-error polar plugin type mismatch with better-auth version
+  polarClient(),
 ] satisfies BetterAuthClientPlugin[]

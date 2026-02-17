@@ -1,15 +1,33 @@
 import { expo } from '@better-auth/expo'
+import { checkout, polar, portal, webhooks } from '@polar-sh/better-auth'
+import { Polar } from '@polar-sh/sdk'
 import { time } from '@take-out/helpers'
 import { betterAuth } from 'better-auth'
 import { admin, bearer, emailOTP, jwt, magicLink, phoneNumber } from 'better-auth/plugins'
 
 import { DOMAIN } from '~/constants/app'
 import { database } from '~/database/database'
-import { BETTER_AUTH_SECRET, BETTER_AUTH_URL } from '~/server/env-server'
+import { CREDIT_PACKAGES } from '~/features/payments/constants'
+import {
+  handleOrderPaid,
+  handleOrderRefunded,
+} from '~/features/payments/server/polarIntegration'
+import {
+  BETTER_AUTH_SECRET,
+  BETTER_AUTH_URL,
+  POLAR_ACCESS_TOKEN,
+  POLAR_MODE,
+  POLAR_WEBHOOK_SECRET,
+} from '~/server/env-server'
 
 import { APP_SCHEME } from '../constants'
 import { afterCreateUser } from './afterCreateUser'
 import { storeOTP } from './lastOTP'
+
+const polarClient = new Polar({
+  accessToken: POLAR_ACCESS_TOKEN,
+  server: POLAR_MODE === 'production' ? 'production' : 'sandbox',
+})
 
 console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH_URL)
 
@@ -122,6 +140,29 @@ export const authServer = betterAuth({
           return ''
         },
       },
+    }),
+
+    // polar payments integration
+    // @ts-expect-error polar plugin type mismatch with better-auth version
+    polar({
+      client: polarClient,
+      createCustomerOnSignUp: true,
+      use: [
+        checkout({
+          products: CREDIT_PACKAGES.filter((p) => p.polarProductId).map((p) => ({
+            productId: p.polarProductId,
+            slug: p.slug,
+          })),
+          successUrl: '/home/pricing/success?checkout_id={CHECKOUT_ID}',
+          authenticatedUsersOnly: true,
+        }),
+        portal(),
+        webhooks({
+          secret: POLAR_WEBHOOK_SECRET,
+          onOrderPaid: handleOrderPaid,
+          onOrderRefunded: handleOrderRefunded,
+        }),
+      ],
     }),
   ],
 

@@ -15,6 +15,7 @@ type AppUser = User & { role?: 'admin' }
 
 const betterAuthClient = createBetterAuthClient({
   baseURL: SERVER_URL,
+  //@ts-expect-error polar plugin type mismatch with better-auth version
   plugins,
   createUser: (user) => user as AppUser,
   onAuthStateChange: (state) => {

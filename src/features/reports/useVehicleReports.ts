@@ -23,14 +23,13 @@ export function useVehicleReports(limit?: number) {
     { enabled: !!userId }
   )
 
-  const now = Date.now()
-
   const { activeReports, expiredReports } = useMemo(() => {
+    const now = Date.now()
     const active: VehicleReportWithVehicle[] = []
     const expired: VehicleReportWithVehicle[] = []
 
     for (const report of reports || []) {
-      if (report.expiresAt > now) {
+      if (new Date(report.expiresAt).getTime() > now) {
         active.push(report as VehicleReportWithVehicle)
       } else {
         expired.push(report as VehicleReportWithVehicle)
@@ -38,7 +37,7 @@ export function useVehicleReports(limit?: number) {
     }
 
     return { activeReports: active, expiredReports: expired }
-  }, [reports, now])
+  }, [reports])
 
   return {
     reports: reports as readonly VehicleReportWithVehicle[] | undefined,

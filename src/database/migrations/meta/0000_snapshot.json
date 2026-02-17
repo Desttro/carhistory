@@ -1,5 +1,5 @@
 {
-  "id": "43028fae-8ab4-443c-856d-a2d3b6c2c4dc",
+  "id": "eda88c79-5a6e-4564-a040-5d2641fa30da",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -109,6 +109,129 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.creditTransaction": {
+      "name": "creditTransaction",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "referenceId": {
+          "name": "referenceId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "platform": {
+          "name": "platform",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "platformTransactionId": {
+          "name": "platformTransactionId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "platformEventType": {
+          "name": "platformEventType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "productId": {
+          "name": "productId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amountCents": {
+          "name": "amountCents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rawPayload": {
+          "name": "rawPayload",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "creditTransaction_userId_idx": {
+          "name": "creditTransaction_userId_idx",
+          "columns": [
+            {
+              "expression": "userId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "creditTransaction_platform_txid_unique": {
+          "name": "creditTransaction_platform_txid_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "platform",
+            "platformTransactionId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.jwks": {
       "name": "jwks",
       "schema": "",
@@ -139,6 +262,373 @@
         }
       },
       "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.parsedReport": {
+      "name": "parsedReport",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "reportHtmlId": {
+          "name": "reportHtmlId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vehicleId": {
+          "name": "vehicleId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vehicleReportId": {
+          "name": "vehicleReportId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parserVersion": {
+          "name": "parserVersion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parsedAt": {
+          "name": "parsedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'success'"
+        },
+        "errorMessage": {
+          "name": "errorMessage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estimatedOwners": {
+          "name": "estimatedOwners",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "accidentCount": {
+          "name": "accidentCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "odometerLastReported": {
+          "name": "odometerLastReported",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "odometerLastDate": {
+          "name": "odometerLastDate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "odometerIssues": {
+          "name": "odometerIssues",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "titleBrands": {
+          "name": "titleBrands",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "totalLoss": {
+          "name": "totalLoss",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "providerScore": {
+          "name": "providerScore",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "providerScoreRangeLow": {
+          "name": "providerScoreRangeLow",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "providerScoreRangeHigh": {
+          "name": "providerScoreRangeHigh",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rawParsedJson": {
+          "name": "rawParsedJson",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "parsedReport_vehicleReportId_idx": {
+          "name": "parsedReport_vehicleReportId_idx",
+          "columns": [
+            {
+              "expression": "vehicleReportId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "parsedReport_vehicleId_idx": {
+          "name": "parsedReport_vehicleId_idx",
+          "columns": [
+            {
+              "expression": "vehicleId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.promo": {
+      "name": "promo",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "maxUses": {
+          "name": "maxUses",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "useCount": {
+          "name": "useCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "validUntil": {
+          "name": "validUntil",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "productIds": {
+          "name": "productIds",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "promo_code_idx": {
+          "name": "promo_code_idx",
+          "columns": [
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "promo_code_unique": {
+          "name": "promo_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.reportHtml": {
+      "name": "reportHtml",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vehicleId": {
+          "name": "vehicleId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "providerVersion": {
+          "name": "providerVersion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "r2Key": {
+          "name": "r2Key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "r2Bucket": {
+          "name": "r2Bucket",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'reports'"
+        },
+        "contentHash": {
+          "name": "contentHash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fileSizeBytes": {
+          "name": "fileSizeBytes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reportDate": {
+          "name": "reportDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uploadedAt": {
+          "name": "uploadedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "reportHtml_vehicleId_idx": {
+          "name": "reportHtml_vehicleId_idx",
+          "columns": [
+            {
+              "expression": "vehicleId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "reportHtml_contentHash_idx": {
+          "name": "reportHtml_contentHash_idx",
+          "columns": [
+            {
+              "expression": "contentHash",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -221,6 +711,189 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.timelineEvent": {
+      "name": "timelineEvent",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vehicleReportId": {
+          "name": "vehicleReportId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vehicleId": {
+          "name": "vehicleId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "eventType": {
+          "name": "eventType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "eventSubtype": {
+          "name": "eventSubtype",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "eventDate": {
+          "name": "eventDate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "eventDatePrecision": {
+          "name": "eventDatePrecision",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'day'"
+        },
+        "location": {
+          "name": "location",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "country": {
+          "name": "country",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'US'"
+        },
+        "odometerMiles": {
+          "name": "odometerMiles",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "details": {
+          "name": "details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "detailsJson": {
+          "name": "detailsJson",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "severity": {
+          "name": "severity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isNegative": {
+          "name": "isNegative",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "ownerSequence": {
+          "name": "ownerSequence",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sources": {
+          "name": "sources",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fingerprint": {
+          "name": "fingerprint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "timelineEvent_vehicleReportId_idx": {
+          "name": "timelineEvent_vehicleReportId_idx",
+          "columns": [
+            {
+              "expression": "vehicleReportId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "timelineEvent_eventType_idx": {
+          "name": "timelineEvent_eventType_idx",
+          "columns": [
+            {
+              "expression": "eventType",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "timelineEvent_eventDate_idx": {
+          "name": "timelineEvent_eventDate_idx",
+          "columns": [
+            {
+              "expression": "eventDate",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -580,129 +1253,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.creditTransaction": {
-      "name": "creditTransaction",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "amount": {
-          "name": "amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "referenceId": {
-          "name": "referenceId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "platform": {
-          "name": "platform",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "platformTransactionId": {
-          "name": "platformTransactionId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "platformEventType": {
-          "name": "platformEventType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "productId": {
-          "name": "productId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "amountCents": {
-          "name": "amountCents",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "currency": {
-          "name": "currency",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "rawPayload": {
-          "name": "rawPayload",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "creditTransaction_userId_idx": {
-          "name": "creditTransaction_userId_idx",
-          "columns": [
-            {
-              "expression": "userId",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "creditTransaction_platform_txid_unique": {
-          "name": "creditTransaction_platform_txid_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "platform",
-            "platformTransactionId"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.device": {
       "name": "device",
       "schema": "",
@@ -1043,174 +1593,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.parsedReport": {
-      "name": "parsedReport",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "reportHtmlId": {
-          "name": "reportHtmlId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "vehicleId": {
-          "name": "vehicleId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "vehicleReportId": {
-          "name": "vehicleReportId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "provider": {
-          "name": "provider",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "parserVersion": {
-          "name": "parserVersion",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "parsedAt": {
-          "name": "parsedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "status": {
-          "name": "status",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'success'"
-        },
-        "errorMessage": {
-          "name": "errorMessage",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "estimatedOwners": {
-          "name": "estimatedOwners",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "accidentCount": {
-          "name": "accidentCount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "odometerLastReported": {
-          "name": "odometerLastReported",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "odometerLastDate": {
-          "name": "odometerLastDate",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "odometerIssues": {
-          "name": "odometerIssues",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "titleBrands": {
-          "name": "titleBrands",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "totalLoss": {
-          "name": "totalLoss",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "providerScore": {
-          "name": "providerScore",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "providerScoreRangeLow": {
-          "name": "providerScoreRangeLow",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "providerScoreRangeHigh": {
-          "name": "providerScoreRangeHigh",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "rawParsedJson": {
-          "name": "rawParsedJson",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "parsedReport_vehicleReportId_idx": {
-          "name": "parsedReport_vehicleReportId_idx",
-          "columns": [
-            {
-              "expression": "vehicleReportId",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "parsedReport_vehicleId_idx": {
-          "name": "parsedReport_vehicleId_idx",
-          "columns": [
-            {
-              "expression": "vehicleId",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.post": {
       "name": "post",
       "schema": "",
@@ -1314,99 +1696,6 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.promo": {
-      "name": "promo",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "code": {
-          "name": "code",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "value": {
-          "name": "value",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "maxUses": {
-          "name": "maxUses",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "useCount": {
-          "name": "useCount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "validUntil": {
-          "name": "validUntil",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "productIds": {
-          "name": "productIds",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "promo_code_idx": {
-          "name": "promo_code_idx",
-          "columns": [
-            {
-              "expression": "code",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "promo_code_unique": {
-          "name": "promo_code_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
-        }
-      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -1529,295 +1818,6 @@
           "columns": [
             {
               "expression": "status",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.reportHtml": {
-      "name": "reportHtml",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "vehicleId": {
-          "name": "vehicleId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "provider": {
-          "name": "provider",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "providerVersion": {
-          "name": "providerVersion",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "r2Key": {
-          "name": "r2Key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "r2Bucket": {
-          "name": "r2Bucket",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'reports'"
-        },
-        "contentHash": {
-          "name": "contentHash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "fileSizeBytes": {
-          "name": "fileSizeBytes",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "reportDate": {
-          "name": "reportDate",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "uploadedAt": {
-          "name": "uploadedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "reportHtml_vehicleId_idx": {
-          "name": "reportHtml_vehicleId_idx",
-          "columns": [
-            {
-              "expression": "vehicleId",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "reportHtml_contentHash_idx": {
-          "name": "reportHtml_contentHash_idx",
-          "columns": [
-            {
-              "expression": "contentHash",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.timelineEvent": {
-      "name": "timelineEvent",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "vehicleReportId": {
-          "name": "vehicleReportId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "vehicleId": {
-          "name": "vehicleId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "eventType": {
-          "name": "eventType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "eventSubtype": {
-          "name": "eventSubtype",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "eventDate": {
-          "name": "eventDate",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "eventDatePrecision": {
-          "name": "eventDatePrecision",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'day'"
-        },
-        "location": {
-          "name": "location",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "state": {
-          "name": "state",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "country": {
-          "name": "country",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'US'"
-        },
-        "odometerMiles": {
-          "name": "odometerMiles",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "summary": {
-          "name": "summary",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "details": {
-          "name": "details",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "detailsJson": {
-          "name": "detailsJson",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "severity": {
-          "name": "severity",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "isNegative": {
-          "name": "isNegative",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "ownerSequence": {
-          "name": "ownerSequence",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "sources": {
-          "name": "sources",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "fingerprint": {
-          "name": "fingerprint",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "timelineEvent_vehicleReportId_idx": {
-          "name": "timelineEvent_vehicleReportId_idx",
-          "columns": [
-            {
-              "expression": "vehicleReportId",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "timelineEvent_eventType_idx": {
-          "name": "timelineEvent_eventType_idx",
-          "columns": [
-            {
-              "expression": "eventType",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "timelineEvent_eventDate_idx": {
-          "name": "timelineEvent_eventDate_idx",
-          "columns": [
-            {
-              "expression": "eventDate",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

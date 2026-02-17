@@ -1,17 +1,12 @@
 import { eq, and, gt } from 'drizzle-orm'
 
 import { getDb } from '~/database'
-import {
-  vehicle,
-  vehicleReport,
-  reportHtml,
-  parsedReport,
-  timelineEvent,
-} from '~/database/schema-public'
+import { reportHtml, parsedReport, timelineEvent } from '~/database/schema-private'
+import { vehicle, vehicleReport } from '~/database/schema-public'
 
 import { REPORT_VALIDITY_DAYS } from '../constants'
 import { computeContentHash } from '../ingest/computeHash'
-import { detectProvider, extractVinFromHtml } from '../ingest/detectProvider'
+import { detectProvider } from '../ingest/detectProvider'
 import { storeHtml } from '../ingest/storeHtml'
 import { mergeReports } from '../merge/mergeReports'
 import { AutoCheckParser } from '../parsers/autocheck/AutoCheckParser'
@@ -200,7 +195,7 @@ async function createReport(
       providerScore: source.report.providerScore,
       providerScoreRangeLow: source.report.providerScoreRangeLow,
       providerScoreRangeHigh: source.report.providerScoreRangeHigh,
-      rawParsedJson: source.report as any,
+      rawParsedJson: source.report,
     })
 
     mergeInputs.push({ report: source.report, parsedReportId })
@@ -249,7 +244,7 @@ async function createReport(
       eventCount: canonical.eventCount,
       serviceRecordCount: canonical.serviceRecordCount,
       sourceProviders: canonical.sourceProviders,
-      canonicalJson: canonical as any,
+      canonicalJson: canonical,
     })
     .where(eq(vehicleReport.id, reportId))
 
@@ -285,7 +280,7 @@ async function getReport(
     return null
   }
 
-  return result[0].canonicalJson as CanonicalReport
+  return result[0].canonicalJson ?? null
 }
 
 // check if user has valid (non-expired) report for VIN

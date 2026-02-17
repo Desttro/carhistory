@@ -14,11 +14,78 @@ CREATE TABLE "account" (
 	"updatedAt" timestamp NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "creditTransaction" (
+	"id" text PRIMARY KEY NOT NULL,
+	"userId" text NOT NULL,
+	"amount" integer NOT NULL,
+	"type" text NOT NULL,
+	"referenceId" text,
+	"description" text,
+	"platform" text,
+	"platformTransactionId" text,
+	"platformEventType" text,
+	"productId" text,
+	"amountCents" integer,
+	"currency" text,
+	"rawPayload" jsonb,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "creditTransaction_platform_txid_unique" UNIQUE("platform","platformTransactionId")
+);
+--> statement-breakpoint
 CREATE TABLE "jwks" (
 	"id" text PRIMARY KEY NOT NULL,
 	"publicKey" text NOT NULL,
 	"privateKey" text NOT NULL,
 	"createdAt" timestamp NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "parsedReport" (
+	"id" text PRIMARY KEY NOT NULL,
+	"reportHtmlId" text NOT NULL,
+	"vehicleId" text NOT NULL,
+	"vehicleReportId" text NOT NULL,
+	"provider" text NOT NULL,
+	"parserVersion" text NOT NULL,
+	"parsedAt" timestamp DEFAULT now() NOT NULL,
+	"status" text DEFAULT 'success' NOT NULL,
+	"errorMessage" text,
+	"estimatedOwners" integer,
+	"accidentCount" integer,
+	"odometerLastReported" integer,
+	"odometerLastDate" text,
+	"odometerIssues" boolean DEFAULT false,
+	"titleBrands" jsonb,
+	"totalLoss" boolean DEFAULT false,
+	"providerScore" integer,
+	"providerScoreRangeLow" integer,
+	"providerScoreRangeHigh" integer,
+	"rawParsedJson" jsonb
+);
+--> statement-breakpoint
+CREATE TABLE "promo" (
+	"id" text PRIMARY KEY NOT NULL,
+	"code" text NOT NULL,
+	"type" text NOT NULL,
+	"value" integer NOT NULL,
+	"maxUses" integer,
+	"useCount" integer DEFAULT 0 NOT NULL,
+	"validUntil" timestamp,
+	"productIds" jsonb,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "promo_code_unique" UNIQUE("code")
+);
+--> statement-breakpoint
+CREATE TABLE "reportHtml" (
+	"id" text PRIMARY KEY NOT NULL,
+	"vehicleId" text NOT NULL,
+	"provider" text NOT NULL,
+	"providerVersion" text,
+	"r2Key" text NOT NULL,
+	"r2Bucket" text DEFAULT 'reports' NOT NULL,
+	"contentHash" text NOT NULL,
+	"fileSizeBytes" integer,
+	"reportDate" timestamp,
+	"uploadedAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "session" (
@@ -31,6 +98,29 @@ CREATE TABLE "session" (
 	"userAgent" text,
 	"userId" text NOT NULL,
 	"impersonatedBy" varchar
+);
+--> statement-breakpoint
+CREATE TABLE "timelineEvent" (
+	"id" text PRIMARY KEY NOT NULL,
+	"vehicleReportId" text NOT NULL,
+	"vehicleId" text NOT NULL,
+	"eventType" text NOT NULL,
+	"eventSubtype" text,
+	"eventDate" text NOT NULL,
+	"eventDatePrecision" text DEFAULT 'day' NOT NULL,
+	"location" text,
+	"state" text,
+	"country" text DEFAULT 'US',
+	"odometerMiles" integer,
+	"summary" text NOT NULL,
+	"details" text,
+	"detailsJson" jsonb,
+	"severity" text,
+	"isNegative" boolean DEFAULT false,
+	"ownerSequence" integer,
+	"sources" jsonb,
+	"fingerprint" text NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "user" (
@@ -83,24 +173,6 @@ CREATE TABLE "comment" (
 	"createdAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "creditTransaction" (
-	"id" text PRIMARY KEY NOT NULL,
-	"userId" text NOT NULL,
-	"amount" integer NOT NULL,
-	"type" text NOT NULL,
-	"referenceId" text,
-	"description" text,
-	"platform" text,
-	"platformTransactionId" text,
-	"platformEventType" text,
-	"productId" text,
-	"amountCents" integer,
-	"currency" text,
-	"rawPayload" jsonb,
-	"createdAt" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "creditTransaction_platform_txid_unique" UNIQUE("platform","platformTransactionId")
-);
---> statement-breakpoint
 CREATE TABLE "device" (
 	"id" text PRIMARY KEY NOT NULL,
 	"userId" text NOT NULL,
@@ -142,29 +214,6 @@ CREATE TABLE "notification" (
 	"createdAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "parsedReport" (
-	"id" text PRIMARY KEY NOT NULL,
-	"reportHtmlId" text NOT NULL,
-	"vehicleId" text NOT NULL,
-	"vehicleReportId" text NOT NULL,
-	"provider" text NOT NULL,
-	"parserVersion" text NOT NULL,
-	"parsedAt" timestamp DEFAULT now() NOT NULL,
-	"status" text DEFAULT 'success' NOT NULL,
-	"errorMessage" text,
-	"estimatedOwners" integer,
-	"accidentCount" integer,
-	"odometerLastReported" integer,
-	"odometerLastDate" text,
-	"odometerIssues" boolean DEFAULT false,
-	"titleBrands" jsonb,
-	"totalLoss" boolean DEFAULT false,
-	"providerScore" integer,
-	"providerScoreRangeLow" integer,
-	"providerScoreRangeHigh" integer,
-	"rawParsedJson" jsonb
-);
---> statement-breakpoint
 CREATE TABLE "post" (
 	"id" text PRIMARY KEY NOT NULL,
 	"userId" text NOT NULL,
@@ -178,19 +227,6 @@ CREATE TABLE "post" (
 	"updatedAt" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "promo" (
-	"id" text PRIMARY KEY NOT NULL,
-	"code" text NOT NULL,
-	"type" text NOT NULL,
-	"value" integer NOT NULL,
-	"maxUses" integer,
-	"useCount" integer DEFAULT 0 NOT NULL,
-	"validUntil" timestamp,
-	"productIds" jsonb,
-	"createdAt" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "promo_code_unique" UNIQUE("code")
-);
---> statement-breakpoint
 CREATE TABLE "report" (
 	"id" text PRIMARY KEY NOT NULL,
 	"reporterId" text NOT NULL,
@@ -201,42 +237,6 @@ CREATE TABLE "report" (
 	"status" text DEFAULT 'pending' NOT NULL,
 	"reviewedBy" text,
 	"reviewedAt" timestamp,
-	"createdAt" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "reportHtml" (
-	"id" text PRIMARY KEY NOT NULL,
-	"vehicleId" text NOT NULL,
-	"provider" text NOT NULL,
-	"providerVersion" text,
-	"r2Key" text NOT NULL,
-	"r2Bucket" text DEFAULT 'reports' NOT NULL,
-	"contentHash" text NOT NULL,
-	"fileSizeBytes" integer,
-	"reportDate" timestamp,
-	"uploadedAt" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "timelineEvent" (
-	"id" text PRIMARY KEY NOT NULL,
-	"vehicleReportId" text NOT NULL,
-	"vehicleId" text NOT NULL,
-	"eventType" text NOT NULL,
-	"eventSubtype" text,
-	"eventDate" text NOT NULL,
-	"eventDatePrecision" text DEFAULT 'day' NOT NULL,
-	"location" text,
-	"state" text,
-	"country" text DEFAULT 'US',
-	"odometerMiles" integer,
-	"summary" text NOT NULL,
-	"details" text,
-	"detailsJson" jsonb,
-	"severity" text,
-	"isNegative" boolean DEFAULT false,
-	"ownerSequence" integer,
-	"sources" jsonb,
-	"fingerprint" text NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -312,31 +312,31 @@ CREATE TABLE "vehicleReport" (
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "creditTransaction_userId_idx" ON "creditTransaction" USING btree ("userId");--> statement-breakpoint
+CREATE INDEX "parsedReport_vehicleReportId_idx" ON "parsedReport" USING btree ("vehicleReportId");--> statement-breakpoint
+CREATE INDEX "parsedReport_vehicleId_idx" ON "parsedReport" USING btree ("vehicleId");--> statement-breakpoint
+CREATE INDEX "promo_code_idx" ON "promo" USING btree ("code");--> statement-breakpoint
+CREATE INDEX "reportHtml_vehicleId_idx" ON "reportHtml" USING btree ("vehicleId");--> statement-breakpoint
+CREATE INDEX "reportHtml_contentHash_idx" ON "reportHtml" USING btree ("contentHash");--> statement-breakpoint
+CREATE INDEX "timelineEvent_vehicleReportId_idx" ON "timelineEvent" USING btree ("vehicleReportId");--> statement-breakpoint
+CREATE INDEX "timelineEvent_eventType_idx" ON "timelineEvent" USING btree ("eventType");--> statement-breakpoint
+CREATE INDEX "timelineEvent_eventDate_idx" ON "timelineEvent" USING btree ("eventDate");--> statement-breakpoint
 CREATE INDEX "block_blockerId_idx" ON "block" USING btree ("blockerId");--> statement-breakpoint
 CREATE INDEX "block_blockedId_idx" ON "block" USING btree ("blockedId");--> statement-breakpoint
 CREATE INDEX "comment_postId_idx" ON "comment" USING btree ("postId");--> statement-breakpoint
 CREATE INDEX "comment_userId_idx" ON "comment" USING btree ("userId");--> statement-breakpoint
-CREATE INDEX "creditTransaction_userId_idx" ON "creditTransaction" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX "device_userId_idx" ON "device" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX "device_pushToken_idx" ON "device" USING btree ("pushToken");--> statement-breakpoint
 CREATE INDEX "invite_email_idx" ON "invite" USING btree ("email");--> statement-breakpoint
 CREATE INDEX "notification_userId_idx" ON "notification" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX "notification_userId_read_idx" ON "notification" USING btree ("userId","read");--> statement-breakpoint
 CREATE INDEX "notification_createdAt_idx" ON "notification" USING btree ("createdAt");--> statement-breakpoint
-CREATE INDEX "parsedReport_vehicleReportId_idx" ON "parsedReport" USING btree ("vehicleReportId");--> statement-breakpoint
-CREATE INDEX "parsedReport_vehicleId_idx" ON "parsedReport" USING btree ("vehicleId");--> statement-breakpoint
 CREATE INDEX "post_userId_idx" ON "post" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX "post_createdAt_idx" ON "post" USING btree ("createdAt");--> statement-breakpoint
-CREATE INDEX "promo_code_idx" ON "promo" USING btree ("code");--> statement-breakpoint
 CREATE INDEX "report_reporterId_idx" ON "report" USING btree ("reporterId");--> statement-breakpoint
 CREATE INDEX "report_reportedUserId_idx" ON "report" USING btree ("reportedUserId");--> statement-breakpoint
 CREATE INDEX "report_reportedPostId_idx" ON "report" USING btree ("reportedPostId");--> statement-breakpoint
 CREATE INDEX "report_status_idx" ON "report" USING btree ("status");--> statement-breakpoint
-CREATE INDEX "reportHtml_vehicleId_idx" ON "reportHtml" USING btree ("vehicleId");--> statement-breakpoint
-CREATE INDEX "reportHtml_contentHash_idx" ON "reportHtml" USING btree ("contentHash");--> statement-breakpoint
-CREATE INDEX "timelineEvent_vehicleReportId_idx" ON "timelineEvent" USING btree ("vehicleReportId");--> statement-breakpoint
-CREATE INDEX "timelineEvent_eventType_idx" ON "timelineEvent" USING btree ("eventType");--> statement-breakpoint
-CREATE INDEX "timelineEvent_eventDate_idx" ON "timelineEvent" USING btree ("eventDate");--> statement-breakpoint
 CREATE INDEX "userCredits_userId_idx" ON "userCredits" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX "vehicle_make_model_idx" ON "vehicle" USING btree ("make","model");--> statement-breakpoint
 CREATE INDEX "vehicleReport_vehicleId_idx" ON "vehicleReport" USING btree ("vehicleId");--> statement-breakpoint

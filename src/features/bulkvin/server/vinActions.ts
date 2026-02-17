@@ -1,7 +1,7 @@
 import { REPORT_CREDIT_COST } from '~/features/credits/constants'
 import { creditsActions } from '~/features/credits/server/creditsActions'
 import { reportActions } from '~/features/reports/server/reportActions'
-import { validateVin } from '~/features/vin/validation'
+import { validateVin } from '~/features/vin-lookup/validation'
 
 import { bulkvinClient } from '../client'
 

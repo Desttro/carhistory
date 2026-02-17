@@ -1,7 +1,7 @@
 import { eq, and } from 'drizzle-orm'
 
 import { getDb } from '~/database'
-import { creditTransaction } from '~/database/schema-public'
+import { creditTransaction } from '~/database/schema-private'
 import {
   creditsActions,
   type PaymentMetadata,

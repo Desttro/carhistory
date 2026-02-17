@@ -4,9 +4,10 @@ import { useCallback, useState } from 'react'
 import { REPORT_CREDIT_COST } from '~/features/credits/constants'
 import { useCredits } from '~/features/credits/useCredits'
 import { useUser } from '~/features/user/useUser'
-import { VIN_LENGTH } from '~/features/vin/validation'
 import { dialogConfirm } from '~/interface/dialogs/actions'
 import { showToast } from '~/interface/toast/helpers'
+
+import { VIN_LENGTH } from './validation'
 
 import type { VinCheckResult } from '~/features/bulkvin/types'
 

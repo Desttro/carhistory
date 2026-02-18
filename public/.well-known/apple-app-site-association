@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "5J565W44Y8.io.carhistory.app",
+        "paths": ["/", "/.*"]
+      },
+      {
+        "appID": "5J565W44Y8.io.carhistory.app.preview",
+        "paths": ["/", "/.*"]
+      },
+      {
+        "appID": "5J565W44Y8.io.carhistory.app.dev",
+        "paths": ["/", "/.*"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.carhistory.app",
+        "sha256_cert_fingerprints": [
+          "SHA256:xx:xx:xx... (production fingerprint)"
+        ]
+      }
+    },
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.carhistory.app.preview",
+        "sha256_cert_fingerprints": [
+          "SHA256:yy:yy:yy... (preview fingerprint)"
+        ]
+      }
+    },
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.carhistory.app.dev",
+        "sha256_cert_fingerprints": [
+          "SHA256:zz:zz:zz... (dev fingerprint – volitelné)"
+        ]
+      }
+    }
+  ]

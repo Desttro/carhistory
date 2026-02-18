@@ -78,6 +78,7 @@ export default {
           'Allow $(PRODUCT_NAME) to access your music library',
         UIBackgroundModes: ['fetch', 'remote-notification'],
       },
+      associatedDomains: ['applinks:carhistory.io', 'applinks:*.carhistory.io'],
     },
     android: {
       versionCode: Number(buildVersion),
@@ -88,6 +89,19 @@ export default {
         backgroundColor: '##ffffff',
       },
       permissions: ['android.permission.RECORD_AUDIO'],
+      intentFilters: [
+        {
+          action: 'VIEW',
+          data: [
+            {
+              scheme: 'https',
+              host: 'carhistory.io',
+              pathPrefix: '/',
+            },
+          ],
+          category: ['BROWSABLE', 'DEFAULT'],
+        },
+      ],
     },
     primaryColor: '##ffffff',
     plugins: [

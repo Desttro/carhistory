@@ -24,19 +24,3 @@ export async function setAttributes(
     throw new Error(`revenuecat setAttributes failed: ${res.status} ${await res.text()}`)
   }
 }
-
-export async function getSubscriber(appUserId: string) {
-  const res = await fetch(
-    `${BASE_URL}/subscribers/${encodeURIComponent(appUserId)}`,
-    {
-      method: 'GET',
-      headers: headers(),
-    }
-  )
-
-  if (!res.ok) {
-    throw new Error(`revenuecat getSubscriber failed: ${res.status} ${await res.text()}`)
-  }
-
-  return res.json()
-}

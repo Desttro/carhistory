@@ -4,6 +4,7 @@ import { DEMO_EMAIL } from '~/constants/app'
 import { getDb } from '~/database'
 import { user as userTable, whitelist } from '~/database/schema-private'
 import { userCredits, userPublic, userState } from '~/database/schema-public'
+import { syncPolarCustomer } from '~/features/payments/server/polarCustomerSync'
 
 export async function afterCreateUser(user: { id: string; email: string }) {
   try {
@@ -118,6 +119,8 @@ export async function afterCreateUser(user: { id: string; email: string }) {
 
     console.info(`[afterCreateUser] Creating userPublic record`)
     await db.insert(userPublic).values(userRow)
+
+    await syncPolarCustomer({ id: userId, email, name: userPrivate.name || undefined })
 
     console.info(`[afterCreateUser] ✅ User ${email} setup complete`)
     return userPrivate

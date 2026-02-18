@@ -1,6 +1,5 @@
 import { expo } from '@better-auth/expo'
 import { checkout, polar, portal, webhooks } from '@polar-sh/better-auth'
-import { Polar } from '@polar-sh/sdk'
 import { time } from '@take-out/helpers'
 import { betterAuth } from 'better-auth'
 import { admin, bearer, emailOTP, jwt, magicLink, phoneNumber } from 'better-auth/plugins'
@@ -8,6 +7,7 @@ import { admin, bearer, emailOTP, jwt, magicLink, phoneNumber } from 'better-aut
 import { DOMAIN } from '~/constants/app'
 import { database } from '~/database/database'
 import { CREDIT_PACKAGES } from '~/features/payments/constants'
+import { polarClient } from '~/features/payments/server/polarClient'
 import {
   handleOrderPaid,
   handleOrderRefunded,
@@ -15,19 +15,12 @@ import {
 import {
   BETTER_AUTH_SECRET,
   BETTER_AUTH_URL,
-  POLAR_ACCESS_TOKEN,
-  POLAR_MODE,
   POLAR_WEBHOOK_SECRET,
 } from '~/server/env-server'
 
 import { APP_SCHEME } from '../constants'
 import { afterCreateUser } from './afterCreateUser'
 import { storeOTP } from './lastOTP'
-
-const polarClient = new Polar({
-  accessToken: POLAR_ACCESS_TOKEN,
-  server: POLAR_MODE === 'production' ? 'production' : 'sandbox',
-})
 
 console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH_URL)
 
@@ -154,7 +147,7 @@ export const authServer = betterAuth({
     // polar payments integration
     polar({
       client: polarClient,
-      createCustomerOnSignUp: true,
+      createCustomerOnSignUp: false,
       use: [
         checkout({
           products: CREDIT_PACKAGES.filter((p) => p.polarProductId).map((p) => ({

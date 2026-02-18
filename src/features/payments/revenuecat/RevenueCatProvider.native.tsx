@@ -5,7 +5,8 @@ import Purchases, {
 } from 'react-native-purchases'
 
 import { useAuth } from '~/features/auth/client/authClient'
-import { VITE_REVENUECAT_API_PUBLIC } from '~/server/env-server'
+
+const VITE_REVENUECAT_API_PUBLIC = process.env.VITE_REVENUECAT_API_PUBLIC ?? ''
 
 export interface RevenueCatContextValue {
   offerings: PurchasesOfferings | null

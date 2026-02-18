@@ -16,7 +16,6 @@
         "VITE_ZERO_HOSTNAME": "carhistory-dev-saby.carhistory.io",
         "VITE_WEB_HOSTNAME": "carhistory-dev-saby.carhistory.io",
         "VITE_REVENUECAT_API_PUBLIC": "test_YdhUttgtlMcWaNHudizpxsdTfhT"
-
       }
     },
     "development": {
@@ -30,12 +29,6 @@
       "ios": {
         "simulator": true,
         "image": "latest"
-      },
-      "env": {
-        "APP_VARIANT": "development",
-        "VITE_ZERO_HOSTNAME": "carhistory-dev-saby.carhistory.io",
-        "VITE_WEB_HOSTNAME": "carhistory-dev-saby.carhistory.io",
-        "VITE_REVENUECAT_API_PUBLIC": "test_YdhUttgtlMcWaNHudizpxsdTfhT"
       }
     },
     "preview": {

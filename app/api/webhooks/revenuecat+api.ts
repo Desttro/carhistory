@@ -1,4 +1,4 @@
-import { handleRevenueCatWebhook } from '~/features/payments/server/revenuecatWebhook'
+import { handleRevenueCatWebhook } from '~/features/payments/server/revenuecatIntegration'
 import { REVENUECAT_WEBHOOK_AUTH } from '~/server/env-server'
 
 import type { Endpoint } from 'one'

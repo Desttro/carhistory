@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import Purchases, {
   type CustomerInfo,
   type PurchasesOfferings,
@@ -34,90 +34,77 @@ export function RevenueCatProvider({ children }: { children: ReactNode }) {
   // configure sdk on mount
   useEffect(() => {
     if (!VITE_REVENUECAT_API_PUBLIC) {
-      console.info('[RevenueCat] no API key configured, skipping initialization')
+      console.info('[revenuecat] no api key configured, skipping initialization')
       setIsLoading(false)
       return
     }
 
-    const configure = async () => {
-      try {
-        Purchases.configure({ apiKey: VITE_REVENUECAT_API_PUBLIC })
-        setIsConfigured(true)
-        console.info('[RevenueCat] SDK configured')
-      } catch (error) {
-        console.info('[RevenueCat] failed to configure:', error)
-      }
+    try {
+      Purchases.configure({ apiKey: VITE_REVENUECAT_API_PUBLIC })
+      setIsConfigured(true)
+      console.info('[revenuecat] sdk configured')
+    } catch (error) {
+      console.info('[revenuecat] failed to configure:', error)
     }
-
-    configure()
   }, [])
 
-  // link/unlink user when auth state changes
+  // sync identity + offerings when auth state changes
   useEffect(() => {
     if (!isConfigured) return
     if (state === 'loading') return
 
-    const syncUser = async () => {
+    const sync = async () => {
       try {
         if (user?.id) {
-          // log in with our user ID so RevenueCat can associate purchases
           const { customerInfo } = await Purchases.logIn(user.id)
           setCustomerInfo(customerInfo)
-          console.info('[RevenueCat] logged in user:', user.id)
+
+          if (user.email) Purchases.setEmail(user.email)
+          if (user.name) Purchases.setDisplayName(user.name)
+
+          console.info('[revenuecat] logged in user:', user.id)
         } else {
-          // user logged out, reset to anonymous
           const customerInfo = await Purchases.logOut()
           setCustomerInfo(customerInfo)
-          console.info('[RevenueCat] logged out user')
+          console.info('[revenuecat] logged out user')
         }
-      } catch (error) {
-        console.info('[RevenueCat] sync user error:', error)
-      }
-    }
 
-    syncUser()
-  }, [isConfigured, user?.id, state])
-
-  // fetch offerings once configured
-  useEffect(() => {
-    if (!isConfigured) return
-
-    const fetchOfferings = async () => {
-      try {
-        setIsLoading(true)
         const fetchedOfferings = await Purchases.getOfferings()
         setOfferings(fetchedOfferings)
-        console.info('[RevenueCat] offerings fetched:', Object.keys(fetchedOfferings.all))
+        console.info('[revenuecat] offerings fetched:', Object.keys(fetchedOfferings.all))
       } catch (error) {
-        console.info('[RevenueCat] failed to fetch offerings:', error)
+        console.info('[revenuecat] sync error:', error)
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchOfferings()
-  }, [isConfigured])
+    sync()
+  }, [isConfigured, user?.id, user?.email, user?.name, state])
 
-  const refreshCustomerInfo = async () => {
+  const refreshCustomerInfo = useCallback(async () => {
     if (!isConfigured) return
     try {
       const info = await Purchases.getCustomerInfo()
       setCustomerInfo(info)
     } catch (error) {
-      console.info('[RevenueCat] failed to refresh customer info:', error)
+      console.info('[revenuecat] failed to refresh customer info:', error)
     }
-  }
+  }, [isConfigured])
+
+  const value = useMemo(
+    () => ({
+      offerings,
+      customerInfo,
+      isConfigured,
+      isLoading,
+      refreshCustomerInfo,
+    }),
+    [offerings, customerInfo, isConfigured, isLoading, refreshCustomerInfo]
+  )
 
   return (
-    <RevenueCatContext.Provider
-      value={{
-        offerings,
-        customerInfo,
-        isConfigured,
-        isLoading,
-        refreshCustomerInfo,
-      }}
-    >
+    <RevenueCatContext.Provider value={value}>
       {children}
     </RevenueCatContext.Provider>
   )

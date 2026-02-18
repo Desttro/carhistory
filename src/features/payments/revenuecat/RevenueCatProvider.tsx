@@ -2,7 +2,7 @@ import { createContext, type ReactNode } from 'react'
 
 import type { CustomerInfo, PurchasesOfferings } from 'react-native-purchases'
 
-// web stub - RevenueCat is native only
+// web stub — revenuecat is native only
 
 export interface RevenueCatContextValue {
   offerings: PurchasesOfferings | null
@@ -21,17 +21,5 @@ export const RevenueCatContext = createContext<RevenueCatContextValue>({
 })
 
 export function RevenueCatProvider({ children }: { children: ReactNode }) {
-  return (
-    <RevenueCatContext.Provider
-      value={{
-        offerings: null,
-        customerInfo: null,
-        isConfigured: false,
-        isLoading: false,
-        refreshCustomerInfo: async () => {},
-      }}
-    >
-      {children}
-    </RevenueCatContext.Provider>
-  )
+  return <>{children}</>
 }

@@ -30,7 +30,7 @@ const getAppIcon = () => {
 }
 
 const appVersion = '3.0.0'
-const buildVersion = '43'
+const buildVersion = '44'
 
 export default {
   expo: {
@@ -96,7 +96,10 @@ export default {
             {
               scheme: 'https',
               host: 'carhistory.io',
-              pathPrefix: '/',
+            },
+            {
+              scheme: 'https',
+              host: 'www.carhistory.io',
             },
           ],
           category: ['BROWSABLE', 'DEFAULT'],

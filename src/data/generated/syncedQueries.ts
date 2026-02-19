@@ -123,6 +123,10 @@ const post = {
   ),
 }
 
+const product = {
+  activeProducts: defineQuery(() => Queries.product.activeProducts()),
+}
+
 const user = {
   userById: defineQuery(
     v.object({
@@ -190,6 +194,7 @@ export const queries = defineQueries({
   comment,
   notification,
   post,
+  product,
   user,
   userCredits,
   vehicleReport,

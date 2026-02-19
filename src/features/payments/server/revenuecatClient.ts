@@ -11,6 +11,11 @@ export async function setAttributes(
   appUserId: string,
   attributes: Record<string, { value: string }>
 ) {
+  if (!REVENUECAT_API_KEY) {
+    console.info('[revenuecat] no server API key configured, skipping setAttributes')
+    return
+  }
+
   const res = await fetch(
     `${BASE_URL}/subscribers/${encodeURIComponent(appUserId)}/attributes`,
     {

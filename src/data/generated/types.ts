@@ -16,6 +16,9 @@ export type NotificationUpdate = TableUpdateRow<typeof schema.notification>
 export type Post = TableInsertRow<typeof schema.post>
 export type PostUpdate = TableUpdateRow<typeof schema.post>
 
+export type Product = TableInsertRow<typeof schema.product>
+export type ProductUpdate = TableUpdateRow<typeof schema.product>
+
 export type Report = TableInsertRow<typeof schema.report>
 export type ReportUpdate = TableUpdateRow<typeof schema.report>
 

@@ -121,8 +121,10 @@ export async function afterCreateUser(user: { id: string; email: string }) {
     console.info(`[afterCreateUser] Creating userPublic record`)
     await db.insert(userPublic).values(userRow)
 
-    await syncPolarCustomer({ id: userId, email, name: userPrivate.name || undefined })
-    await syncRevenueCatSubscriber({ id: userId, email, name: userPrivate.name || undefined })
+    await Promise.allSettled([
+      syncPolarCustomer({ id: userId, email, name: userPrivate.name || undefined }),
+      syncRevenueCatSubscriber({ id: userId, email, name: userPrivate.name || undefined }),
+    ])
 
     console.info(`[afterCreateUser] ✅ User ${email} setup complete`)
     return userPrivate

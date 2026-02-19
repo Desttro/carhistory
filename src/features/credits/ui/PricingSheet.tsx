@@ -2,13 +2,13 @@ import { href, useRouter } from 'one'
 import { memo, useState } from 'react'
 import { SizableText, XStack, YStack } from 'tamagui'
 
+import { activeProducts } from '~/data/queries/product'
 import { useAuth } from '~/features/auth/client/authClient'
 import { returnToStorage } from '~/features/auth/returnToStorage'
 import { useCredits } from '~/features/credits/useCredits'
 import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
-
-import { PACKAGE_METADATA, PRICE_DISPLAY } from '~/features/payments/constants'
+import { useQuery } from '~/zero/client'
 
 import { PackageCard } from './components/PackageCard'
 import { usePurchaseCredits } from './usePurchaseCredits'
@@ -35,8 +35,9 @@ export const PricingSheet = memo(
     const { state } = useAuth()
     const isLoggedIn = state === 'logged-in'
     const { balance } = useCredits()
-    const { packages, purchaseWithPolar, isLoading, error } = usePurchaseCredits()
+    const { purchaseWithPolar, isLoading, error } = usePurchaseCredits()
     const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
+    const [products] = useQuery(activeProducts)
 
     const handleLoginClick = () => {
       const returnUrl = vin
@@ -104,19 +105,22 @@ export const PricingSheet = memo(
               maxW: inline ? 400 : 900,
             }}
           >
-            {packages.map((pkg) => {
-              const priceData = PRICE_DISPLAY[pkg.slug]
-              const metadata = PACKAGE_METADATA[pkg.slug]
+            {products.map((pkg) => {
+              const price = `$${(pkg.priceCents / 100).toFixed(2)}`
+              const pricePerCredit =
+                pkg.credits > 1
+                  ? `$${(pkg.priceCents / 100 / pkg.credits).toFixed(2)}`
+                  : undefined
 
               return (
                 <YStack key={pkg.slug} $md={{ flex: inline ? undefined : 1 }}>
                   <PackageCard
                     credits={pkg.credits}
-                    price={priceData?.price || 'See price'}
-                    pricePerCredit={priceData?.pricePerCredit}
+                    price={price}
+                    pricePerCredit={pricePerCredit}
                     onPress={() => handlePurchase(pkg.slug)}
                     isLoading={isLoading && selectedSlug === pkg.slug}
-                    isPopular={metadata?.badge === 'popular'}
+                    isPopular={pkg.badge === 'popular'}
                   />
                 </YStack>
               )

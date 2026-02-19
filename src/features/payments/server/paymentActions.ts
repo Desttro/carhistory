@@ -1,14 +1,15 @@
 import { eq, and } from 'drizzle-orm'
 
 import { getDb } from '~/database'
-import { creditTransaction } from '~/database/schema-private'
+import { creditTransaction, order, productProvider } from '~/database/schema-private'
+import { product } from '~/database/schema-public'
 import {
   creditsActions,
   type PaymentMetadata,
   type PaymentPlatform,
 } from '~/features/credits/server/creditsActions'
 
-import { getCreditsForProduct, type Platform } from '../constants'
+import type { Platform } from '../constants'
 
 export interface PurchaseResult {
   success: boolean
@@ -24,6 +25,23 @@ export interface RefundResult {
   newBalance?: number
   error?: string
   alreadyProcessed?: boolean
+}
+
+// resolve a product from external provider product ID
+async function resolveProduct(externalProductId: string, provider: string) {
+  const db = getDb()
+  const rows = await db
+    .select({ credits: product.credits, productId: product.id })
+    .from(productProvider)
+    .innerJoin(product, eq(product.id, productProvider.productId))
+    .where(
+      and(
+        eq(productProvider.provider, provider),
+        eq(productProvider.externalProductId, externalProductId)
+      )
+    )
+    .limit(1)
+  return rows[0] ?? null
 }
 
 // check if a transaction has already been processed (idempotency)
@@ -67,9 +85,9 @@ export async function processPurchase(
     return { success: true, alreadyProcessed: true }
   }
 
-  // resolve credits from product ID
-  const credits = getCreditsForProduct(productId, platform)
-  if (!credits) {
+  // resolve credits from product ID via database
+  const resolved = await resolveProduct(productId, platform)
+  if (!resolved) {
     console.info(`[payments] unknown product ID: ${productId} for ${platform}`)
     return { success: false, error: `Unknown product ID: ${productId}` }
   }
@@ -86,10 +104,10 @@ export async function processPurchase(
 
   const result = await creditsActions.addCreditsByUserId(
     userId,
-    credits,
+    resolved.credits,
     'purchase',
     platformTransactionId,
-    `${credits} credits purchased via ${platform}`,
+    `${resolved.credits} credits purchased via ${platform}`,
     paymentMetadata
   )
 
@@ -97,11 +115,31 @@ export async function processPurchase(
     return { success: false, error: result.error }
   }
 
-  console.info(`[payments] added ${credits} credits for user ${userId} via ${platform}`)
+  // create order record
+  const db = getDb()
+  await db.insert(order).values({
+    id: crypto.randomUUID(),
+    userId,
+    productId: resolved.productId,
+    type: 'purchase',
+    status: 'completed',
+    credits: resolved.credits,
+    amountCents: amountCents ?? null,
+    currency: currency ?? null,
+    provider: platform,
+    providerOrderId: platformTransactionId,
+    providerEventType: platformEventType,
+    rawPayload: rawPayload as Record<string, unknown> | null,
+    createdAt: new Date().toISOString(),
+  })
+
+  console.info(
+    `[payments] added ${resolved.credits} credits for user ${userId} via ${platform}`
+  )
 
   return {
     success: true,
-    creditsAdded: credits,
+    creditsAdded: resolved.credits,
     newBalance: result.newBalance,
   }
 }
@@ -127,9 +165,9 @@ export async function processRefund(
     return { success: true, alreadyProcessed: true }
   }
 
-  // resolve credits from product ID
-  const credits = getCreditsForProduct(productId, platform)
-  if (!credits) {
+  // resolve credits from product ID via database
+  const resolved = await resolveProduct(productId, platform)
+  if (!resolved) {
     console.info(`[payments] unknown product ID for refund: ${productId}`)
     return { success: false, error: `Unknown product ID: ${productId}` }
   }
@@ -146,10 +184,10 @@ export async function processRefund(
 
   const result = await creditsActions.deductCreditsByUserId(
     userId,
-    credits,
+    resolved.credits,
     'refund',
     originalTransactionId,
-    `${credits} credits refunded via ${platform}`,
+    `${resolved.credits} credits refunded via ${platform}`,
     paymentMetadata
   )
 
@@ -164,11 +202,31 @@ export async function processRefund(
     }
   }
 
-  console.info(`[payments] deducted ${credits} credits from user ${userId} due to refund`)
+  // create order record for refund
+  const db = getDb()
+  await db.insert(order).values({
+    id: crypto.randomUUID(),
+    userId,
+    productId: resolved.productId,
+    type: 'refund',
+    status: 'completed',
+    credits: resolved.credits,
+    amountCents: amountCents ? -amountCents : null,
+    currency: currency ?? null,
+    provider: platform,
+    providerOrderId: refundTransactionId,
+    providerEventType: platformEventType,
+    rawPayload: rawPayload as Record<string, unknown> | null,
+    createdAt: new Date().toISOString(),
+  })
+
+  console.info(
+    `[payments] deducted ${resolved.credits} credits from user ${userId} due to refund`
+  )
 
   return {
     success: true,
-    creditsDeducted: credits,
+    creditsDeducted: resolved.credits,
     newBalance: result.newBalance,
   }
 }

@@ -23,6 +23,9 @@ const PRIVATE_TABLES = [
   'timelineEvent',
   'creditTransaction',
   'promo',
+  'productProvider',
+  'customerProvider',
+  'order',
 ]
 
 async function ensureZeroPublication() {

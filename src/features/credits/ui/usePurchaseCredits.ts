@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import { authClient } from '~/features/auth/client/authClient'
-import { CREDIT_PACKAGES } from '~/features/payments/constants'
 
 export function usePurchaseCredits() {
   const [isLoading, setIsLoading] = useState(false)
@@ -24,7 +23,6 @@ export function usePurchaseCredits() {
   }
 
   return {
-    packages: CREDIT_PACKAGES,
     purchaseWithPolar,
     isLoading,
     error,

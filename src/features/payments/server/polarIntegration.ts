@@ -1,7 +1,10 @@
 import { processPurchase, processRefund } from './paymentActions'
+import { syncPolarProduct } from './productSync'
 
 import type { WebhookOrderPaidPayload } from '@polar-sh/sdk/models/components/webhookorderpaidpayload'
 import type { WebhookOrderRefundedPayload } from '@polar-sh/sdk/models/components/webhookorderrefundedpayload'
+import type { WebhookProductCreatedPayload } from '@polar-sh/sdk/models/components/webhookproductcreatedpayload'
+import type { WebhookProductUpdatedPayload } from '@polar-sh/sdk/models/components/webhookproductupdatedpayload'
 
 // handler for Polar order.paid webhook
 export async function handleOrderPaid(payload: WebhookOrderPaidPayload) {
@@ -81,4 +84,14 @@ export async function handleOrderRefunded(payload: WebhookOrderRefundedPayload) 
       `[polar] failed to process refund for order ${order.id}: ${result.error}`
     )
   }
+}
+
+// handler for Polar product.created webhook
+export async function handleProductCreated(payload: WebhookProductCreatedPayload) {
+  await syncPolarProduct(payload.data)
+}
+
+// handler for Polar product.updated webhook
+export async function handleProductUpdated(payload: WebhookProductUpdatedPayload) {
+  await syncPolarProduct(payload.data)
 }

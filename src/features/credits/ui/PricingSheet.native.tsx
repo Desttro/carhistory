@@ -1,13 +1,12 @@
 import { useRouter } from 'one'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import Purchases from 'react-native-purchases'
 import { SizableText, Spinner, XStack, YStack } from 'tamagui'
 
+import { API_URL } from '~/constants/urls'
 import { useAuth } from '~/features/auth/client/authClient'
 import { useCredits } from '~/features/credits/useCredits'
-import { CREDIT_PACKAGES } from '~/features/payments/constants'
-import { PACKAGE_METADATA } from '~/features/payments/constants'
 import { useRevenueCat } from '~/features/payments/revenuecat'
 import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
@@ -15,6 +14,18 @@ import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 import { PackageCard } from './components/PackageCard'
 
 import type { PurchasesPackage } from 'react-native-purchases'
+
+interface ApiProduct {
+  id: string
+  slug: string
+  name: string
+  credits: number
+  priceCents: number
+  currency: string
+  badge: string | null
+  sortOrder: number
+  providers: Record<string, string>
+}
 
 export interface PricingSheetProps {
   // for inline display (not in dialog)
@@ -45,13 +56,24 @@ export const PricingSheet = memo(
     } = useRevenueCat()
     const [isPurchasing, setIsPurchasing] = useState(false)
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
+    const [products, setProducts] = useState<ApiProduct[]>([])
+    const [isLoadingProducts, setIsLoadingProducts] = useState(true)
 
-    // map our credit packages to RevenueCat packages
-    const packagesWithOffering = CREDIT_PACKAGES.map((pkg) => {
+    useEffect(() => {
+      fetch(`${API_URL}/products`)
+        .then((r) => r.json())
+        .then((data) => setProducts(data))
+        .catch((err) => console.info('[PricingSheet] failed to load products:', err))
+        .finally(() => setIsLoadingProducts(false))
+    }, [])
+
+    // map products to RevenueCat packages
+    const packagesWithOffering = products.map((product) => {
+      const rcProductId = product.providers?.revenuecat
       const rcPackage = offerings?.current?.availablePackages.find(
-        (p) => p.product.identifier === pkg.revenuecatProductId
+        (p) => p.product.identifier === rcProductId
       )
-      return { ...pkg, rcPackage }
+      return { ...product, rcProductId, rcPackage }
     })
 
     const handleLoginClick = () => {
@@ -92,20 +114,7 @@ export const PricingSheet = memo(
       }
     }
 
-    // const handleRestore = async () => {
-    //   setIsPurchasing(true)
-    //   try {
-    //     const customerInfo = await Purchases.restorePurchases()
-    //     console.info('[Restore] success:', customerInfo.originalAppUserId)
-    //     await refreshCustomerInfo()
-    //     Alert.alert('Restore Complete', 'Your purchases have been restored.')
-    //   } catch (error: any) {
-    //     console.info('[Restore] error:', error)
-    //     Alert.alert('Restore Failed', error.message || 'Could not restore purchases')
-    //   } finally {
-    //     setIsPurchasing(false)
-    //   }
-    // }
+    const isLoading = isLoadingProducts || isLoadingOfferings
 
     return (
       <YStack gap="$4">
@@ -136,7 +145,7 @@ export const PricingSheet = memo(
             {isLoggedIn ? 'Buy Credits' : 'Credit Packages'}
           </SizableText>
 
-          {isLoadingOfferings ? (
+          {isLoading ? (
             <YStack items="center" py="$6">
               <Spinner size="large" />
               <SizableText size="$3" color="$color10" mt="$2">
@@ -153,7 +162,6 @@ export const PricingSheet = memo(
                   pkg.credits > 0 && priceNum > 0
                     ? `$${(priceNum / pkg.credits).toFixed(2)}`
                     : undefined
-                const metadata = PACKAGE_METADATA[pkg.slug]
 
                 return (
                   <PackageCard
@@ -162,33 +170,20 @@ export const PricingSheet = memo(
                     price={price}
                     pricePerCredit={pricePerCredit}
                     onPress={() => {
-                      if (rcPackage) {
-                        handlePurchase(rcPackage, pkg.revenuecatProductId)
+                      if (rcPackage && pkg.rcProductId) {
+                        handlePurchase(rcPackage, pkg.rcProductId)
                       } else if (!isLoggedIn) {
                         handleLoginClick()
                       }
                     }}
-                    isLoading={
-                      isPurchasing && selectedProductId === pkg.revenuecatProductId
-                    }
-                    isPopular={metadata?.badge === 'popular'}
+                    isLoading={isPurchasing && selectedProductId === pkg.rcProductId}
+                    isPopular={pkg.badge === 'popular'}
                   />
                 )
               })}
             </YStack>
           )}
         </YStack>
-
-        {/* {isLoggedIn && (
-          <Button
-            variant="transparent"
-            size="small"
-            onPress={handleRestore}
-            disabled={isPurchasing}
-          >
-            Restore Purchases
-          </Button>
-        )} */}
 
         <SizableText size="$2" color="$color9" text="center">
           Credits never expire.{' '}

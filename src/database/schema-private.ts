@@ -225,6 +225,77 @@ export const creditTransaction = pgTable(
   ]
 )
 
+// productProvider - maps products to external provider IDs
+export const productProvider = pgTable(
+  'productProvider',
+  {
+    id: text('id').primaryKey(),
+    productId: text('productId').notNull(),
+    provider: text('provider').notNull(), // 'polar' | 'revenuecat'
+    externalProductId: text('externalProductId').notNull(),
+    externalData: jsonb('externalData'),
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt', { mode: 'string' }),
+  },
+  (table) => [
+    unique('productProvider_provider_extId_unique').on(
+      table.provider,
+      table.externalProductId
+    ),
+    unique('productProvider_productId_provider_unique').on(
+      table.productId,
+      table.provider
+    ),
+  ]
+)
+
+// customerProvider - maps users to external provider customer IDs
+export const customerProvider = pgTable(
+  'customerProvider',
+  {
+    id: text('id').primaryKey(),
+    userId: text('userId').notNull(),
+    provider: text('provider').notNull(), // 'polar' | 'revenuecat'
+    externalCustomerId: text('externalCustomerId').notNull(),
+    externalData: jsonb('externalData'),
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt', { mode: 'string' }),
+  },
+  (table) => [
+    unique('customerProvider_userId_provider_unique').on(table.userId, table.provider),
+    unique('customerProvider_provider_extId_unique').on(
+      table.provider,
+      table.externalCustomerId
+    ),
+  ]
+)
+
+// order - tracks purchases and refunds from payment providers
+export const order = pgTable(
+  'order',
+  {
+    id: text('id').primaryKey(),
+    userId: text('userId').notNull(),
+    productId: text('productId').notNull(),
+    type: text('type').notNull(), // 'purchase' | 'refund'
+    status: text('status').notNull().default('completed'),
+    credits: integer('credits').notNull(),
+    amountCents: integer('amountCents'),
+    currency: text('currency'),
+    provider: text('provider').notNull(), // 'polar' | 'revenuecat'
+    providerOrderId: text('providerOrderId').notNull(),
+    providerEventType: text('providerEventType'),
+    rawPayload: jsonb('rawPayload'),
+    creditTransactionId: text('creditTransactionId'),
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+  },
+  (table) => [
+    unique('order_provider_orderId_unique').on(table.provider, table.providerOrderId),
+    index('order_userId_idx').on(table.userId),
+    index('order_productId_idx').on(table.productId),
+  ]
+)
+
 // promo - promotional codes for bonus credits, discounts, etc.
 export const promo = pgTable(
   'promo',

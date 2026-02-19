@@ -230,6 +230,29 @@ export const vehicleReport = pgTable(
   ]
 )
 
+// product - purchasable items (Zero-synced for client display)
+export const product = pgTable(
+  'product',
+  {
+    id: text('id').primaryKey(),
+    slug: text('slug').notNull().unique(),
+    name: text('name').notNull(),
+    description: text('description'),
+    credits: integer('credits').notNull(),
+    priceCents: integer('priceCents').notNull(),
+    currency: text('currency').notNull().default('usd'),
+    badge: text('badge'),
+    sortOrder: integer('sortOrder').notNull().default(0),
+    isActive: boolean('isActive').notNull().default(true),
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt', { mode: 'string' }),
+  },
+  (table) => [
+    index('product_slug_idx').on(table.slug),
+    index('product_active_sort_idx').on(table.isActive, table.sortOrder),
+  ]
+)
+
 // userCredits - user credit balance for purchasing reports
 export const userCredits = pgTable(
   'userCredits',

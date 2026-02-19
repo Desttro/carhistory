@@ -1,6 +1,6 @@
 import { H1, Paragraph, SizableText, XStack, YStack } from 'tamagui'
 
-import { CREDIT_PACKAGES, PACKAGE_METADATA, PRICE_DISPLAY } from '~/features/payments/constants'
+import { PRICING_DEFAULTS } from '~/features/payments/pricingDefaults'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { Link } from '~/interface/app/Link'
 import { Button } from '~/interface/buttons/Button'
@@ -23,7 +23,8 @@ export function PricingSSGPage() {
             Credits & Pricing
           </H1>
           <Paragraph size="$5" color="$color10" text="center">
-            Purchase credits to get vehicle history reports combining Carfax & AutoCheck data.
+            Purchase credits to get vehicle history reports combining Carfax & AutoCheck
+            data.
           </Paragraph>
         </YStack>
 
@@ -35,10 +36,8 @@ export function PricingSSGPage() {
             gap: '$4',
           }}
         >
-          {CREDIT_PACKAGES.map((pkg) => {
-            const priceData = PRICE_DISPLAY[pkg.slug]
-            const metadata = PACKAGE_METADATA[pkg.slug]
-            const isPopular = metadata?.badge === 'popular'
+          {PRICING_DEFAULTS.map((pkg) => {
+            const isPopular = pkg.badge === 'popular'
 
             return (
               <YStack
@@ -80,11 +79,11 @@ export function PricingSSGPage() {
                   </YStack>
                   <YStack items="center">
                     <SizableText size="$6" fontWeight="700" color="$color12">
-                      {priceData?.price}
+                      {pkg.price}
                     </SizableText>
-                    {priceData?.pricePerCredit && pkg.credits > 1 && (
+                    {pkg.pricePerCredit && pkg.credits > 1 && (
                       <SizableText size="$2" color="$color9">
-                        {priceData.pricePerCredit}/credit
+                        {pkg.pricePerCredit}/credit
                       </SizableText>
                     )}
                   </YStack>

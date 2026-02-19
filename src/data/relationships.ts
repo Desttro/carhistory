@@ -169,6 +169,8 @@ export const vehicleRelationships = relationships(tables.vehicle, ({ many }) => 
   }),
 }))
 
+export const productRelationships = relationships(tables.product, () => ({}))
+
 export const userCreditsRelationships = relationships(tables.userCredits, ({ one }) => ({
   user: one({
     sourceField: ['userId'],
@@ -188,5 +190,6 @@ export const allRelationships = [
   notificationRelationships,
   vehicleReportRelationships,
   vehicleRelationships,
+  productRelationships,
   userCreditsRelationships,
 ]

@@ -3,14 +3,19 @@ import { checkout, polar, portal, webhooks } from '@polar-sh/better-auth'
 import { time } from '@take-out/helpers'
 import { betterAuth } from 'better-auth'
 import { admin, bearer, emailOTP, jwt, magicLink, phoneNumber } from 'better-auth/plugins'
+import { eq, and } from 'drizzle-orm'
 
 import { DOMAIN } from '~/constants/app'
+import { getDb } from '~/database'
 import { database } from '~/database/database'
-import { CREDIT_PACKAGES } from '~/features/payments/constants'
+import { productProvider } from '~/database/schema-private'
+import { product } from '~/database/schema-public'
 import { polarClient } from '~/features/payments/server/polarClient'
 import {
   handleOrderPaid,
   handleOrderRefunded,
+  handleProductCreated,
+  handleProductUpdated,
 } from '~/features/payments/server/polarIntegration'
 import {
   BETTER_AUTH_SECRET,
@@ -150,10 +155,20 @@ export const authServer = betterAuth({
       createCustomerOnSignUp: false,
       use: [
         checkout({
-          products: CREDIT_PACKAGES.filter((p) => p.polarProductId).map((p) => ({
-            productId: p.polarProductId,
-            slug: p.slug,
-          })),
+          products: async () => {
+            const db = getDb()
+            const rows = await db
+              .select({
+                slug: product.slug,
+                productId: productProvider.externalProductId,
+              })
+              .from(product)
+              .innerJoin(productProvider, eq(product.id, productProvider.productId))
+              .where(
+                and(eq(product.isActive, true), eq(productProvider.provider, 'polar'))
+              )
+            return rows.map((r) => ({ productId: r.productId, slug: r.slug }))
+          },
           successUrl: '/home/pricing/success?checkout_id={CHECKOUT_ID}',
           authenticatedUsersOnly: true,
         }),
@@ -162,6 +177,8 @@ export const authServer = betterAuth({
           secret: POLAR_WEBHOOK_SECRET,
           onOrderPaid: handleOrderPaid,
           onOrderRefunded: handleOrderRefunded,
+          onProductCreated: handleProductCreated,
+          onProductUpdated: handleProductUpdated,
         }),
       ],
     }),

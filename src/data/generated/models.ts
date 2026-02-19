@@ -4,6 +4,7 @@ import * as comment from '../models/comment'
 import * as device from '../models/device'
 import * as notification from '../models/notification'
 import * as post from '../models/post'
+import * as product from '../models/product'
 import * as report from '../models/report'
 import * as userPublic from '../models/user'
 import * as userCredits from '../models/userCredits'
@@ -17,6 +18,7 @@ export const models = {
   device,
   notification,
   post,
+  product,
   report,
   userCredits,
   userPublic,

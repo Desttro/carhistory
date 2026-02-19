@@ -5,6 +5,8 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import type { UserConfig } from 'vite'
 
 export default {
+  envPrefix: ['VITE_', 'EXPO_PUBLIC_', 'ONE_'],
+
   resolve: {
     alias: [
       // much smaller bundle size on web

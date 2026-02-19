@@ -4,6 +4,7 @@ import { getDb } from '~/database'
 import { productProvider } from '~/database/schema-private'
 import { product } from '~/database/schema-public'
 
+import { REVENUECAT_PRODUCT_MAPPINGS } from '../productConfig'
 import { polarClient } from './polarClient'
 
 import type { Product } from '@polar-sh/sdk/models/components/product'
@@ -141,18 +142,11 @@ export async function syncAllPolarProducts() {
   console.info('[product-sync] sync complete')
 }
 
-// known revenuecat product ID mappings
-const RC_MAPPINGS: Record<string, string> = {
-  'credits-1': 'cat_history_1_credit',
-  'credits-3': 'cat_history_3_credits',
-  'credits-6': 'cat_history_6_credits',
-}
-
 // create productProvider rows for revenuecat using known mappings
 export async function seedRevenueCatMappings() {
   const db = getDb()
 
-  for (const [slug, rcProductId] of Object.entries(RC_MAPPINGS)) {
+  for (const [slug, rcProductId] of Object.entries(REVENUECAT_PRODUCT_MAPPINGS)) {
     const existingProduct = await db
       .select({ id: product.id })
       .from(product)

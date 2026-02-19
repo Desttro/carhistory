@@ -17,6 +17,7 @@ import {
   handleProductCreated,
   handleProductUpdated,
 } from '~/features/payments/server/polarIntegration'
+import { syncAllPolarProducts } from '~/features/payments/server/productSync'
 import {
   BETTER_AUTH_SECRET,
   BETTER_AUTH_URL,
@@ -28,6 +29,10 @@ import { afterCreateUser } from './afterCreateUser'
 import { storeOTP } from './lastOTP'
 
 console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH_URL)
+
+syncAllPolarProducts().catch((err) => {
+  console.info('[product-sync] startup sync failed:', err)
+})
 
 export const authServer = betterAuth({
   // using BETTER_AUTH_URL instead of baseUrl

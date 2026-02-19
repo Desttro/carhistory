@@ -1,31 +1,20 @@
 import { useRouter } from 'one'
-import { memo, useEffect, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Alert } from 'react-native'
 import Purchases from 'react-native-purchases'
 import { SizableText, Spinner, XStack, YStack } from 'tamagui'
 
-import { API_URL } from '~/constants/urls'
+import { activeProducts } from '~/data/queries/product'
 import { useAuth } from '~/features/auth/client/authClient'
 import { useCredits } from '~/features/credits/useCredits'
 import { useRevenueCat } from '~/features/payments/revenuecat'
 import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
+import { useQuery } from '~/zero/client'
 
 import { PackageCard } from './components/PackageCard'
 
 import type { PurchasesPackage } from 'react-native-purchases'
-
-interface ApiProduct {
-  id: string
-  slug: string
-  name: string
-  credits: number
-  priceCents: number
-  currency: string
-  badge: string | null
-  sortOrder: number
-  providers: Record<string, string>
-}
 
 export interface PricingSheetProps {
   // for inline display (not in dialog)
@@ -56,28 +45,21 @@ export const PricingSheet = memo(
     } = useRevenueCat()
     const [isPurchasing, setIsPurchasing] = useState(false)
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
-    const [products, setProducts] = useState<ApiProduct[]>([])
-    const [isLoadingProducts, setIsLoadingProducts] = useState(true)
+    const [products] = useQuery(activeProducts)
 
-    useEffect(() => {
-      fetch(`${API_URL}/products`)
-        .then((r) => r.json())
-        .then((data) => setProducts(data))
-        .catch((err) => console.info('[PricingSheet] failed to load products:', err))
-        .finally(() => setIsLoadingProducts(false))
-    }, [])
-
-    // map products to RevenueCat packages
-    const packagesWithOffering = products.map((product) => {
-      const rcProductId = product.providers?.revenuecat
-      const rcPackage = offerings?.current?.availablePackages.find(
-        (p) => p.product.identifier === rcProductId
-      )
-      return { ...product, rcProductId, rcPackage }
-    })
+    // match products to RC packages by credits count
+    const packagesWithProduct = useMemo(() => {
+      if (!offerings?.current?.availablePackages || !products.length) return []
+      return products.map((product) => {
+        const rcPackage = offerings.current!.availablePackages.find((pkg) => {
+          const match = pkg.product.identifier.match(/(\d+)_credit/)
+          return match && parseInt(match[1]) === product.credits
+        })
+        return { product, rcPackage }
+      })
+    }, [offerings, products])
 
     const handleLoginClick = () => {
-      // navigate to auth screen on native
       router.push('/auth/login')
     }
 
@@ -114,7 +96,7 @@ export const PricingSheet = memo(
       }
     }
 
-    const isLoading = isLoadingProducts || isLoadingOfferings
+    const isLoading = !products.length || isLoadingOfferings
 
     return (
       <YStack gap="$4">
@@ -154,8 +136,7 @@ export const PricingSheet = memo(
             </YStack>
           ) : (
             <YStack gap="$3">
-              {packagesWithOffering.map((pkg) => {
-                const rcPackage = pkg.rcPackage
+              {packagesWithProduct.map(({ product: pkg, rcPackage }) => {
                 const price = rcPackage?.product.priceString || 'N/A'
                 const priceNum = rcPackage?.product.price || 0
                 const pricePerCredit =
@@ -170,13 +151,13 @@ export const PricingSheet = memo(
                     price={price}
                     pricePerCredit={pricePerCredit}
                     onPress={() => {
-                      if (rcPackage && pkg.rcProductId) {
-                        handlePurchase(rcPackage, pkg.rcProductId)
+                      if (rcPackage) {
+                        handlePurchase(rcPackage, pkg.id)
                       } else if (!isLoggedIn) {
                         handleLoginClick()
                       }
                     }}
-                    isLoading={isPurchasing && selectedProductId === pkg.rcProductId}
+                    isLoading={isPurchasing && selectedProductId === pkg.id}
                     isPopular={pkg.badge === 'popular'}
                   />
                 )

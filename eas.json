@@ -35,7 +35,10 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_VARIANT": "preview"
+        "APP_VARIANT": "preview",
+        "ONE_SERVER_URL": "https://preview.carhistory.io",
+        "VITE_ZERO_HOSTNAME": "zero-preview.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "appl_BrTtKDBvFRvVDoalyblWOYPVEvk"
       }
     },
     "production": {
@@ -47,7 +50,10 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_VARIANT": "production"
+        "APP_VARIANT": "production",
+        "ONE_SERVER_URL": "https://carhistory.io",
+        "VITE_ZERO_HOSTNAME": "zero.carhistory.io",
+        "VITE_REVENUECAT_API_PUBLIC": "appl_MFfHjduTDWrIxZhFmhLkBwCVUUc"
       }
     }
   },

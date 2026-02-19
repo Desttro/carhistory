@@ -30,7 +30,7 @@ const getAppIcon = () => {
 }
 
 const appVersion = '3.0.0'
-const buildVersion = '44'
+const buildVersion = '46'
 
 export default {
   expo: {
@@ -50,10 +50,10 @@ export default {
     version: appVersion,
     // runtimeVersion: version, // must be set to use hot-updater "appVersion" update strategy
     // Strongly recommended for EAS Update / OTA
-    runtimeVersion: {
-      policy: 'appVersion', // auto-uses expo.version → safest & simplest
-      // OR: runtimeVersion: appVersion        // explicit string also fine
-    },
+    // runtimeVersion: {
+    //   policy: 'appVersion', // auto-uses expo.version → safest & simplest
+    //   // OR: runtimeVersion: appVersion        // explicit string also fine
+    // },
     newArchEnabled: true,
     platforms: ['ios', 'android', 'web'],
     userInterfaceStyle: 'automatic',

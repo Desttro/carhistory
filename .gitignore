@@ -64,3 +64,5 @@ src/uncloud/certs/origin.*
 src/uncloud/Caddyfile
 # hot-updater
 .hot-updater/output
+/credentials.json
+/credentials

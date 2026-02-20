@@ -184,6 +184,7 @@ export default {
           imageHeight: 80,
         },
       ],
+      ['expo-localization'],
       // enable hot-updater here
       // [
       //   '@hot-updater/react-native',

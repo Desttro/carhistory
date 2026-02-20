@@ -31,7 +31,7 @@ export function AppI18nProvider({ children }: { children: ReactNode }) {
   const userId = auth?.user?.id
   const [userData] = useQuery(
     userWithState,
-    { userId: userId! },
+    { userId: userId ?? '' },
     { enabled: Boolean(userId) }
   )
   const zeroLocale = userData?.state?.[0]?.locale

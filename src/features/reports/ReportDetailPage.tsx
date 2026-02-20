@@ -1,14 +1,17 @@
 import { useParams, useRouter } from 'one'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Platform, ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { H2, H3, H4, SizableText, Spinner, XStack, YStack } from 'tamagui'
+import { AnimatePresence, H2, H3, H4, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
 import { useTabBarBottomPadding } from '~/features/app/tabBarConstants'
 import { vehicleReportById } from '~/data/queries/vehicleReport'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { Button } from '~/interface/buttons/Button'
+import { StatusChip } from '~/interface/chips/StatusChip'
 import { CarIcon } from '~/interface/icons/phosphor/CarIcon'
+import { CaretDownIcon } from '~/interface/icons/phosphor/CaretDownIcon'
+import { CaretLeftIcon } from '~/interface/icons/phosphor/CaretLeftIcon'
 import { CheckCircleIcon } from '~/interface/icons/phosphor/CheckCircleIcon'
 import { ClockIcon } from '~/interface/icons/phosphor/ClockIcon'
 import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
@@ -18,11 +21,11 @@ import { ShieldCheckIcon } from '~/interface/icons/phosphor/ShieldCheckIcon'
 import { UserIcon } from '~/interface/icons/phosphor/UserIcon'
 import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
 import { WrenchIcon } from '~/interface/icons/phosphor/WrenchIcon'
-import { CaretLeftIcon } from '~/interface/icons/phosphor/CaretLeftIcon'
 import { KeyValueRow } from '~/interface/lists/KeyValueRow'
 import { PageLayout } from '~/interface/pages/PageLayout'
 import { useQuery } from '~/zero/client'
 
+import { animationClamped } from '~/interface/animations/animationClamped'
 import { EventDamageVisualization } from './components/VehicleDamageVisualization'
 
 import type { CanonicalReport, EventType, NormalizedEvent } from './types'
@@ -155,8 +158,9 @@ export const ReportDetailPage = memo(() => {
           gap="$4"
           {...(isNative ? {} : { p: '$4', mx: 'auto', width: '100%' })}
           $platform-web={{ maxW: 800 }}
+          $lg={{ maxW: 1040 }}
         >
-          <VehicleHeader report={report} />
+          <VehicleHeader report={report} hasIssues={hasIssues} />
           <SummaryStats report={report} hasIssues={hasIssues} />
           {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
           <Timeline events={report.events} />
@@ -167,33 +171,63 @@ export const ReportDetailPage = memo(() => {
   )
 })
 
-const VehicleHeader = memo(({ report }: { report: CanonicalReport }) => {
-  const { vehicleInfo } = report
+const VehicleHeader = memo(
+  ({ report, hasIssues }: { report: CanonicalReport; hasIssues: boolean }) => {
+    const { vehicleInfo } = report
 
-  return (
-    <YStack gap="$2">
-      <H2 size="$8" fontWeight="600">
-        {vehicleInfo.year} {vehicleInfo.make} {vehicleInfo.model}
-      </H2>
-      <YStack bg="$color2" rounded="$4" px="$3" py="$1">
-        <KeyValueRow
-          label="VIN"
-          value={
-            <SizableText size="$3" color="$color12" fontFamily="$mono">
-              {vehicleInfo.vin}
-            </SizableText>
-          }
-        />
-        {vehicleInfo.trim && <KeyValueRow label="Trim" value={vehicleInfo.trim} />}
-        <KeyValueRow
-          label="Year / Make / Model"
-          value={`${vehicleInfo.year} ${vehicleInfo.make} ${vehicleInfo.model}`}
-          last
-        />
+    return (
+      <YStack gap="$3">
+        <XStack gap="$3" items="center">
+          <YStack
+            width={56}
+            height={56}
+            rounded="$4"
+            bg="$color3"
+            items="center"
+            justify="center"
+            shrink={0}
+          >
+            <CarIcon size={28} color="$color11" />
+          </YStack>
+          <YStack flex={1} gap="$1">
+            <H2 size="$7" fontWeight="600" $md={{ size: '$8' }}>
+              {vehicleInfo.year} {vehicleInfo.make} {vehicleInfo.model}
+            </H2>
+            <XStack items="center" gap="$2">
+              <SizableText size="$3" color="$color10" fontFamily="$mono">
+                {vehicleInfo.vin}
+              </SizableText>
+              <StatusChip
+                label={hasIssues ? 'Issues Found' : 'Clean'}
+                icon={
+                  hasIssues ? (
+                    <WarningCircleIcon size={10} color="$color11" />
+                  ) : (
+                    <CheckCircleIcon size={10} color="$color11" />
+                  )
+                }
+                theme={hasIssues ? 'orange' : 'green'}
+                size="small"
+              />
+            </XStack>
+          </YStack>
+        </XStack>
+
+        <YStack bg="$color2" rounded="$4" px="$3" py="$1">
+          {vehicleInfo.trim && <KeyValueRow label="Trim" value={vehicleInfo.trim} />}
+          {vehicleInfo.bodyStyle && <KeyValueRow label="Body Style" value={vehicleInfo.bodyStyle} />}
+          {vehicleInfo.engine && <KeyValueRow label="Engine" value={vehicleInfo.engine} />}
+          {vehicleInfo.drivetrain && <KeyValueRow label="Drivetrain" value={vehicleInfo.drivetrain} />}
+          <KeyValueRow
+            label="Year / Make / Model"
+            value={`${vehicleInfo.year} ${vehicleInfo.make} ${vehicleInfo.model}`}
+            last
+          />
+        </YStack>
       </YStack>
-    </YStack>
-  )
-})
+    )
+  }
+)
 
 const SummaryStats = memo(
   ({ report, hasIssues }: { report: CanonicalReport; hasIssues: boolean }) => {
@@ -214,14 +248,24 @@ const SummaryStats = memo(
           <StatBox
             label="Owners"
             value={report.estimatedOwners?.toString() ?? 'Unknown'}
+            icon={<UserIcon size={18} color="$color10" />}
           />
           <StatBox
             label="Accidents"
             value={report.accidentCount.toString()}
             isWarning={report.accidentCount > 0}
+            icon={<WarningCircleIcon size={18} color={report.accidentCount > 0 ? '$red10' : '$color10'} />}
           />
-          <StatBox label="Service Records" value={report.serviceRecordCount.toString()} />
-          <StatBox label="Total Events" value={report.eventCount.toString()} />
+          <StatBox
+            label="Service Records"
+            value={report.serviceRecordCount.toString()}
+            icon={<WrenchIcon size={18} color="$color10" />}
+          />
+          <StatBox
+            label="Total Events"
+            value={report.eventCount.toString()}
+            icon={<ClockIcon size={18} color="$color10" />}
+          />
         </XStack>
 
         {report.odometerLastReported && (
@@ -273,18 +317,36 @@ const StatBox = memo(
     label,
     value,
     isWarning,
+    icon,
   }: {
     label: string
     value: string
     isWarning?: boolean
+    icon?: React.ReactNode
   }) => {
     return (
-      <YStack flex={1} minW={100} bg="$color2" p="$3" rounded="$4" items="center">
+      <YStack
+        flex={1}
+        minW={140}
+        $md={{ minW: 160 }}
+        bg="$color2"
+        p="$3"
+        rounded="$4"
+        items="center"
+        gap="$1"
+        borderWidth={1}
+        borderColor={isWarning ? '$red4' : '$color4'}
+      >
+        {icon && (
+          <YStack width={32} height={32} rounded={1000} bg="$color3" items="center" justify="center">
+            {icon}
+          </YStack>
+        )}
+        <SizableText size="$8" fontWeight="600" color={isWarning ? '$red10' : '$color12'}>
+          {value}
+        </SizableText>
         <SizableText size="$2" color="$color10">
           {label}
-        </SizableText>
-        <SizableText size="$7" fontWeight="600" color={isWarning ? '$red10' : '$color12'}>
-          {value}
         </SizableText>
       </YStack>
     )
@@ -307,13 +369,11 @@ const TitleBrands = memo(({ brands }: { brands: string[] }) => {
           Title Brands
         </SizableText>
       </XStack>
-      <YStack gap="$1">
+      <XStack gap="$2" flexWrap="wrap">
         {brands.map((brand, i) => (
-          <SizableText key={i} size="$3" color="$orange11">
-            • {brand}
-          </SizableText>
+          <StatusChip key={i} label={brand} theme="orange" size="medium" />
         ))}
-      </YStack>
+      </XStack>
     </YStack>
   )
 })
@@ -380,6 +440,7 @@ const OwnerSection = memo(
     isFirst: boolean
     isEven: boolean
   }) => {
+    const [isExpanded, setIsExpanded] = useState(isFirst)
     const label = ownerNumber === 'unknown' ? 'Unknown Owner' : `Owner ${ownerNumber}`
 
     return (
@@ -396,9 +457,11 @@ const OwnerSection = memo(
           pb="$2"
           borderBottomWidth={1}
           borderColor="$color4"
+          onPress={() => setIsExpanded((prev) => !prev)}
+          cursor="pointer"
         >
           <UserIcon size={18} color="$color10" />
-          <H4 size="$4" color="$color11">
+          <H4 size="$4" color="$color11" flex={1}>
             {label}
           </H4>
           <SizableText
@@ -411,43 +474,76 @@ const OwnerSection = memo(
           >
             {events.length} {events.length === 1 ? 'event' : 'events'}
           </SizableText>
+          <YStack
+            transition={animationClamped('quick')}
+            rotate={isExpanded ? '0deg' : '-90deg'}
+          >
+            <CaretDownIcon size={16} color="$color10" />
+          </YStack>
         </XStack>
-        <YStack gap="$2" pl="$3" borderLeftWidth={2} borderColor="$color5">
-          {events.map((event, i) => (
-            <TimelineEvent key={event.fingerprint || i} event={event} />
-          ))}
-        </YStack>
+
+        <AnimatePresence>
+          {isExpanded && (
+            <YStack
+              key="events"
+              gap="$2"
+              pl="$3"
+              borderLeftWidth={2}
+              borderColor="$color5"
+              transition={animationClamped('quick')}
+              enterStyle={{ opacity: 0, y: -10 }}
+              exitStyle={{ opacity: 0, y: -10 }}
+              opacity={1}
+              y={0}
+            >
+              {events.map((event, i) => (
+                <TimelineEvent key={event.fingerprint || i} event={event} />
+              ))}
+            </YStack>
+          )}
+        </AnimatePresence>
       </YStack>
     )
   }
 )
+
+const eventTypeTheme: Record<string, string> = {
+  ACCIDENT: 'red',
+  DAMAGE: 'red',
+  RECALL: 'orange',
+  SERVICE: 'blue',
+  TITLE: 'green',
+  REGISTRATION: 'green',
+  INSPECTION: 'purple',
+  EMISSION: 'purple',
+}
 
 const getEventIcon = (eventType: EventType) => {
   switch (eventType) {
     case 'TITLE':
     case 'REGISTRATION':
     case 'LIEN':
-      return <CarIcon size={14} color="$color10" />
+      return <CarIcon size={14} color="$color11" />
     case 'SERVICE':
-      return <WrenchIcon size={14} color="$color10" />
+      return <WrenchIcon size={14} color="$color11" />
     case 'ODOMETER_READING':
-      return <GaugeIcon size={14} color="$color10" />
+      return <GaugeIcon size={14} color="$color11" />
     case 'INSPECTION':
     case 'WARRANTY':
     case 'EMISSION':
-      return <ShieldCheckIcon size={14} color="$color10" />
+      return <ShieldCheckIcon size={14} color="$color11" />
     case 'ACCIDENT':
     case 'DAMAGE':
-      return <WarningCircleIcon size={14} color="$red10" />
+      return <WarningCircleIcon size={14} color="$color11" />
     case 'RECALL':
-      return <MegaphoneIcon size={14} color="$orange10" />
+      return <MegaphoneIcon size={14} color="$color11" />
     case 'AUCTION':
     case 'LISTING':
     case 'INSURANCE':
     case 'MANUFACTURER':
     case 'OTHER':
     default:
-      return <ClockIcon size={14} color="$color10" />
+      return <ClockIcon size={14} color="$color11" />
   }
 }
 
@@ -456,6 +552,7 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
   const bgColor = isNegative ? '$red2' : '$background'
   const borderColor = isNegative ? '$red4' : '$color4'
   const showDamageViz = event.eventType === 'ACCIDENT' || event.eventType === 'DAMAGE'
+  const chipTheme = eventTypeTheme[event.eventType]
 
   return (
     <YStack
@@ -464,6 +561,8 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
       rounded="$4"
       borderWidth={1}
       borderColor={borderColor}
+      borderLeftWidth={isNegative ? 3 : 1}
+      borderLeftColor={isNegative ? '$red8' : borderColor}
       gap="$1"
       $platform-web={{
         cursor: 'default',
@@ -476,12 +575,12 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
         <SizableText size="$2" color="$color10" fontFamily="$mono">
           {event.eventDate}
         </SizableText>
-        <XStack items="center" gap="$1.5" bg="$color4" px="$2" py="$0.5" rounded="$2">
-          {getEventIcon(event.eventType)}
-          <SizableText size="$1" color="$color8">
-            {event.eventType.replace(/_/g, ' ')}
-          </SizableText>
-        </XStack>
+        <StatusChip
+          label={event.eventType.replace(/_/g, ' ')}
+          icon={getEventIcon(event.eventType)}
+          theme={chipTheme as any}
+          size="small"
+        />
       </XStack>
       <SizableText size="$3" fontWeight="500">
         {event.summary}
@@ -516,19 +615,13 @@ const SourceProviders = memo(({ providers }: { providers: string[] }) => {
       <SizableText size="$2" color="$color10">
         Data Sources
       </SizableText>
-      <XStack gap="$2">
+      <XStack gap="$2" flexWrap="wrap">
         {providers.map((provider) => (
-          <SizableText
+          <StatusChip
             key={provider}
-            size="$2"
-            bg="$color4"
-            px="$2"
-            py="$1"
-            rounded="$3"
-            textTransform="capitalize"
-          >
-            {provider}
-          </SizableText>
+            label={provider.charAt(0).toUpperCase() + provider.slice(1)}
+            size="medium"
+          />
         ))}
       </XStack>
     </YStack>

@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useRouter } from 'one'
-import { H2, SizableText, Spinner, YStack } from 'tamagui'
+import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
 import { ReportCard } from '~/features/reports/ReportCard'
 import { useVehicleReports } from '~/features/reports/useVehicleReports'
 import { VinSearchForm } from '~/features/vin-lookup/VinSearchForm'
 import { CarIcon } from '~/interface/icons/phosphor/CarIcon'
 import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
+import { SimpleGrid, SimpleGridItem } from '~/interface/layout/SimpleGrid'
 import { PageLayout } from '~/interface/pages/PageLayout'
 
 export function ReportsPage() {
@@ -20,9 +21,27 @@ export function ReportsPage() {
 
   return (
     <PageLayout scroll tabBarOffset>
-      <YStack gap="$4" px="$4" py="$6" maxW={700} width="100%" self="center" $md={{ maxW: 800, px: '$8' }}>
+      <YStack
+        gap="$4"
+        px="$4"
+        py="$6"
+        maxW={700}
+        width="100%"
+        self="center"
+        $md={{ maxW: 900, px: '$8' }}
+        $lg={{ maxW: 1000 }}
+      >
         <YStack gap="$2" items="center">
-          <FileTextIcon size={32} color="$color10" />
+          <YStack
+            width={56}
+            height={56}
+            rounded={1000}
+            bg="$color3"
+            items="center"
+            justify="center"
+          >
+            <FileTextIcon size={28} color="$color10" />
+          </YStack>
           <H2 size="$8" fontWeight="700" text="center">
             My Reports
           </H2>
@@ -38,9 +57,28 @@ export function ReportsPage() {
         )}
 
         {isEmpty && (
-          <YStack gap="$6" items="center" py="$8" px="$2">
+          <YStack
+            gap="$6"
+            items="center"
+            py="$8"
+            px="$4"
+            borderWidth={2}
+            borderStyle="dashed"
+            borderColor="$color6"
+            bg="$color2"
+            rounded="$6"
+          >
             <YStack gap="$3" items="center">
-              <CarIcon size={64} color="$color8" />
+              <YStack
+                width={80}
+                height={80}
+                rounded={1000}
+                bg="$color3"
+                items="center"
+                justify="center"
+              >
+                <CarIcon size={40} color="$color8" />
+              </YStack>
               <SizableText size="$6" fontWeight="600" color="$color11" text="center">
                 No reports yet
               </SizableText>
@@ -63,23 +101,57 @@ export function ReportsPage() {
 
         {activeReports.length > 0 && (
           <YStack gap="$3">
-            <SizableText size="$5" fontWeight="600" color="$color11">
-              Active Reports
-            </SizableText>
-            {activeReports.map((report) => (
-              <ReportCard key={report.id} report={report} />
-            ))}
+            <XStack items="center" gap="$2">
+              <SizableText size="$5" fontWeight="600" color="$color11">
+                Active Reports
+              </SizableText>
+              <SizableText
+                size="$1"
+                fontWeight="600"
+                bg="$color4"
+                color="$color10"
+                px="$2"
+                py="$0.5"
+                rounded={1000}
+              >
+                {activeReports.length}
+              </SizableText>
+            </XStack>
+            <SimpleGrid>
+              {activeReports.map((report) => (
+                <SimpleGridItem key={report.id} columns={2}>
+                  <ReportCard report={report} />
+                </SimpleGridItem>
+              ))}
+            </SimpleGrid>
           </YStack>
         )}
 
         {expiredReports.length > 0 && (
           <YStack gap="$3" mt="$4">
-            <SizableText size="$5" fontWeight="600" color="$color10">
-              Expired Reports
-            </SizableText>
-            {expiredReports.map((report) => (
-              <ReportCard key={report.id} report={report} isExpired />
-            ))}
+            <XStack items="center" gap="$2">
+              <SizableText size="$5" fontWeight="600" color="$color10">
+                Expired Reports
+              </SizableText>
+              <SizableText
+                size="$1"
+                fontWeight="600"
+                bg="$color4"
+                color="$color10"
+                px="$2"
+                py="$0.5"
+                rounded={1000}
+              >
+                {expiredReports.length}
+              </SizableText>
+            </XStack>
+            <SimpleGrid>
+              {expiredReports.map((report) => (
+                <SimpleGridItem key={report.id} columns={2}>
+                  <ReportCard report={report} isExpired />
+                </SimpleGridItem>
+              ))}
+            </SimpleGrid>
           </YStack>
         )}
       </YStack>

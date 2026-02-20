@@ -46,6 +46,7 @@ export const ReportCard = memo(({ report, isExpired = false }: ReportCardProps) 
   return (
     <YStack
       onPress={handlePress}
+      flex={1}
       p="$4"
       rounded="$5"
       borderWidth={1}

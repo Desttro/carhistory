@@ -156,8 +156,10 @@ export const ReportDetailPage = memo(() => {
         )}
         <YStack
           gap="$4"
-          {...(isNative ? {} : { p: '$4', mx: 'auto', width: '100%' })}
-          $platform-web={{ maxW: 800 }}
+          width="100%"
+          self="center"
+          maxW={800}
+          {...(isNative ? {} : { p: '$4' })}
           $lg={{ maxW: 1040 }}
         >
           <VehicleHeader report={report} hasIssues={hasIssues} />

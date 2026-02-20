@@ -10,8 +10,8 @@ import {
   YStack,
 } from 'tamagui'
 
-import { analytics } from '~/features/analytics/analytics'
 import { APP_NAME } from '~/constants/app'
+import { analytics } from '~/features/analytics/analytics'
 import { LoginAdminButton } from '~/features/auth/ui/LoginAdminButton'
 import { LoginDemoButton } from '~/features/auth/ui/LoginDemoButton'
 import { LoginEmailButton } from '~/features/auth/ui/LoginEmailButton'

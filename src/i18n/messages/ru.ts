@@ -162,6 +162,23 @@ export const messages: Record<keyof Messages, string> = {
   'profile.vehicles': 'Автомобили',
   'profile.memberSince': 'Участник с',
 
+  // share
+  'share.badge': 'Общий отчёт',
+  'share.pageTitle': 'Общий отчёт о транспортном средстве',
+  'share.pageDescription':
+    'Просмотрите этот общий отчёт об истории транспортного средства.',
+  'share.notFound.title': 'Отчёт не найден',
+  'share.notFound.description':
+    'Эта ссылка на общий отчёт недействительна или срок её действия истёк.',
+  'share.expired.title': 'Отчёт истёк',
+  'share.expired.description': 'Этот общий отчёт больше не доступен.',
+  'share.revoked.title': 'Ссылка отозвана',
+  'share.revoked.description': 'Владелец отозвал доступ к этому общему отчёту.',
+  'share.button': 'Поделиться',
+  'share.copied': 'Ссылка на отчёт скопирована в буфер обмена!',
+  'share.shared': 'Отчёт отправлен!',
+  'share.revoke': 'Отозвать ссылку',
+
   // nav
   'nav.home': 'Главная',
   'nav.reports': 'Отчёты',

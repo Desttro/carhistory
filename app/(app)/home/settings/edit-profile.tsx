@@ -67,7 +67,9 @@ export const ProfileEditPage = () => {
           description={t('editProfile.discardDialog.description')}
         />
         <XStack justify="flex-end" gap="$2">
-          <Button onPress={() => blocker.reset?.()}>{t('editProfile.discardDialog.stay')}</Button>
+          <Button onPress={() => blocker.reset?.()}>
+            {t('editProfile.discardDialog.stay')}
+          </Button>
           <Button variant="action" onPress={handleDiscard}>
             {t('editProfile.discardDialog.discard')}
           </Button>

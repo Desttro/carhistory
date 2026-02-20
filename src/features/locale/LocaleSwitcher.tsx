@@ -1,5 +1,5 @@
-import * as DropdownMenu from 'zeego/dropdown-menu'
 import { SizableText, XStack } from 'tamagui'
+import * as DropdownMenu from 'zeego/dropdown-menu'
 
 import { useAuth } from '~/features/auth/client/authClient'
 import { useLocale, useSetLocale } from '~/i18n/context'
@@ -34,7 +34,11 @@ export function LocaleSwitcher({
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <XStack gap="$1.5" items="center" cursor="pointer" hitSlop={8}>
-          <SizableText size={textSize} color="$color11" hoverStyle={{ color: '$color12' }}>
+          <SizableText
+            size={textSize}
+            color="$color11"
+            hoverStyle={{ color: '$color12' }}
+          >
             {LOCALE_META[currentLocale].name}
           </SizableText>
           <CaretDownIcon size={12} color="$color11" />

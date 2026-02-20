@@ -77,7 +77,9 @@ export const OtpPage = () => {
         return
       }
 
-      analytics.track('user_login', { method: params.method === 'phone' ? 'phone' : 'email' })
+      analytics.track('user_login', {
+        method: params.method === 'phone' ? 'phone' : 'email',
+      })
       pauseTimer()
     } catch {
       // error handled by auth client

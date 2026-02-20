@@ -22,6 +22,11 @@ import {
   BETTER_AUTH_SECRET,
   BETTER_AUTH_URL,
   POLAR_WEBHOOK_SECRET,
+  APPLE_CLIENT_ID,
+  APPLE_CLIENT_SECRET,
+  APPLE_APP_BUNDLE_IDENTIFIER,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
 } from '~/server/env-server'
 
 import { APP_SCHEME } from '../constants'
@@ -88,6 +93,7 @@ export const authServer = betterAuth({
     'wss://zero-preview.carhistory.io',
     'wss://zero.carhistory.io',
     'https://carhistory-dev-saby.carhistory.io',
+    'https://appleid.apple.com',
   ],
 
   databaseHooks: {
@@ -192,6 +198,19 @@ export const authServer = betterAuth({
   account: {
     accountLinking: {
       allowDifferentEmails: true,
+    },
+  },
+
+  socialProviders: {
+    apple: {
+      clientId: APPLE_CLIENT_ID,
+      clientSecret: APPLE_CLIENT_SECRET,
+      // Optional
+      appBundleIdentifier: APPLE_APP_BUNDLE_IDENTIFIER,
+    },
+    google: {
+      clientId: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
     },
   },
 })

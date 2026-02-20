@@ -161,6 +161,23 @@ export const messages: Record<keyof Messages, string> = {
   'profile.vehicles': 'Veicoli',
   'profile.memberSince': 'Membro dal',
 
+  // share
+  'share.badge': 'Report condiviso',
+  'share.pageTitle': 'Report veicolo condiviso',
+  'share.pageDescription': 'Visualizza questo report di cronologia veicolo condiviso.',
+  'share.notFound.title': 'Report non trovato',
+  'share.notFound.description':
+    'Questo link di report condiviso non è valido o è scaduto.',
+  'share.expired.title': 'Report scaduto',
+  'share.expired.description': 'Questo report condiviso non è più disponibile.',
+  'share.revoked.title': 'Link revocato',
+  'share.revoked.description':
+    "Il proprietario ha revocato l'accesso a questo report condiviso.",
+  'share.button': 'Condividi',
+  'share.copied': 'Link del report copiato negli appunti!',
+  'share.shared': 'Report condiviso!',
+  'share.revoke': 'Revoca link di condivisione',
+
   // nav
   'nav.home': 'Home',
   'nav.reports': 'Rapporti',

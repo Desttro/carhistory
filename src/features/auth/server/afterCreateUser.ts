@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm'
 
 import { DEMO_EMAIL } from '~/constants/app'
+import { analyticsActions } from '~/data/server/actions/analyticsActions'
 import { getDb } from '~/database'
 import { user as userTable, whitelist } from '~/database/schema-private'
 import { userCredits, userPublic, userState } from '~/database/schema-public'
-import { analyticsActions } from '~/data/server/actions/analyticsActions'
 import { syncPolarCustomer } from '~/features/payments/server/polarCustomerSync'
 import { syncRevenueCatSubscriber } from '~/features/payments/server/revenuecatCustomerSync'
 

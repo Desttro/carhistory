@@ -91,6 +91,7 @@ export default {
       permissions: ['android.permission.RECORD_AUDIO'],
       intentFilters: [
         {
+          autoVerify: true,
           action: 'VIEW',
           data: [
             {
@@ -100,6 +101,10 @@ export default {
             {
               scheme: 'https',
               host: 'www.carhistory.io',
+            },
+            {
+              scheme: 'https',
+              host: 'preview.carhistory.io',
             },
           ],
           category: ['BROWSABLE', 'DEFAULT'],

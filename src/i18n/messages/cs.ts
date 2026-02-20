@@ -162,6 +162,22 @@ export const messages: Record<keyof Messages, string> = {
   'profile.vehicles': 'Vozidla',
   'profile.memberSince': 'Členem od',
 
+  // share
+  'share.badge': 'Sdílená zpráva',
+  'share.pageTitle': 'Sdílená zpráva o vozidle',
+  'share.pageDescription': 'Zobrazit tuto sdílenou zprávu o historii vozidla.',
+  'share.notFound.title': 'Zpráva nenalezena',
+  'share.notFound.description':
+    'Tento odkaz na sdílenou zprávu je neplatný nebo vypršel.',
+  'share.expired.title': 'Zpráva vypršela',
+  'share.expired.description': 'Tato sdílená zpráva již není k dispozici.',
+  'share.revoked.title': 'Odkaz zrušen',
+  'share.revoked.description': 'Vlastník zrušil přístup k této sdílené zprávě.',
+  'share.button': 'Sdílet',
+  'share.copied': 'Odkaz na zprávu zkopírován do schránky!',
+  'share.shared': 'Zpráva sdílena!',
+  'share.revoke': 'Zrušit odkaz sdílení',
+
   // nav
   'nav.home': 'Domů',
   'nav.reports': 'Zprávy',

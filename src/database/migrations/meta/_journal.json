@@ -15,6 +15,13 @@
       "when": 1771474379073,
       "tag": "0001_lumpy_ronan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771618963124,
+      "tag": "0002_sharp_moira_mactaggert",
+      "breakpoints": true
     }
   ]
 }

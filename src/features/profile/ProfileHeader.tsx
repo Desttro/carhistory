@@ -95,9 +95,7 @@ export const ProfileHeader = memo(({ userInfo, isOwnProfile }: ProfileHeaderProp
 
         {isOwnProfile && (
           <ProfileActionPill>
-            <ProfileActionItem
-              onPress={() => router.push('/home/settings/edit-profile')}
-            >
+            <ProfileActionItem onPress={() => router.push('/home/settings/edit-profile')}>
               <PencilSimpleIcon size={18} color="$color11" />
             </ProfileActionItem>
           </ProfileActionPill>

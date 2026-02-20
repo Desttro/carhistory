@@ -94,6 +94,7 @@ declare module 'one' {
         | `/home/vin-lookup/`
         | `/pricing`
         | `/privacy-policy`
+        | `/report`
         | `/terms-of-service`
       DynamicRoutes: 
         | `/(app)/auth/signup/${OneRouter.SingleRoutePart<T>}`
@@ -115,6 +116,7 @@ declare module 'one' {
         | `/home/feed/profile/${OneRouter.SingleRoutePart<T>}`
         | `/home/profile/post/${OneRouter.SingleRoutePart<T>}`
         | `/home/reports/${OneRouter.SingleRoutePart<T>}`
+        | `/report/share/${OneRouter.SingleRoutePart<T>}`
       DynamicRouteTemplate: 
         | `/(app)/auth/signup/[method]`
         | `/(app)/home/(tabs)/feed/post/[feedId]`
@@ -135,6 +137,7 @@ declare module 'one' {
         | `/home/feed/profile/[userId]`
         | `/home/profile/post/[feedId]`
         | `/home/reports/[reportId]`
+        | `/report/share/[token]`
       IsTyped: true
       RouteTypes: {
         '/(app)/auth/signup/[method]': RouteInfo<{ method: string }>
@@ -156,6 +159,7 @@ declare module 'one' {
         '/home/feed/profile/[userId]': RouteInfo<{ userId: string }>
         '/home/profile/post/[feedId]': RouteInfo<{ feedId: string }>
         '/home/reports/[reportId]': RouteInfo<{ reportId: string }>
+        '/report/share/[token]': RouteInfo<{ token: string }>
       }
     }
   }

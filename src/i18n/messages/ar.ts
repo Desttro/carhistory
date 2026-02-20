@@ -144,8 +144,7 @@ export const messages: Record<keyof Messages, string> = {
   'editProfile.username': 'اسم المستخدم',
   'editProfile.usernamePlaceholder': 'ahmedmohamed',
   'editProfile.usernameUnavailable': 'اسم المستخدم غير متاح',
-  'editProfile.usernameInvalid':
-    'الحد الأدنى 3 أحرف، يبدأ بحرف، أحرف/أرقام/_ فقط',
+  'editProfile.usernameInvalid': 'الحد الأدنى 3 أحرف، يبدأ بحرف، أحرف/أرقام/_ فقط',
   'editProfile.saving': 'جارٍ الحفظ...',
 
   // theme labels
@@ -161,6 +160,21 @@ export const messages: Record<keyof Messages, string> = {
   'profile.reports': 'التقارير',
   'profile.vehicles': 'المركبات',
   'profile.memberSince': 'عضو منذ',
+
+  // share
+  'share.badge': 'تقرير مشترك',
+  'share.pageTitle': 'تقرير مركبة مشترك',
+  'share.pageDescription': 'عرض تقرير تاريخ المركبة المشترك هذا.',
+  'share.notFound.title': 'التقرير غير موجود',
+  'share.notFound.description': 'رابط التقرير المشترك هذا غير صالح أو منتهي الصلاحية.',
+  'share.expired.title': 'انتهت صلاحية التقرير',
+  'share.expired.description': 'هذا التقرير المشترك لم يعد متاحاً.',
+  'share.revoked.title': 'تم إلغاء الرابط',
+  'share.revoked.description': 'قام المالك بإلغاء الوصول إلى هذا التقرير المشترك.',
+  'share.button': 'مشاركة',
+  'share.copied': 'تم نسخ رابط التقرير إلى الحافظة!',
+  'share.shared': 'تمت مشاركة التقرير!',
+  'share.revoke': 'إلغاء رابط المشاركة',
 
   // nav
   'nav.home': 'الرئيسية',

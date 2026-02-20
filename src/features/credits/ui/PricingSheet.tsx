@@ -8,9 +8,8 @@ import { returnToStorage } from '~/features/auth/returnToStorage'
 import { useCredits } from '~/features/credits/useCredits'
 import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
-import { useQuery } from '~/zero/client'
-
 import { PricingShimmer } from '~/interface/shimmer/PricingShimmer'
+import { useQuery } from '~/zero/client'
 
 import { PackageCard } from './components/PackageCard'
 import { usePurchaseCredits } from './usePurchaseCredits'

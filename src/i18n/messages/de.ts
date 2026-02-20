@@ -161,6 +161,23 @@ export const messages: Record<keyof Messages, string> = {
   'profile.vehicles': 'Fahrzeuge',
   'profile.memberSince': 'Mitglied seit',
 
+  // share
+  'share.badge': 'Geteilter Bericht',
+  'share.pageTitle': 'Geteilter Fahrzeugbericht',
+  'share.pageDescription': 'Diesen geteilten Fahrzeughistorienbericht ansehen.',
+  'share.notFound.title': 'Bericht nicht gefunden',
+  'share.notFound.description':
+    'Dieser geteilte Berichtslink ist ungültig oder abgelaufen.',
+  'share.expired.title': 'Bericht abgelaufen',
+  'share.expired.description': 'Dieser geteilte Bericht ist nicht mehr verfügbar.',
+  'share.revoked.title': 'Link widerrufen',
+  'share.revoked.description':
+    'Der Eigentümer hat den Zugriff auf diesen geteilten Bericht widerrufen.',
+  'share.button': 'Teilen',
+  'share.copied': 'Berichtslink in die Zwischenablage kopiert!',
+  'share.shared': 'Bericht geteilt!',
+  'share.revoke': 'Freigabelink widerrufen',
+
   // nav
   'nav.home': 'Startseite',
   'nav.reports': 'Berichte',

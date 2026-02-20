@@ -21,7 +21,10 @@ const betterAuthClient = createBetterAuthClient({
   onAuthStateChange: (state) => {
     setUser(state.user)
     if (state.user) {
-      analytics.identify(state.user.id, { email: state.user.email, name: state.user.name })
+      analytics.identify(state.user.id, {
+        email: state.user.email,
+        name: state.user.name,
+      })
     } else {
       analytics.reset()
     }

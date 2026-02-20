@@ -157,6 +157,21 @@ export const messages = {
   'profile.vehicles': 'Vehicles',
   'profile.memberSince': 'Member Since',
 
+  // share
+  'share.badge': 'Shared Report',
+  'share.pageTitle': 'Shared Vehicle Report',
+  'share.pageDescription': 'View this shared vehicle history report.',
+  'share.notFound.title': 'Report Not Found',
+  'share.notFound.description': 'This shared report link is invalid or has expired.',
+  'share.expired.title': 'Report Expired',
+  'share.expired.description': 'This shared report is no longer available.',
+  'share.revoked.title': 'Link Revoked',
+  'share.revoked.description': 'The owner has revoked access to this shared report.',
+  'share.button': 'Share',
+  'share.copied': 'Report link copied to clipboard!',
+  'share.shared': 'Report shared!',
+  'share.revoke': 'Revoke Share Link',
+
   // nav
   'nav.home': 'Home',
   'nav.reports': 'Reports',

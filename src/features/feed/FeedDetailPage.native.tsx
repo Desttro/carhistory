@@ -13,8 +13,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { scheduleOnUI } from 'react-native-worklets'
 import { SizableText, XStack, YStack } from 'tamagui'
 
-import { analytics } from '~/features/analytics/analytics'
 import { postDetail } from '~/data/queries/post'
+import { analytics } from '~/features/analytics/analytics'
 import { useAuth } from '~/features/auth/client/authClient'
 import { CommentInput } from '~/features/feed/CommentInput'
 import { CommentSection } from '~/features/feed/CommentSection'
@@ -127,7 +127,10 @@ export const FeedDetailPage = memo(() => {
         content: content.trim(),
         createdAt: Date.now(),
       })
-      analytics.track('comment_created', { postId: feedId, contentLength: content.trim().length })
+      analytics.track('comment_created', {
+        postId: feedId,
+        contentLength: content.trim().length,
+      })
       setContent('')
       setIsSubmitting(false)
       // flag to scroll when content size updates

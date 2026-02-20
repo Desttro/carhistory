@@ -38,10 +38,7 @@ export function cldrCardinal(locale: string, n: number): PluralCategory {
       const m100 = i % 100
       if (v === 0 && m10 === 1 && m100 !== 11) return 'one'
       if (v === 0 && m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return 'few'
-      if (
-        v === 0 &&
-        (m10 === 0 || (m10 >= 5 && m10 <= 9) || (m100 >= 11 && m100 <= 14))
-      )
+      if (v === 0 && (m10 === 0 || (m10 >= 5 && m10 <= 9) || (m100 >= 11 && m100 <= 14)))
         return 'many'
       return 'other'
     }
@@ -91,7 +88,7 @@ const cache = new Map<string, Intl.PluralRules>()
 export function selectPlural(
   locale: string,
   value: number,
-  type: 'cardinal' | 'ordinal' = 'cardinal',
+  type: 'cardinal' | 'ordinal' = 'cardinal'
 ): string {
   if (!hasPluralRules) {
     // ordinal not used in our messages, safe to return 'other'

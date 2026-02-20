@@ -94,12 +94,7 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
   }, [isLoadingMore])
 
   const renderHeader = useCallback(() => {
-    return (
-      <ProfileHeader
-        userInfo={user}
-        isOwnProfile={isOwnProfile}
-      />
-    )
+    return <ProfileHeader userInfo={user} isOwnProfile={isOwnProfile} />
   }, [user, isOwnProfile])
 
   const listContent = (

@@ -296,6 +296,23 @@ export const order = pgTable(
   ]
 )
 
+// reportShareToken - share tokens for public report access
+export const reportShareToken = pgTable(
+  'reportShareToken',
+  {
+    id: text('id').primaryKey(),
+    vehicleReportId: text('vehicleReportId').notNull(),
+    userId: text('userId').notNull(),
+    token: text('token').notNull().unique(),
+    createdAt: timestamp('createdAt', { mode: 'string' }).defaultNow().notNull(),
+    revokedAt: timestamp('revokedAt', { mode: 'string' }),
+  },
+  (table) => [
+    index('reportShareToken_token_idx').on(table.token),
+    index('reportShareToken_vehicleReportId_idx').on(table.vehicleReportId),
+  ]
+)
+
 // promo - promotional codes for bonus credits, discounts, etc.
 export const promo = pgTable(
   'promo',

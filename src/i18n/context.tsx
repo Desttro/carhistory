@@ -14,7 +14,10 @@ interface I18nContextValue {
 
 const I18nContext = createContext<I18nContextValue | null>(null)
 
-function makeCtx(i18n: I18n, setLocale?: (locale: SupportedLocale) => void): I18nContextValue {
+function makeCtx(
+  i18n: I18n,
+  setLocale?: (locale: SupportedLocale) => void
+): I18nContextValue {
   return {
     i18n,
     t: i18n.t,

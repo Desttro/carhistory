@@ -233,7 +233,11 @@ export function usePostsSearch(pageSize = 12) {
   // track search queries when results arrive
   const lastTrackedSearch = useRef('')
   useEffect(() => {
-    if (debouncedSearchText && posts && debouncedSearchText !== lastTrackedSearch.current) {
+    if (
+      debouncedSearchText &&
+      posts &&
+      debouncedSearchText !== lastTrackedSearch.current
+    ) {
       lastTrackedSearch.current = debouncedSearchText
       analytics.track('search_performed', {
         query: debouncedSearchText,

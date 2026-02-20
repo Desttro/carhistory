@@ -46,7 +46,11 @@ export function useVinLookup() {
 
       if (!data.success) {
         const errorMsg = data.error || 'No records found for this VIN'
-        analytics.track('vin_searched', { vin: normalizedVin, success: false, error: errorMsg })
+        analytics.track('vin_searched', {
+          vin: normalizedVin,
+          success: false,
+          error: errorMsg,
+        })
         setError(errorMsg)
         return
       }
@@ -56,7 +60,11 @@ export function useVinLookup() {
       setCheckResult({ ...data, vin: normalizedVin })
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Failed to check VIN'
-      analytics.track('vin_searched', { vin: normalizedVin, success: false, error: errorMsg })
+      analytics.track('vin_searched', {
+        vin: normalizedVin,
+        success: false,
+        error: errorMsg,
+      })
       console.info('vin check error:', err)
       setError(errorMsg)
     } finally {
@@ -110,7 +118,11 @@ export function useVinLookup() {
 
       if (!data.success) {
         const errorMsg = data.error || 'Failed to purchase report'
-        analytics.track('report_purchased', { vin: normalizedVin, success: false, error: errorMsg })
+        analytics.track('report_purchased', {
+          vin: normalizedVin,
+          success: false,
+          error: errorMsg,
+        })
         setError(errorMsg)
         return
       }
@@ -129,7 +141,11 @@ export function useVinLookup() {
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Failed to purchase report'
-      analytics.track('report_purchased', { vin: normalizedVin, success: false, error: errorMsg })
+      analytics.track('report_purchased', {
+        vin: normalizedVin,
+        success: false,
+        error: errorMsg,
+      })
       console.info('purchase report error:', err)
       setError(errorMsg)
     } finally {

@@ -162,6 +162,22 @@ export const messages: Record<keyof Messages, string> = {
   'profile.vehicles': 'Pojazdy',
   'profile.memberSince': 'Członek od',
 
+  // share
+  'share.badge': 'Udostępniony raport',
+  'share.pageTitle': 'Udostępniony raport pojazdu',
+  'share.pageDescription': 'Zobacz ten udostępniony raport historii pojazdu.',
+  'share.notFound.title': 'Raport nie znaleziony',
+  'share.notFound.description':
+    'Ten udostępniony link do raportu jest nieprawidłowy lub wygasł.',
+  'share.expired.title': 'Raport wygasł',
+  'share.expired.description': 'Ten udostępniony raport nie jest już dostępny.',
+  'share.revoked.title': 'Link unieważniony',
+  'share.revoked.description': 'Właściciel cofnął dostęp do tego udostępnionego raportu.',
+  'share.button': 'Udostępnij',
+  'share.copied': 'Link do raportu skopiowany do schowka!',
+  'share.shared': 'Raport udostępniony!',
+  'share.revoke': 'Unieważnij link udostępniania',
+
   // nav
   'nav.home': 'Strona główna',
   'nav.reports': 'Raporty',

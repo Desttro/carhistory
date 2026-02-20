@@ -12,13 +12,16 @@ export const messages: Record<keyof Messages, string> = {
   'common.more': '[+{count} ɱöŕé~~~~]',
   'report.loading': '[Ĺöàðìñĝ ŕéþöŕţ...~~~~~~]',
   'report.notFound.title': '[Ŕéþöŕţ Ñöţ Ƒöüñð~~~~~]',
-  'report.notFound.description': '[Ţĥìš ŕéþöŕţ ɱàý ĥàṽé ƀééñ ðéĺéţéð öŕ ýöü ðöñ\'ţ ĥàṽé àççéšš ţö ìţ.~~~~~~~~~~~~~~~~~~~~]',
+  'report.notFound.description':
+    "[Ţĥìš ŕéþöŕţ ɱàý ĥàṽé ƀééñ ðéĺéţéð öŕ ýöü ðöñ'ţ ĥàṽé àççéšš ţö ìţ.~~~~~~~~~~~~~~~~~~~~]",
   'report.notFound.back': '[Ɓàçķ ţö Ŕéþöŕţš~~~~~]',
   'report.expired.title': '[Ŕéþöŕţ Éẋþìŕéð~~~~~]',
-  'report.expired.description': '[Ţĥìš ŕéþöŕţ ĥàš éẋþìŕéð. Þüŕçĥàšé à ñéŵ ŕéþöŕţ ţö ĝéţ üþðàţéð ìñƒöŕɱàţìöñ.~~~~~~~~~~~~~~~~~~~~~~~]',
+  'report.expired.description':
+    '[Ţĥìš ŕéþöŕţ ĥàš éẋþìŕéð. Þüŕçĥàšé à ñéŵ ŕéþöŕţ ţö ĝéţ üþðàţéð ìñƒöŕɱàţìöñ.~~~~~~~~~~~~~~~~~~~~~~~]',
   'report.expired.cta': '[Ĝéţ Üþðàţéð Ŕéþöŕţ~~~~~~]',
   'report.error.title': '[Ŕéþöŕţ Ðàţà Üñàṽàìĺàƀĺé~~~~~~~]',
-  'report.error.description': '[Ţĥéŕé ŵàš àñ ìššüé ĺöàðìñĝ ţĥìš ŕéþöŕţ\'š ðàţà.~~~~~~~~~~~~~~]',
+  'report.error.description':
+    "[Ţĥéŕé ŵàš àñ ìššüé ĺöàðìñĝ ţĥìš ŕéþöŕţ'š ðàţà.~~~~~~~~~~~~~~]",
   'report.vin': '[ṼÌÑ: {vin}~~~]',
   'report.issuesFound': '[Ìššüéš Ƒöüñð~~~~]',
   'report.cleanHistory': '[Çĺéàñ Ĥìšţöŕý~~~~]',
@@ -44,16 +47,20 @@ export const messages: Record<keyof Messages, string> = {
   'report.timeline.count': '[Ţìɱéĺìñé ({count} éṽéñţš)~~~~~~~~]',
   'report.timeline.ownerUnknown': '[Üñķñöŵñ Öŵñéŕ~~~~]',
   'report.timeline.owner': '[Öŵñéŕ {number}~~~~~]',
-  'report.timeline.eventCount': '[{count, plural, one {# event} other {# events}}~~~~~~~~~~~~~~~]',
+  'report.timeline.eventCount':
+    '[{count, plural, one {# event} other {# events}}~~~~~~~~~~~~~~~]',
   'damage.severeDamage': '[Šéṽéŕé Ðàɱàĝé~~~~]',
   'damage.moderateDamage': '[Ṁöðéŕàţé Ðàɱàĝé~~~~~]',
   'damage.minorDamage': '[Ṁìñöŕ Ðàɱàĝé~~~~]',
   'damage.damageReported': '[Ðàɱàĝé Ŕéþöŕţéð~~~~~]',
   'damage.hoverHint': '[Ĥöṽéŕ öṽéŕ ĥìĝĥĺìĝĥţéð àŕéàš ţö šéé ðéţàìĺš~~~~~~~~~~~~~]',
-  'damage.areasWithDamage': '[{count, plural, one {# area} other {# areas}} ŵìţĥ ŕéþöŕţéð ðàɱàĝé~~~~~~~~~~~~~~~~~~~~]',
-  'damage.incidentCount': '[{count, plural, one {# incident} other {# incidents}}~~~~~~~~~~~~~~~~]',
+  'damage.areasWithDamage':
+    '[{count, plural, one {# area} other {# areas}} ŵìţĥ ŕéþöŕţéð ðàɱàĝé~~~~~~~~~~~~~~~~~~~~]',
+  'damage.incidentCount':
+    '[{count, plural, one {# incident} other {# incidents}}~~~~~~~~~~~~~~~~]',
   'damage.severityLabel': '[{severity} šéṽéŕìţý~~~~~~]',
-  'damage.impactArea': '[{count, plural, one {Impact area} other {Impact areas}}~~~~~~~~~~~~~~~~~]',
+  'damage.impactArea':
+    '[{count, plural, one {Impact area} other {Impact areas}}~~~~~~~~~~~~~~~~~]',
   'eventType.TITLE': '[Ţìţĺé~~]',
   'eventType.REGISTRATION': '[Ŕéĝìšţŕàţìöñ~~~~]',
   'eventType.LIEN': '[Ĺìéñ~~]',
@@ -103,11 +110,13 @@ export const messages: Record<keyof Messages, string> = {
   'settings.termsOfService': '[Ţéŕɱš öƒ Šéŕṽìçé~~~~~]',
   'settings.privacyPolicy': '[Þŕìṽàçý Þöĺìçý~~~~~]',
   'settings.deleteAccount': '[Ðéĺéţé Àççöüñţ~~~~~]',
-  'settings.deleteAccountUnavailable': '[Àççöüñţ ðéĺéţìöñ ìš ñöţ çüŕŕéñţĺý àṽàìĺàƀĺé.~~~~~~~~~~~~~~]',
+  'settings.deleteAccountUnavailable':
+    '[Àççöüñţ ðéĺéţìöñ ìš ñöţ çüŕŕéñţĺý àṽàìĺàƀĺé.~~~~~~~~~~~~~~]',
   'settings.logOut': '[Ĺöĝ Öüţ~~~]',
   'settings.language': '[Ĺàñĝüàĝé~~~]',
   'editProfile.discardDialog.title': '[Ðìšçàŕð çĥàñĝéš?~~~~~]',
-  'editProfile.discardDialog.description': '[Ýöü ĥàṽé üñšàṽéð çĥàñĝéš. Àŕé ýöü šüŕé ýöü ŵàñţ ţö ðìšçàŕð ţĥéɱ?~~~~~~~~~~~~~~~~~~~~]',
+  'editProfile.discardDialog.description':
+    '[Ýöü ĥàṽé üñšàṽéð çĥàñĝéš. Àŕé ýöü šüŕé ýöü ŵàñţ ţö ðìšçàŕð ţĥéɱ?~~~~~~~~~~~~~~~~~~~~]',
   'editProfile.discardDialog.stay': '[Šţàý~~]',
   'editProfile.discardDialog.discard': '[Ðìšçàŕð~~~]',
   'editProfile.name': '[Ñàɱé~~]',
@@ -115,7 +124,8 @@ export const messages: Record<keyof Messages, string> = {
   'editProfile.username': '[Üšéŕñàɱé~~~]',
   'editProfile.usernamePlaceholder': '[ĵöĥñðöé~~~]',
   'editProfile.usernameUnavailable': '[Üšéŕñàɱé ìš ñöţ àṽàìĺàƀĺé~~~~~~~~]',
-  'editProfile.usernameInvalid': '[Ṁüšţ ƀé 3+ çĥàŕš, šţàŕţ ŵìţĥ ĺéţţéŕ, öñĺý ĺéţţéŕš/ñüɱƀéŕš/_~~~~~~~~~~~~~~~~~~]',
+  'editProfile.usernameInvalid':
+    '[Ṁüšţ ƀé 3+ çĥàŕš, šţàŕţ ŵìţĥ ĺéţţéŕ, öñĺý ĺéţţéŕš/ñüɱƀéŕš/_~~~~~~~~~~~~~~~~~~]',
   'editProfile.saving': '[Šàṽìñĝ...~~~]',
   'theme.dark': '[Ðàŕķ~~]',
   'theme.light': '[Ĺìĝĥţ~~]',
@@ -125,6 +135,22 @@ export const messages: Record<keyof Messages, string> = {
   'profile.reports': '[Ŕéþöŕţš~~~]',
   'profile.vehicles': '[Ṽéĥìçĺéš~~~]',
   'profile.memberSince': '[Ṁéɱƀéŕ Šìñçé~~~~]',
+  'share.badge': '[Šĥàŕéð Ŕéþöŕţ~~~~]',
+  'share.pageTitle': '[Šĥàŕéð Ṽéĥìçĺé Ŕéþöŕţ~~~~~~~]',
+  'share.pageDescription': '[Ṽìéŵ ţĥìš šĥàŕéð ṽéĥìçĺé ĥìšţöŕý ŕéþöŕţ.~~~~~~~~~~~~]',
+  'share.notFound.title': '[Ŕéþöŕţ Ñöţ Ƒöüñð~~~~~]',
+  'share.notFound.description':
+    '[Ţĥìš šĥàŕéð ŕéþöŕţ ĺìñķ ìš ìñṽàĺìð öŕ ĥàš éẋþìŕéð.~~~~~~~~~~~~~~~]',
+  'share.expired.title': '[Ŕéþöŕţ Éẋþìŕéð~~~~~]',
+  'share.expired.description':
+    '[Ţĥìš šĥàŕéð ŕéþöŕţ ìš ñö ĺöñĝéŕ àṽàìĺàƀĺé.~~~~~~~~~~~~~]',
+  'share.revoked.title': '[Ĺìñķ Ŕéṽöķéð~~~~]',
+  'share.revoked.description':
+    '[Ţĥé öŵñéŕ ĥàš ŕéṽöķéð àççéšš ţö ţĥìš šĥàŕéð ŕéþöŕţ.~~~~~~~~~~~~~~~~]',
+  'share.button': '[Šĥàŕé~~]',
+  'share.copied': '[Ŕéþöŕţ ĺìñķ çöþìéð ţö çĺìþƀöàŕð!~~~~~~~~~~]',
+  'share.shared': '[Ŕéþöŕţ šĥàŕéð!~~~~~]',
+  'share.revoke': '[Ŕéṽöķé Šĥàŕé Ĺìñķ~~~~~~]',
   'nav.home': '[Ĥöɱé~~]',
   'nav.reports': '[Ŕéþöŕţš~~~]',
   'nav.settings': '[Šéţţìñĝš~~~]',

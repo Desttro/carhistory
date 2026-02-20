@@ -39,6 +39,7 @@ export default {
       'zero.carhistory.io',
       'media.carhistory.io',
       'media-preview.carhistory.io',
+      'appleid.apple.com',
     ],
   },
 

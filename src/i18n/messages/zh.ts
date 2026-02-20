@@ -129,8 +129,7 @@ export const messages: Record<keyof Messages, string> = {
 
   // edit profile
   'editProfile.discardDialog.title': '放弃更改？',
-  'editProfile.discardDialog.description':
-    '您有未保存的更改。确定要放弃吗？',
+  'editProfile.discardDialog.description': '您有未保存的更改。确定要放弃吗？',
   'editProfile.discardDialog.stay': '留下',
   'editProfile.discardDialog.discard': '放弃',
   'editProfile.name': '姓名',
@@ -138,8 +137,7 @@ export const messages: Record<keyof Messages, string> = {
   'editProfile.username': '用户名',
   'editProfile.usernamePlaceholder': 'zhangsan',
   'editProfile.usernameUnavailable': '用户名不可用',
-  'editProfile.usernameInvalid':
-    '至少3个字符，以字母开头，仅限字母/数字/_',
+  'editProfile.usernameInvalid': '至少3个字符，以字母开头，仅限字母/数字/_',
   'editProfile.saving': '保存中...',
 
   // theme labels
@@ -155,6 +153,21 @@ export const messages: Record<keyof Messages, string> = {
   'profile.reports': '报告',
   'profile.vehicles': '车辆',
   'profile.memberSince': '加入时间',
+
+  // share
+  'share.badge': '共享报告',
+  'share.pageTitle': '共享车辆报告',
+  'share.pageDescription': '查看此共享车辆历史报告。',
+  'share.notFound.title': '报告未找到',
+  'share.notFound.description': '此共享报告链接无效或已过期。',
+  'share.expired.title': '报告已过期',
+  'share.expired.description': '此共享报告已不再可用。',
+  'share.revoked.title': '链接已撤销',
+  'share.revoked.description': '所有者已撤销对此共享报告的访问权限。',
+  'share.button': '分享',
+  'share.copied': '报告链接已复制到剪贴板！',
+  'share.shared': '报告已分享！',
+  'share.revoke': '撤销分享链接',
 
   // nav
   'nav.home': '首页',

@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest'
+
 import { cldrCardinal } from '~/i18n/plural'
 
 describe('cldrCardinal', () => {

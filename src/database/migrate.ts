@@ -26,6 +26,7 @@ const PRIVATE_TABLES = [
   'productProvider',
   'customerProvider',
   'order',
+  'reportShareToken',
 ]
 
 async function ensureZeroPublication() {

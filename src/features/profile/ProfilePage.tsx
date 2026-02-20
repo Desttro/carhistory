@@ -65,10 +65,7 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
         }}
       >
         <YStack px="$4" pb="$10" maxW={760} mx="auto">
-          <ProfileHeader
-            userInfo={user}
-            isOwnProfile={isOwnProfile}
-          />
+          <ProfileHeader userInfo={user} isOwnProfile={isOwnProfile} />
 
           {isLoading && !posts?.length ? (
             <ProfileShimmer />

@@ -39,6 +39,7 @@ export function Layout() {
                       }}
                     >
                       <Stack.Screen name="(app)" />
+                      <Stack.Screen name="report" />
                     </Stack>
                   ) : (
                     <>

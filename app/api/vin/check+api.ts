@@ -7,7 +7,10 @@ export const GET: Endpoint = async (req) => {
   const vin = url.searchParams.get('vin')
 
   if (!vin) {
-    return Response.json({ success: false, error: 'Missing vin parameter' }, { status: 400 })
+    return Response.json(
+      { success: false, error: 'Missing vin parameter' },
+      { status: 400 }
+    )
   }
 
   try {

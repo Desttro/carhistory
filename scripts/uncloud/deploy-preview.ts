@@ -295,7 +295,9 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
     console.info('  uc logs web -f           # follow web logs')
     console.info(`  ssh ${DEPLOY_USER}@${DEPLOY_HOST}  # ssh to server`)
     console.info('\nto skip builds on redeploy:')
-    console.info('  bun run:preview tko uncloud deploy-preview --skip-build --skip-docker')
+    console.info(
+      '  bun run:preview tko uncloud deploy-preview --skip-build --skip-docker'
+    )
   } finally {
     if (!skipLock) {
       await releaseDeployLock(ssh)

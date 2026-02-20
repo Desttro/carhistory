@@ -13,7 +13,10 @@ export const POST: Endpoint = async (req) => {
     }
 
     if (!body.vin) {
-      return Response.json({ success: false, error: 'Missing vin in request body' }, { status: 400 })
+      return Response.json(
+        { success: false, error: 'Missing vin in request body' },
+        { status: 400 }
+      )
     }
 
     const authData = {

@@ -2,18 +2,22 @@ import { Fragment, memo } from 'react'
 import { isWeb } from 'tamagui'
 
 import { APP_NAME } from '~/constants/app'
+import { DEFAULT_LOCALE, LOCALE_META, SUPPORTED_LOCALES } from '~/i18n/locales'
 
 const DEFAULT_OG_IMAGE = `${process.env.ONE_SERVER_URL}/og.jpg`
+const DOMAIN = process.env.ONE_SERVER_URL || ''
 
 export const HeadInfo = memo(function HeadInfo({
   title,
   description,
   canonicalUrl,
+  currentPath,
   openGraph,
 }: {
   title?: string
   description?: string
   canonicalUrl?: string
+  currentPath?: string
   openGraph?: {
     type?: string
     locale?: string
@@ -73,6 +77,20 @@ export const HeadInfo = memo(function HeadInfo({
 
           <meta property="og:locale" content={openGraph.locale ?? 'en_US'} />
           <meta property="og:site_name" content={openGraph.siteName || APP_NAME} />
+        </>
+      )}
+
+      {currentPath && DOMAIN && (
+        <>
+          {SUPPORTED_LOCALES.map((loc) => (
+            <link
+              key={loc}
+              rel="alternate"
+              hrefLang={LOCALE_META[loc].bcp47}
+              href={`${DOMAIN}${loc === DEFAULT_LOCALE ? '' : `/${loc}`}${currentPath}`}
+            />
+          ))}
+          <link rel="alternate" hrefLang="x-default" href={`${DOMAIN}${currentPath}`} />
         </>
       )}
     </>

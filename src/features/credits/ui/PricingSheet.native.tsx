@@ -157,17 +157,14 @@ export const PricingSheet = memo(
                   const priceNum = rcPackage?.product.price || 0
                   const ppc = pkg.credits > 0 ? priceNum / pkg.credits : 0
                   const pricePerCredit =
-                    pkg.credits > 0 && priceNum > 0
-                      ? `$${ppc.toFixed(2)}`
-                      : undefined
+                    pkg.credits > 0 && priceNum > 0 ? `$${ppc.toFixed(2)}` : undefined
                   const savingsPercent =
                     pkg.credits > 1 && basePricePerCredit > 0
                       ? Math.round(
                           ((basePricePerCredit - ppc) / basePricePerCredit) * 100
                         )
                       : 0
-                  const isBestValue =
-                    pkg.credits === maxCredits && pkg.credits > 1
+                  const isBestValue = pkg.credits === maxCredits && pkg.credits > 1
 
                   return (
                     <YStack key={pkg.slug} $md={{ flex: inline ? undefined : 1 }}>

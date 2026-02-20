@@ -1,6 +1,8 @@
 import { memo, useMemo, useState } from 'react'
 import { H4, SizableText, View, XStack, YStack } from 'tamagui'
 
+import { useT } from '~/i18n/context'
+import { translateDamageZone, translateSeverity } from '~/i18n/enums'
 import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
 
 import { DamageLegend } from './DamageLegend'
@@ -29,19 +31,6 @@ function getMaxSeverity(zones: DamageZoneData[]): Severity {
   return max
 }
 
-function getSeverityLabel(severity: Severity): string {
-  switch (severity) {
-    case 'severe':
-      return 'Severe Damage'
-    case 'moderate':
-      return 'Moderate Damage'
-    case 'minor':
-      return 'Minor Damage'
-    default:
-      return 'Damage Reported'
-  }
-}
-
 function getSeverityColor(severity: Severity): ColorTokens {
   switch (severity) {
     case 'severe':
@@ -58,13 +47,13 @@ function getSeverityColor(severity: Severity): ColorTokens {
 export const VehicleDamageVisualization = memo(
   ({ accidents, events }: VehicleDamageVisualizationProps) => {
     const [hoveredZone, setHoveredZone] = useState<DamageZoneId | null>(null)
+    const t = useT()
 
     const damageZones = useMemo(
       () => parseDamageZones(accidents, events),
       [accidents, events]
     )
 
-    // don't render if no damage zones found
     if (damageZones.length === 0) {
       return null
     }
@@ -73,9 +62,16 @@ export const VehicleDamageVisualization = memo(
     const hoveredData = hoveredZone
       ? damageZones.find((z) => z.zoneId === hoveredZone)
       : null
-    const hoveredLabel = hoveredZone
-      ? damageZonePaths.find((p) => p.id === hoveredZone)?.label
-      : null
+    const hoveredLabel = hoveredZone ? translateDamageZone(t, hoveredZone) : null
+
+    const severityLabel =
+      maxSeverity === 'severe'
+        ? t('damage.severeDamage')
+        : maxSeverity === 'moderate'
+          ? t('damage.moderateDamage')
+          : maxSeverity === 'minor'
+            ? t('damage.minorDamage')
+            : t('damage.damageReported')
 
     return (
       <YStack
@@ -90,7 +86,7 @@ export const VehicleDamageVisualization = memo(
         <XStack items="center" gap="$2">
           <WarningCircleIcon size={18} color={getSeverityColor(maxSeverity)} />
           <H4 size="$4" color={getSeverityColor(maxSeverity)}>
-            {getSeverityLabel(maxSeverity)}
+            {severityLabel}
           </H4>
         </XStack>
 
@@ -124,9 +120,10 @@ export const VehicleDamageVisualization = memo(
                   {hoveredLabel}
                 </SizableText>
                 <SizableText size="$3" color="$color10">
-                  {hoveredData.eventCount}{' '}
-                  {hoveredData.eventCount === 1 ? 'incident' : 'incidents'} •{' '}
-                  {hoveredData.severity} severity
+                  {t('damage.incidentCount', { count: hoveredData.eventCount })} •{' '}
+                  {t('damage.severityLabel', {
+                    severity: translateSeverity(t, hoveredData.severity),
+                  })}
                 </SizableText>
                 {hoveredData.events.slice(0, 2).map((event, i) => (
                   <YStack key={i} gap="$1" bg="$color3" p="$2" rounded="$3">
@@ -140,26 +137,24 @@ export const VehicleDamageVisualization = memo(
                 ))}
                 {hoveredData.events.length > 2 && (
                   <SizableText size="$2" color="$color8">
-                    +{hoveredData.events.length - 2} more
+                    {t('common.more', { count: hoveredData.events.length - 2 })}
                   </SizableText>
                 )}
               </YStack>
             ) : (
               <YStack gap="$2">
                 <SizableText size="$3" color="$color10">
-                  {damageZones.length} area{damageZones.length !== 1 ? 's' : ''} with
-                  reported damage
+                  {t('damage.areasWithDamage', { count: damageZones.length })}
                 </SizableText>
                 <SizableText size="$2" color="$color8">
-                  Hover over highlighted areas to see details
+                  {t('damage.hoverHint')}
                 </SizableText>
                 <XStack gap="$2" flexWrap="wrap" mt="$1">
                   {damageZones.map((zone) => {
-                    const label = damageZonePaths.find((p) => p.id === zone.zoneId)?.label
                     return (
                       <YStack key={zone.zoneId} bg="$color4" px="$2" py="$1" rounded="$3">
                         <SizableText size="$2" color="$color11">
-                          {label} ({zone.eventCount})
+                          {translateDamageZone(t, zone.zoneId)} ({zone.eventCount})
                         </SizableText>
                       </YStack>
                     )

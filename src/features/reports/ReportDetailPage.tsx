@@ -2,16 +2,30 @@ import { useParams, useRouter } from 'one'
 import { memo, useMemo, useState } from 'react'
 import { Platform, ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { AnimatePresence, H2, H3, H4, SizableText, Spinner, XStack, YStack } from 'tamagui'
+import {
+  AnimatePresence,
+  H2,
+  H3,
+  H4,
+  SizableText,
+  Spinner,
+  XStack,
+  YStack,
+} from 'tamagui'
 
-import { useTabBarBottomPadding } from '~/features/app/tabBarConstants'
 import { vehicleReportById } from '~/data/queries/vehicleReport'
+import { useTabBarBottomPadding } from '~/features/app/tabBarConstants'
+import { useT } from '~/i18n/context'
+import { useLocale } from '~/i18n/context'
+import { translateEventType, translateTitleBrand } from '~/i18n/enums'
+import { formatNumber } from '~/i18n/format'
+import { animationClamped } from '~/interface/animations/animationClamped'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { Button } from '~/interface/buttons/Button'
 import { StatusChip } from '~/interface/chips/StatusChip'
-import { CarIcon } from '~/interface/icons/phosphor/CarIcon'
 import { CaretDownIcon } from '~/interface/icons/phosphor/CaretDownIcon'
 import { CaretLeftIcon } from '~/interface/icons/phosphor/CaretLeftIcon'
+import { CarIcon } from '~/interface/icons/phosphor/CarIcon'
 import { CheckCircleIcon } from '~/interface/icons/phosphor/CheckCircleIcon'
 import { ClockIcon } from '~/interface/icons/phosphor/ClockIcon'
 import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
@@ -25,7 +39,6 @@ import { KeyValueRow } from '~/interface/lists/KeyValueRow'
 import { PageLayout } from '~/interface/pages/PageLayout'
 import { useQuery } from '~/zero/client'
 
-import { animationClamped } from '~/interface/animations/animationClamped'
 import { EventDamageVisualization } from './components/VehicleDamageVisualization'
 
 import type { CanonicalReport, EventType, NormalizedEvent } from './types'
@@ -38,6 +51,8 @@ export const ReportDetailPage = memo(() => {
   const [vehicleReport, status] = useQuery(vehicleReportById, { reportId })
   const insets = useSafeAreaInsets()
   const tabBarPadding = useTabBarBottomPadding()
+  const t = useT()
+  const locale = useLocale()
 
   const report = vehicleReport?.canonicalJson as CanonicalReport | undefined
   const isLoading = status.type === 'unknown'
@@ -46,11 +61,11 @@ export const ReportDetailPage = memo(() => {
   if (isLoading) {
     return (
       <PageLayout>
-        <HeadInfo title="Loading Report..." />
+        <HeadInfo title={t('report.loading')} />
         <YStack flex={1} items="center" justify="center" p="$8">
           <Spinner size="large" />
           <SizableText size="$3" color="$color10" mt="$3">
-            Loading report...
+            {t('report.loading')}
           </SizableText>
         </YStack>
       </PageLayout>
@@ -60,16 +75,18 @@ export const ReportDetailPage = memo(() => {
   if (!vehicleReport) {
     return (
       <PageLayout>
-        <HeadInfo title="Report Not Found" />
+        <HeadInfo title={t('report.notFound.title')} />
         <YStack flex={1} items="center" justify="center" p="$8" gap="$4">
           <FileTextIcon size={64} color="$color8" />
           <H2 size="$6" color="$color10">
-            Report Not Found
+            {t('report.notFound.title')}
           </H2>
           <SizableText size="$4" color="$color10" text="center">
-            This report may have been deleted or you don't have access to it.
+            {t('report.notFound.description')}
           </SizableText>
-          <Button onPress={() => router.push('/home/reports')}>Back to Reports</Button>
+          <Button onPress={() => router.push('/home/reports')}>
+            {t('report.notFound.back')}
+          </Button>
         </YStack>
       </PageLayout>
     )
@@ -79,20 +96,20 @@ export const ReportDetailPage = memo(() => {
     const vin = vehicleReport.vehicle?.vin || vehicleReport.vehicleId
     return (
       <PageLayout>
-        <HeadInfo title="Report Expired" />
+        <HeadInfo title={t('report.expired.title')} />
         <YStack flex={1} items="center" justify="center" p="$8" gap="$4">
           <WarningCircleIcon size={64} color="$orange10" />
           <H2 size="$6" color="$orange10">
-            Report Expired
+            {t('report.expired.title')}
           </H2>
           <SizableText size="$4" color="$color10" text="center">
-            This report has expired. Purchase a new report to get updated information.
+            {t('report.expired.description')}
           </SizableText>
           <SizableText size="$3" color="$color8" fontFamily="$mono">
-            VIN: {vin}
+            {t('report.vin', { vin })}
           </SizableText>
           <Button onPress={() => router.push(`/home/vin-lookup?vin=${vin}` as any)}>
-            Get Updated Report
+            {t('report.expired.cta')}
           </Button>
         </YStack>
       </PageLayout>
@@ -102,16 +119,18 @@ export const ReportDetailPage = memo(() => {
   if (!report) {
     return (
       <PageLayout>
-        <HeadInfo title="Report Error" />
+        <HeadInfo title={t('report.error.title')} />
         <YStack flex={1} items="center" justify="center" p="$8" gap="$4">
           <WarningCircleIcon size={64} color="$red10" />
           <H2 size="$6" color="$red10">
-            Report Data Unavailable
+            {t('report.error.title')}
           </H2>
           <SizableText size="$4" color="$color10" text="center">
-            There was an issue loading this report's data.
+            {t('report.error.description')}
           </SizableText>
-          <Button onPress={() => router.push('/home/reports')}>Back to Reports</Button>
+          <Button onPress={() => router.push('/home/reports')}>
+            {t('report.notFound.back')}
+          </Button>
         </YStack>
       </PageLayout>
     )
@@ -163,7 +182,7 @@ export const ReportDetailPage = memo(() => {
           $lg={{ maxW: 1040 }}
         >
           <VehicleHeader report={report} hasIssues={hasIssues} />
-          <SummaryStats report={report} hasIssues={hasIssues} />
+          <SummaryStats report={report} hasIssues={hasIssues} locale={locale} />
           {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
           <Timeline events={report.events} />
           <SourceProviders providers={report.sourceProviders} />
@@ -176,6 +195,7 @@ export const ReportDetailPage = memo(() => {
 const VehicleHeader = memo(
   ({ report, hasIssues }: { report: CanonicalReport; hasIssues: boolean }) => {
     const { vehicleInfo } = report
+    const t = useT()
 
     return (
       <YStack gap="$3">
@@ -200,7 +220,7 @@ const VehicleHeader = memo(
                 {vehicleInfo.vin}
               </SizableText>
               <StatusChip
-                label={hasIssues ? 'Issues Found' : 'Clean'}
+                label={hasIssues ? t('report.issuesFound') : t('report.clean')}
                 icon={
                   hasIssues ? (
                     <WarningCircleIcon size={10} color="$color11" />
@@ -216,12 +236,20 @@ const VehicleHeader = memo(
         </XStack>
 
         <YStack bg="$color2" rounded="$4" px="$3" py="$1">
-          {vehicleInfo.trim && <KeyValueRow label="Trim" value={vehicleInfo.trim} />}
-          {vehicleInfo.bodyStyle && <KeyValueRow label="Body Style" value={vehicleInfo.bodyStyle} />}
-          {vehicleInfo.engine && <KeyValueRow label="Engine" value={vehicleInfo.engine} />}
-          {vehicleInfo.drivetrain && <KeyValueRow label="Drivetrain" value={vehicleInfo.drivetrain} />}
+          {vehicleInfo.trim && (
+            <KeyValueRow label={t('vehicle.trim')} value={vehicleInfo.trim} />
+          )}
+          {vehicleInfo.bodyStyle && (
+            <KeyValueRow label={t('vehicle.bodyStyle')} value={vehicleInfo.bodyStyle} />
+          )}
+          {vehicleInfo.engine && (
+            <KeyValueRow label={t('vehicle.engine')} value={vehicleInfo.engine} />
+          )}
+          {vehicleInfo.drivetrain && (
+            <KeyValueRow label={t('vehicle.drivetrain')} value={vehicleInfo.drivetrain} />
+          )}
           <KeyValueRow
-            label="Year / Make / Model"
+            label={t('vehicle.yearMakeModel')}
             value={`${vehicleInfo.year} ${vehicleInfo.make} ${vehicleInfo.model}`}
             last
           />
@@ -232,7 +260,17 @@ const VehicleHeader = memo(
 )
 
 const SummaryStats = memo(
-  ({ report, hasIssues }: { report: CanonicalReport; hasIssues: boolean }) => {
+  ({
+    report,
+    hasIssues,
+    locale,
+  }: {
+    report: CanonicalReport
+    hasIssues: boolean
+    locale: string
+  }) => {
+    const t = useT()
+
     return (
       <YStack gap="$3">
         <XStack items="center" gap="$2">
@@ -242,29 +280,34 @@ const SummaryStats = memo(
             <CheckCircleIcon size={20} color="$green10" />
           )}
           <H3 size="$5" color={hasIssues ? '$orange10' : '$green10'}>
-            {hasIssues ? 'Issues Found' : 'Clean History'}
+            {hasIssues ? t('report.issuesFound') : t('report.cleanHistory')}
           </H3>
         </XStack>
 
         <XStack gap="$3" flexWrap="wrap">
           <StatBox
-            label="Owners"
-            value={report.estimatedOwners?.toString() ?? 'Unknown'}
+            label={t('report.stat.owners')}
+            value={report.estimatedOwners?.toString() ?? t('report.stat.unknown')}
             icon={<UserIcon size={18} color="$color10" />}
           />
           <StatBox
-            label="Accidents"
+            label={t('report.stat.accidents')}
             value={report.accidentCount.toString()}
             isWarning={report.accidentCount > 0}
-            icon={<WarningCircleIcon size={18} color={report.accidentCount > 0 ? '$red10' : '$color10'} />}
+            icon={
+              <WarningCircleIcon
+                size={18}
+                color={report.accidentCount > 0 ? '$red10' : '$color10'}
+              />
+            }
           />
           <StatBox
-            label="Service Records"
+            label={t('report.stat.serviceRecords')}
             value={report.serviceRecordCount.toString()}
             icon={<WrenchIcon size={18} color="$color10" />}
           />
           <StatBox
-            label="Total Events"
+            label={t('report.stat.totalEvents')}
             value={report.eventCount.toString()}
             icon={<ClockIcon size={18} color="$color10" />}
           />
@@ -273,26 +316,26 @@ const SummaryStats = memo(
         {report.odometerLastReported && (
           <YStack gap="$1" bg="$color2" p="$3" rounded="$4">
             <SizableText size="$2" color="$color10">
-              Last Reported Odometer
+              {t('report.odometer.lastReported')}
             </SizableText>
             <XStack items="baseline" gap="$1">
               <SizableText size="$6" fontWeight="600">
-                {report.odometerLastReported.toLocaleString()}
+                {formatNumber(report.odometerLastReported, locale)}
               </SizableText>
               <SizableText size="$3" color="$color10">
-                miles
+                {t('common.miles')}
               </SizableText>
             </XStack>
             {report.odometerLastDate && (
               <SizableText size="$2" color="$color8">
-                as of {report.odometerLastDate}
+                {t('report.odometer.asOf', { date: report.odometerLastDate })}
               </SizableText>
             )}
             {report.odometerIssues && (
               <XStack items="center" gap="$1" mt="$1">
                 <WarningCircleIcon size={14} color="$red10" />
                 <SizableText size="$2" color="$red10">
-                  Odometer issues detected
+                  {t('report.odometer.issuesDetected')}
                 </SizableText>
               </XStack>
             )}
@@ -304,7 +347,7 @@ const SummaryStats = memo(
             <XStack items="center" gap="$2">
               <WarningCircleIcon size={18} color="$red10" />
               <SizableText size="$4" fontWeight="600" color="$red10">
-                Total Loss Reported
+                {t('report.totalLoss')}
               </SizableText>
             </XStack>
           </YStack>
@@ -340,7 +383,14 @@ const StatBox = memo(
         borderColor={isWarning ? '$red4' : '$color4'}
       >
         {icon && (
-          <YStack width={32} height={32} rounded={1000} bg="$color3" items="center" justify="center">
+          <YStack
+            width={32}
+            height={32}
+            rounded={1000}
+            bg="$color3"
+            items="center"
+            justify="center"
+          >
             {icon}
           </YStack>
         )}
@@ -356,6 +406,8 @@ const StatBox = memo(
 )
 
 const TitleBrands = memo(({ brands }: { brands: string[] }) => {
+  const t = useT()
+
   return (
     <YStack
       gap="$2"
@@ -368,12 +420,17 @@ const TitleBrands = memo(({ brands }: { brands: string[] }) => {
       <XStack items="center" gap="$2">
         <WarningCircleIcon size={18} color="$orange10" />
         <SizableText size="$4" fontWeight="600" color="$orange10">
-          Title Brands
+          {t('report.titleBrands')}
         </SizableText>
       </XStack>
       <XStack gap="$2" flexWrap="wrap">
         {brands.map((brand, i) => (
-          <StatusChip key={i} label={brand} theme="orange" size="medium" />
+          <StatusChip
+            key={i}
+            label={translateTitleBrand(t, brand)}
+            theme="orange"
+            size="medium"
+          />
         ))}
       </XStack>
     </YStack>
@@ -381,6 +438,8 @@ const TitleBrands = memo(({ brands }: { brands: string[] }) => {
 })
 
 const Timeline = memo(({ events }: { events: NormalizedEvent[] }) => {
+  const t = useT()
+
   const groupedEvents = useMemo(() => {
     const sorted = [...events].sort(
       (a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
@@ -404,9 +463,9 @@ const Timeline = memo(({ events }: { events: NormalizedEvent[] }) => {
   if (events.length === 0) {
     return (
       <YStack gap="$2">
-        <H3 size="$5">Timeline</H3>
+        <H3 size="$5">{t('report.timeline')}</H3>
         <SizableText size="$3" color="$color10">
-          No events found
+          {t('report.timeline.noEvents')}
         </SizableText>
       </YStack>
     )
@@ -414,7 +473,7 @@ const Timeline = memo(({ events }: { events: NormalizedEvent[] }) => {
 
   return (
     <YStack gap="$3">
-      <H3 size="$5">Timeline ({events.length} events)</H3>
+      <H3 size="$5">{t('report.timeline.count', { count: events.length })}</H3>
       <YStack gap="$4">
         {groupedEvents.map(([ownerKey, ownerEvents], index) => (
           <OwnerSection
@@ -443,7 +502,11 @@ const OwnerSection = memo(
     isEven: boolean
   }) => {
     const [isExpanded, setIsExpanded] = useState(isFirst)
-    const label = ownerNumber === 'unknown' ? 'Unknown Owner' : `Owner ${ownerNumber}`
+    const t = useT()
+    const label =
+      ownerNumber === 'unknown'
+        ? t('report.timeline.ownerUnknown')
+        : t('report.timeline.owner', { number: ownerNumber })
 
     return (
       <YStack
@@ -474,7 +537,7 @@ const OwnerSection = memo(
             rounded="$2"
             color="$color10"
           >
-            {events.length} {events.length === 1 ? 'event' : 'events'}
+            {t('report.timeline.eventCount', { count: events.length })}
           </SizableText>
           <YStack
             transition={animationClamped('quick')}
@@ -550,6 +613,8 @@ const getEventIcon = (eventType: EventType) => {
 }
 
 const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
+  const t = useT()
+  const locale = useLocale()
   const isNegative = event.isNegative
   const bgColor = isNegative ? '$red2' : '$background'
   const borderColor = isNegative ? '$red4' : '$color4'
@@ -578,7 +643,7 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
           {event.eventDate}
         </SizableText>
         <StatusChip
-          label={event.eventType.replace(/_/g, ' ')}
+          label={translateEventType(t, event.eventType)}
           icon={getEventIcon(event.eventType)}
           theme={chipTheme as any}
           size="small"
@@ -597,7 +662,7 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
         <XStack items="center" gap="$1">
           <GaugeIcon size={12} color="$color8" />
           <SizableText size="$2" color="$color8">
-            {event.odometerMiles.toLocaleString()} miles
+            {formatNumber(event.odometerMiles, locale)} {t('common.miles')}
           </SizableText>
         </XStack>
       )}
@@ -612,10 +677,12 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
 })
 
 const SourceProviders = memo(({ providers }: { providers: string[] }) => {
+  const t = useT()
+
   return (
     <YStack gap="$2" pt="$4" borderTopWidth={1} borderColor="$color4">
       <SizableText size="$2" color="$color10">
-        Data Sources
+        {t('report.dataSources')}
       </SizableText>
       <XStack gap="$2" flexWrap="wrap">
         {providers.map((provider) => (

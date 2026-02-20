@@ -1,11 +1,13 @@
 import { useLogout } from '~/features/auth/useLogout'
 import { useNotificationStatus } from '~/features/notification/useNotificationsStatus'
+import { useT } from '~/i18n/context'
 import { dialogConfirm } from '~/interface/dialogs/actions'
 import { BellIcon } from '~/interface/icons/phosphor/BellIcon'
 import { BookmarkIcon } from '~/interface/icons/phosphor/BookmarkIcon'
 import { ChatCircleIcon } from '~/interface/icons/phosphor/ChatCircleIcon'
 import { DoorIcon } from '~/interface/icons/phosphor/DoorIcon'
 import { FileIcon } from '~/interface/icons/phosphor/FileIcon'
+import { GlobeIcon } from '~/interface/icons/phosphor/GlobeIcon'
 import { InfoIcon } from '~/interface/icons/phosphor/InfoIcon'
 import { LockIcon } from '~/interface/icons/phosphor/LockIcon'
 import { UserIcon } from '~/interface/icons/phosphor/UserIcon'
@@ -34,6 +36,7 @@ export interface SettingSection {
 
 export function useSettingsData() {
   const { logout } = useLogout()
+  const t = useT()
   const {
     onPress: toggleTheme,
     Icon: ThemeIcon,
@@ -45,24 +48,24 @@ export function useSettingsData() {
 
   const handleDeleteAccount = async () => {
     await dialogConfirm({
-      title: 'Delete Account',
-      description: 'Account deletion is not currently available.',
+      title: t('settings.deleteAccount'),
+      description: t('settings.deleteAccountUnavailable'),
     })
   }
 
   const sections: SettingSection[] = [
     {
-      title: 'Account',
+      title: t('settings.account'),
       items: [
         {
           id: 'theme',
-          title: `Theme: ${themeLabel}`,
+          title: t('settings.theme', { theme: themeLabel }),
           icon: ThemeIcon,
           onPress: toggleTheme,
         },
         {
           id: 'notifications',
-          title: 'Push Notifications',
+          title: t('settings.pushNotifications'),
           icon: BellIcon,
           toggle: {
             value: notificationsEnabled,
@@ -71,63 +74,69 @@ export function useSettingsData() {
         },
         {
           id: 'profile',
-          title: 'Edit Profile',
+          title: t('settings.editProfile'),
           icon: UserIcon,
           href: '/home/settings/edit-profile',
         },
         {
           id: 'blocked-users',
-          title: 'Blocked Users',
+          title: t('settings.blockedUsers'),
           icon: LockIcon,
           href: '/home/settings/blocked-users',
+        },
+        {
+          id: 'language',
+          title: t('settings.language'),
+          icon: GlobeIcon,
+          href: '/home/settings/edit-profile' as any,
         },
       ],
     },
     {
-      title: 'Support',
+      title: t('settings.support'),
       items: [
         {
           id: 'help',
-          title: 'Help & Support',
+          title: t('settings.helpSupport'),
           icon: ChatCircleIcon,
           href: '/help',
           external: true,
         },
         {
           id: 'documentation',
-          title: 'Documentation',
+          title: t('settings.documentation'),
           icon: BookmarkIcon,
           href: '/docs/introduction',
           external: true,
         },
         {
           id: 'terms',
-          title: 'Terms of Service',
+          title: t('settings.termsOfService'),
           icon: FileIcon,
           href: '/terms-of-service',
           external: true,
         },
         {
           id: 'privacy',
-          title: 'Privacy Policy',
+          title: t('settings.privacyPolicy'),
           icon: LockIcon,
           href: '/privacy-policy',
           external: true,
         },
         {
           id: 'delete',
-          title: 'Delete Account',
+          title: t('settings.deleteAccount'),
           icon: InfoIcon,
           onPress: handleDeleteAccount,
         },
       ],
     },
     {
-      title: 'Other',
+      title: t('settings.other'),
       items: [
         {
           id: 'logout',
-          title: 'Log Out',
+          title: t('settings.logOut'),
           icon: DoorIcon,
           onPress: logout,
         },

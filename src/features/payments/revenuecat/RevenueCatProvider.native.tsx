@@ -1,4 +1,11 @@
-import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
 import Purchases, {
   type CustomerInfo,
   type PurchasesOfferings,
@@ -103,9 +110,5 @@ export function RevenueCatProvider({ children }: { children: ReactNode }) {
     [offerings, customerInfo, isConfigured, isLoading, refreshCustomerInfo]
   )
 
-  return (
-    <RevenueCatContext.Provider value={value}>
-      {children}
-    </RevenueCatContext.Provider>
-  )
+  return <RevenueCatContext.Provider value={value}>{children}</RevenueCatContext.Provider>
 }

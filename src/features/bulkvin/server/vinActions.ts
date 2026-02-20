@@ -78,7 +78,8 @@ async function purchaseReport(
 
   if (
     knownCounts &&
-    (knownCounts.carfaxRecords !== undefined || knownCounts.autocheckRecords !== undefined)
+    (knownCounts.carfaxRecords !== undefined ||
+      knownCounts.autocheckRecords !== undefined)
   ) {
     expectCarfax = (knownCounts.carfaxRecords ?? 0) > 0
     expectAutocheck = (knownCounts.autocheckRecords ?? 0) > 0

@@ -56,7 +56,14 @@ export const ReportCard = memo(({ report, isExpired = false }: ReportCardProps) 
       gap="$3"
       cursor={isExpired ? undefined : 'pointer'}
       $platform-web={{
-        hoverStyle: isExpired ? undefined : { bg: '$color3', shadowColor: '$shadowColor', shadowRadius: 8, shadowOpacity: 0.1 },
+        hoverStyle: isExpired
+          ? undefined
+          : {
+              bg: '$color3',
+              shadowColor: '$shadowColor',
+              shadowRadius: 8,
+              shadowOpacity: 0.1,
+            },
         pressStyle: isExpired ? undefined : { bg: '$color4' },
       }}
     >
@@ -83,18 +90,26 @@ export const ReportCard = memo(({ report, isExpired = false }: ReportCardProps) 
             {vin}
           </SizableText>
         </YStack>
-        {!isExpired && report.accidentCount !== undefined && report.accidentCount !== null && (
-          <StatusChip
-            label={hasAccidents ? `${accidentCount} Accident${accidentCount > 1 ? 's' : ''}` : 'Clean'}
-            icon={
-              hasAccidents
-                ? <WarningCircleIcon size={12} color="$color11" />
-                : <CheckCircleIcon size={12} color="$color11" />
-            }
-            theme={hasAccidents ? 'red' : 'green'}
-            size="small"
-          />
-        )}
+        {!isExpired &&
+          report.accidentCount !== undefined &&
+          report.accidentCount !== null && (
+            <StatusChip
+              label={
+                hasAccidents
+                  ? `${accidentCount} Accident${accidentCount > 1 ? 's' : ''}`
+                  : 'Clean'
+              }
+              icon={
+                hasAccidents ? (
+                  <WarningCircleIcon size={12} color="$color11" />
+                ) : (
+                  <CheckCircleIcon size={12} color="$color11" />
+                )
+              }
+              theme={hasAccidents ? 'red' : 'green'}
+              size="small"
+            />
+          )}
       </XStack>
 
       {!isExpired && (
@@ -107,14 +122,15 @@ export const ReportCard = memo(({ report, isExpired = false }: ReportCardProps) 
               </SizableText>
             </XStack>
           )}
-          {report.serviceRecordCount !== undefined && report.serviceRecordCount !== null && (
-            <XStack items="center" gap="$1.5">
-              <WrenchIcon size={14} color="$color9" />
-              <SizableText size="$2" color="$color10">
-                {report.serviceRecordCount} service records
-              </SizableText>
-            </XStack>
-          )}
+          {report.serviceRecordCount !== undefined &&
+            report.serviceRecordCount !== null && (
+              <XStack items="center" gap="$1.5">
+                <WrenchIcon size={14} color="$color9" />
+                <SizableText size="$2" color="$color10">
+                  {report.serviceRecordCount} service records
+                </SizableText>
+              </XStack>
+            )}
         </XStack>
       )}
 

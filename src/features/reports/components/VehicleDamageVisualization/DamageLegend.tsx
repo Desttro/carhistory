@@ -1,7 +1,11 @@
 import { memo } from 'react'
 import { SizableText, View, XStack } from 'tamagui'
 
+import { useT } from '~/i18n/context'
+
 export const DamageLegend = memo(() => {
+  const t = useT()
+
   return (
     <XStack gap="$3" flexWrap="wrap">
       <XStack items="center" gap="$1.5">
@@ -15,7 +19,7 @@ export const DamageLegend = memo(() => {
           borderColor="$yellow10"
         />
         <SizableText size="$2" color="$color10">
-          Minor
+          {t('severity.minor')}
         </SizableText>
       </XStack>
       <XStack items="center" gap="$1.5">
@@ -29,7 +33,7 @@ export const DamageLegend = memo(() => {
           borderColor="$orange10"
         />
         <SizableText size="$2" color="$color10">
-          Moderate
+          {t('severity.moderate')}
         </SizableText>
       </XStack>
       <XStack items="center" gap="$1.5">
@@ -43,7 +47,7 @@ export const DamageLegend = memo(() => {
           borderColor="$red10"
         />
         <SizableText size="$2" color="$color10">
-          Severe
+          {t('severity.severe')}
         </SizableText>
       </XStack>
     </XStack>

@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react'
 import { SizableText, XStack, type ThemeName } from 'tamagui'
+
+import type { ReactNode } from 'react'
 
 interface StatusChipProps {
   label: string
@@ -22,11 +23,7 @@ export const StatusChip = ({ label, icon, theme, size = 'small' }: StatusChipPro
       rounded={1000}
     >
       {icon}
-      <SizableText
-        size={isSmall ? '$1' : '$2'}
-        fontWeight="600"
-        color="$color11"
-      >
+      <SizableText size={isSmall ? '$1' : '$2'} fontWeight="600" color="$color11">
         {label}
       </SizableText>
     </XStack>

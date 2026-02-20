@@ -36,7 +36,8 @@ export function NavigationTabs() {
     ? routes
     : routes.filter((r) => r.name === 'vin-lookup' || r.name === 'pricing')
   const currentTab =
-    visibleRoutes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ?? 'vin-lookup'
+    visibleRoutes.find((r) => r.href && pathname.startsWith(r.href as string))?.name ??
+    'vin-lookup'
 
   return (
     <RovingTabs value={currentTab} indicatorStyle="underline">

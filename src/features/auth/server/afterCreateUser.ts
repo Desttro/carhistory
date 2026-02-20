@@ -123,7 +123,11 @@ export async function afterCreateUser(user: { id: string; email: string }) {
 
     await Promise.allSettled([
       syncPolarCustomer({ id: userId, email, name: userPrivate.name || undefined }),
-      syncRevenueCatSubscriber({ id: userId, email, name: userPrivate.name || undefined }),
+      syncRevenueCatSubscriber({
+        id: userId,
+        email,
+        name: userPrivate.name || undefined,
+      }),
     ])
 
     console.info(`[afterCreateUser] ✅ User ${email} setup complete`)

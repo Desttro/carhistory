@@ -4,6 +4,7 @@ import { Configuration, isWeb, SizableText } from 'tamagui'
 import { useAuth } from '~/features/auth/client/authClient'
 import { returnToStorage } from '~/features/auth/returnToStorage'
 import { ZeroTestUI } from '~/features/devtools/ZeroTestUI'
+import { AppI18nProvider } from '~/i18n/provider-app'
 import { Dialogs } from '~/interface/dialogs/Dialogs'
 import { Gallery } from '~/interface/gallery/Gallery'
 import { NotificationProvider } from '~/interface/notification/Notification'
@@ -32,7 +33,9 @@ export function AppLayout() {
         pathname.startsWith(p)
       )
       if (!isPublicPath) {
-        returnToStorage.set(pathname + (typeof window !== 'undefined' ? window.location.search : ''))
+        returnToStorage.set(
+          pathname + (typeof window !== 'undefined' ? window.location.search : '')
+        )
         return <Redirect href="/auth/login" />
       }
     }
@@ -47,32 +50,34 @@ export function AppLayout() {
     // our app is SPA from here on down, avoid extra work by disabling SSR
     <Configuration disableSSR animationDriver={animationsApp}>
       <ProvideZero>
-        <ToastProvider>
-          <NotificationProvider>
-            {!process.env.VITE_NATIVE ? (
-              <DragDropFile>
-                <Gallery />
-                <Slot />
-              </DragDropFile>
-            ) : (
-              // Stack transition animation on native
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  animation: 'none',
-                }}
-              >
-                <Protected guard={!isLoggedIn}>
-                  <Stack.Screen name="auth" />
-                </Protected>
-                <Protected guard={isLoggedIn}>
-                  <Stack.Screen name="home" />
-                </Protected>
-              </Stack>
-            )}
-          </NotificationProvider>
-          <Dialogs />
-        </ToastProvider>
+        <AppI18nProvider>
+          <ToastProvider>
+            <NotificationProvider>
+              {!process.env.VITE_NATIVE ? (
+                <DragDropFile>
+                  <Gallery />
+                  <Slot />
+                </DragDropFile>
+              ) : (
+                // Stack transition animation on native
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    animation: 'none',
+                  }}
+                >
+                  <Protected guard={!isLoggedIn}>
+                    <Stack.Screen name="auth" />
+                  </Protected>
+                  <Protected guard={isLoggedIn}>
+                    <Stack.Screen name="home" />
+                  </Protected>
+                </Stack>
+              )}
+            </NotificationProvider>
+            <Dialogs />
+          </ToastProvider>
+        </AppI18nProvider>
         <ZeroTestUI />
       </ProvideZero>
     </Configuration>

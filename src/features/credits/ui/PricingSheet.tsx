@@ -107,21 +107,16 @@ export const PricingSheet = memo(
           >
             {(() => {
               const singlePkg = products.find((p) => p.credits === 1)
-              const basePricePerCredit = singlePkg
-                ? singlePkg.priceCents / 100
-                : 0
+              const basePricePerCredit = singlePkg ? singlePkg.priceCents / 100 : 0
               const maxCredits = Math.max(...products.map((p) => p.credits))
 
               return products.map((pkg) => {
                 const price = `$${(pkg.priceCents / 100).toFixed(2)}`
                 const ppc = pkg.priceCents / 100 / pkg.credits
-                const pricePerCredit =
-                  pkg.credits > 1 ? `$${ppc.toFixed(2)}` : undefined
+                const pricePerCredit = pkg.credits > 1 ? `$${ppc.toFixed(2)}` : undefined
                 const savingsPercent =
                   pkg.credits > 1 && basePricePerCredit > 0
-                    ? Math.round(
-                        ((basePricePerCredit - ppc) / basePricePerCredit) * 100
-                      )
+                    ? Math.round(((basePricePerCredit - ppc) / basePricePerCredit) * 100)
                     : 0
                 const isBestValue = pkg.credits === maxCredits && pkg.credits > 1
 

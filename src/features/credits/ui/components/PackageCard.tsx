@@ -37,7 +37,10 @@ export const PackageCard = memo(
         {badgeVariant && <PackageBadge variant={badgeVariant} />}
 
         <YStack gap="$3" items="center" py="$3" flex={1}>
-          <SparkleIcon size={28} color={isBestValue && !isPopular ? '$green10' : '$accent10'} />
+          <SparkleIcon
+            size={28}
+            color={isBestValue && !isPopular ? '$green10' : '$accent10'}
+          />
 
           <YStack items="center" gap="$1">
             <SizableText size="$8" fontWeight="700" color="$color12">

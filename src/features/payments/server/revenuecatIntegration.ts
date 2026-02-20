@@ -93,7 +93,9 @@ async function handleRefund(event: RevenueCatEvent, payload: RevenueCatWebhookPa
 
   const userId = resolveUserId(event)
   if (!userId) {
-    console.info(`[revenuecat] could not resolve user ID for refund ${event.id}, skipping`)
+    console.info(
+      `[revenuecat] could not resolve user ID for refund ${event.id}, skipping`
+    )
     return
   }
 

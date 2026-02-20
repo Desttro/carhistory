@@ -2,7 +2,12 @@ import { memo } from 'react'
 import Svg, { G, Path } from 'react-native-svg'
 import { useTheme } from 'tamagui'
 
-import { carDetailPaths, carOutlinePath, carViewBox, damageZonePaths } from './damageZones'
+import {
+  carDetailPaths,
+  carOutlinePath,
+  carViewBox,
+  damageZonePaths,
+} from './damageZones'
 
 import type { DamageZoneData, DamageZoneId } from './types'
 import type { ColorTokens } from 'tamagui'

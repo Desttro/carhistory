@@ -12,7 +12,15 @@ export function PricingPage() {
 
   return (
     <PageLayout scroll tabBarOffset>
-      <YStack gap="$6" px="$4" py="$6" maxW={900} width="100%" self="center" $md={{ px: '$8' }}>
+      <YStack
+        gap="$6"
+        px="$4"
+        py="$6"
+        maxW={900}
+        width="100%"
+        self="center"
+        $md={{ px: '$8' }}
+      >
         <YStack gap="$2" items="center">
           <CoinsIcon size={32} color="$color10" />
           <H2 size="$8" fontWeight="700" text="center">

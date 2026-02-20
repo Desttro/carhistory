@@ -5,6 +5,7 @@ import { useCallback } from 'react'
 import { useSharedValue, withTiming, Easing } from 'react-native-reanimated'
 
 import { TabBar } from '~/features/app/TabBar'
+import { PreloadTabData } from '~/features/app/usePreloadTabData'
 import { FeedDropdown } from '~/interface/headers/FeedDropdown'
 import { feedDropdownEmitter } from '~/interface/headers/feedDropdownEmitter'
 
@@ -29,6 +30,7 @@ export function TabsLayout() {
 
   return (
     <>
+      <PreloadTabData />
       <Tabs
         initialRouteName="vin-lookup"
         tabBar={(props) => <TabBar {...props} />}

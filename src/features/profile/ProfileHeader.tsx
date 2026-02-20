@@ -55,9 +55,11 @@ export const ProfileHeader = memo(({ userInfo, isOwnProfile }: ProfileHeaderProp
   const t = useT()
   const { date } = useFormat()
   const { user: authUser } = useAuth()
-  const [vehicleReports] = useQuery(vehicleReportsByUserId, {
-    userId: authUser?.id || '',
-  })
+  const [vehicleReports] = useQuery(
+    vehicleReportsByUserId,
+    { userId: authUser?.id || '' },
+    { enabled: !!authUser?.id }
+  )
 
   const reportsCount = vehicleReports?.length || 0
   const vehiclesCount = new Set(vehicleReports?.map((r) => r.vehicleId)).size

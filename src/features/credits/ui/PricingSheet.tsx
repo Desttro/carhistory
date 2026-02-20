@@ -10,6 +10,8 @@ import { Button } from '~/interface/buttons/Button'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 import { useQuery } from '~/zero/client'
 
+import { PricingShimmer } from '~/interface/shimmer/PricingShimmer'
+
 import { PackageCard } from './components/PackageCard'
 import { usePurchaseCredits } from './usePurchaseCredits'
 
@@ -37,7 +39,7 @@ export const PricingSheet = memo(
     const { balance } = useCredits()
     const { purchaseWithPolar, isLoading, error } = usePurchaseCredits()
     const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
-    const [products] = useQuery(activeProducts)
+    const [products, productsStatus] = useQuery(activeProducts)
 
     const handleLoginClick = () => {
       const returnUrl = vin
@@ -57,6 +59,10 @@ export const PricingSheet = memo(
       onPurchaseStart?.()
       await purchaseWithPolar(slug)
       setSelectedSlug(null)
+    }
+
+    if (productsStatus.type === 'unknown') {
+      return <PricingShimmer />
     }
 
     return (

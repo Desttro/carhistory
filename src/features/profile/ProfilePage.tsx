@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { ScrollView, useWindowDimensions } from 'react-native'
-import { Spinner, YStack } from 'tamagui'
+import { YStack } from 'tamagui'
 
 import { useTabBarBottomPadding } from '~/features/app/tabBarConstants'
 import { useUser } from '~/hooks/useUser'
@@ -10,6 +10,9 @@ import { galleryEmitter } from '~/interface/gallery/galleryEmitter'
 import { Image } from '~/interface/image/Image'
 import { SimpleGrid, SimpleGridItem } from '~/interface/layout/SimpleGrid'
 import { Pagination } from '~/interface/navigation/Pagination'
+import { LineShimmer } from '~/interface/shimmer/LineShimmer'
+import { ProfileShimmer } from '~/interface/shimmer/ProfileShimmer'
+import { ShimmerProvider } from '~/interface/shimmer/ShimmerContext'
 import { H5 } from '~/interface/text/Headings'
 
 import { ProfileHeader } from './ProfileHeader'
@@ -68,9 +71,7 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
           />
 
           {isLoading && !posts?.length ? (
-            <YStack p="$6" items="center" justify="center">
-              <Spinner size="small" color="$color10" />
-            </YStack>
+            <ProfileShimmer />
           ) : posts && posts.length === 0 ? (
             <YStack p="$4" items="center" justify="center" mt="$4">
               <H5 mt="$3">No posts yet</H5>
@@ -94,9 +95,11 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
               </SimpleGrid>
 
               {isLoading && (
-                <YStack p="$4" items="center" justify="center">
-                  <Spinner size="small" color="$color10" />
-                </YStack>
+                <ShimmerProvider duration={1500}>
+                  <YStack p="$4" items="center" justify="center">
+                    <LineShimmer height={14} width={120} />
+                  </YStack>
+                </ShimmerProvider>
               )}
 
               <Pagination

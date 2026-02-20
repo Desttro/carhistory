@@ -58,7 +58,7 @@ export const Splash = memo(({ onAnimationEnd, isReady }: SplashProps) => {
         StyleSheet.absoluteFillObject,
         {
           zIndex: 1000,
-          backgroundColor: '#e6dac1',
+          backgroundColor: '#ffffff',
           justifyContent: 'center',
           alignItems: 'center',
         },

@@ -1,6 +1,6 @@
 import { useRouter } from 'one'
 import { useState } from 'react'
-import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
+import { H2, SizableText, XStack, YStack } from 'tamagui'
 
 import { ReportCard } from '~/features/reports/ReportCard'
 import { useVehicleReports } from '~/features/reports/useVehicleReports'
@@ -9,6 +9,7 @@ import { CarIcon } from '~/interface/icons/phosphor/CarIcon'
 import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
 import { SimpleGrid, SimpleGridItem } from '~/interface/layout/SimpleGrid'
 import { PageLayout } from '~/interface/pages/PageLayout'
+import { ReportsShimmer } from '~/interface/shimmer/ReportsShimmer'
 
 export function ReportsPage() {
   const { activeReports, expiredReports, isLoading, isEmpty } = useVehicleReports()
@@ -50,11 +51,7 @@ export function ReportsPage() {
           </SizableText>
         </YStack>
 
-        {isLoading && (
-          <YStack items="center" justify="center" py="$12">
-            <Spinner size="large" />
-          </YStack>
-        )}
+        {isLoading && <ReportsShimmer />}
 
         {isEmpty && (
           <YStack

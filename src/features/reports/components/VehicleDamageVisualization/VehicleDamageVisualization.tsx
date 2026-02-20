@@ -99,15 +99,15 @@ export const VehicleDamageVisualization = memo(
           {/* svg container */}
           <YStack
             flex={1}
-            minW={150}
-            maxW={200}
+            minW={100}
+            maxW={140}
             items="center"
             justify="center"
             $platform-web={{
               cursor: 'pointer',
             }}
           >
-            <View width="100%" aspectRatio={1}>
+            <View width="100%" aspectRatio={200 / 440}>
               <VehicleSvg
                 damageZones={damageZones}
                 hoveredZone={hoveredZone}

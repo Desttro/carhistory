@@ -1,8 +1,8 @@
 import { memo } from 'react'
-import Svg, { Path } from 'react-native-svg'
+import Svg, { G, Path } from 'react-native-svg'
 import { useTheme } from 'tamagui'
 
-import { carOutlinePath, damageZonePaths } from './damageZones'
+import { carDetailPaths, carOutlinePath, carViewBox, damageZonePaths } from './damageZones'
 
 import type { DamageZoneData, DamageZoneId } from './types'
 import type { ColorTokens } from 'tamagui'
@@ -40,19 +40,46 @@ export const VehicleSvg = memo(
         fill: theme[colors.fill]?.get() || theme.color8.get(),
         stroke: theme[colors.stroke]?.get() || theme.color10.get(),
         opacity: isHovered ? colors.opacity + 0.2 : colors.opacity,
-        strokeWidth: isHovered ? 2 : 1,
+        strokeWidth: isHovered ? 3 : 1.5,
       }
     }
 
     return (
-      <Svg viewBox="0 0 47.032 47.032" width="100%" height="100%">
-        {/* car outline */}
+      <Svg viewBox={carViewBox} width="100%" height="100%">
+        {/* car body */}
         <Path
           d={carOutlinePath}
           fill={theme.color3.get()}
           stroke={theme.color6.get()}
-          strokeWidth={0.5}
+          strokeWidth={1.5}
         />
+
+        {/* decorative details */}
+        <G opacity={0.3}>
+          {carDetailPaths.map((detail) => {
+            if (detail.type === 'window') {
+              return (
+                <Path
+                  key={detail.id}
+                  d={detail.d}
+                  fill={theme.color5.get()}
+                  stroke={theme.color7.get()}
+                  strokeWidth={1}
+                />
+              )
+            }
+            return (
+              <Path
+                key={detail.id}
+                d={detail.d}
+                fill="none"
+                stroke={theme.color7.get()}
+                strokeWidth={detail.type === 'wheel' ? 3 : 1}
+                strokeLinecap="round"
+              />
+            )
+          })}
+        </G>
 
         {/* damage zones */}
         {damageZonePaths.map((zoneDef) => {

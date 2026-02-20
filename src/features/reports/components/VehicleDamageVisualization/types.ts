@@ -29,3 +29,9 @@ export interface ZonePathDefinition {
   label: string
   d: string
 }
+
+export interface CarDetailPath {
+  id: string
+  d: string
+  type: 'window' | 'wheel' | 'light' | 'line'
+}

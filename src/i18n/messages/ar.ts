@@ -117,13 +117,13 @@ export const messages: Record<keyof Messages, string> = {
   'titleBrand.manufacturer buyback': 'استرداد من الشركة المصنّعة',
 
   // settings
+  'settings.title': 'الإعدادات',
   'settings.account': 'الحساب',
   'settings.support': 'الدعم',
   'settings.other': 'أخرى',
   'settings.theme': 'المظهر: {theme}',
   'settings.pushNotifications': 'الإشعارات الفورية',
   'settings.editProfile': 'تعديل الملف الشخصي',
-  'settings.blockedUsers': 'المستخدمون المحظورون',
   'settings.helpSupport': 'المساعدة والدعم',
   'settings.documentation': 'التوثيق',
   'settings.termsOfService': 'شروط الخدمة',

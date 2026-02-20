@@ -115,13 +115,13 @@ export const messages: Record<keyof Messages, string> = {
   'titleBrand.manufacturer buyback': 'Rachat constructeur',
 
   // settings
+  'settings.title': 'Paramètres',
   'settings.account': 'Compte',
   'settings.support': 'Assistance',
   'settings.other': 'Autre',
   'settings.theme': 'Thème : {theme}',
   'settings.pushNotifications': 'Notifications push',
   'settings.editProfile': 'Modifier le profil',
-  'settings.blockedUsers': 'Utilisateurs bloqués',
   'settings.helpSupport': 'Aide et assistance',
   'settings.documentation': 'Documentation',
   'settings.termsOfService': "Conditions d'utilisation",

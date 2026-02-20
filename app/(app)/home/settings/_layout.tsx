@@ -2,12 +2,15 @@ import { Slot, Stack } from 'one'
 import { View, XStack, YStack } from 'tamagui'
 
 import { MainHeader } from '~/features/app/MainHeader'
+import { useT } from '~/i18n/context'
 import { HeaderBackButton } from '~/interface/buttons/HeaderBackButton'
 import { PageMainContainer } from '~/interface/layout/PageContainer'
 
 import { SettingsSidebarContent } from './index'
 
 export const SettingLayout = () => {
+  const t = useT()
+
   if (process.env.VITE_NATIVE) {
     return (
       <Stack
@@ -17,7 +20,7 @@ export const SettingLayout = () => {
       >
         <Stack.Screen name="index">
           <Stack.Header>
-            <Stack.Header.Title>Settings</Stack.Header.Title>
+            <Stack.Header.Title>{t('settings.title')}</Stack.Header.Title>
             <Stack.Header.Left asChild>
               <HeaderBackButton />
             </Stack.Header.Left>
@@ -25,15 +28,7 @@ export const SettingLayout = () => {
         </Stack.Screen>
         <Stack.Screen name="edit-profile">
           <Stack.Header>
-            <Stack.Header.Title>Edit Profile</Stack.Header.Title>
-            <Stack.Header.Left asChild>
-              <HeaderBackButton />
-            </Stack.Header.Left>
-          </Stack.Header>
-        </Stack.Screen>
-        <Stack.Screen name="blocked-users">
-          <Stack.Header>
-            <Stack.Header.Title>Blocked Users</Stack.Header.Title>
+            <Stack.Header.Title>{t('settings.editProfile')}</Stack.Header.Title>
             <Stack.Header.Left asChild>
               <HeaderBackButton />
             </Stack.Header.Left>

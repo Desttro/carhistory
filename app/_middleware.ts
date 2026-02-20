@@ -80,7 +80,7 @@ export default createMiddleware(async ({ request, next }) => {
   if (maybeLocale && isValidLocale(maybeLocale) && maybeLocale !== DEFAULT_LOCALE) {
     // valid non-default locale prefix: /es/pricing
     const response = await next()
-    if (response) {
+    if (response?.headers) {
       response.headers.set(
         'Set-Cookie',
         `locale=${maybeLocale}; Path=/; Max-Age=31536000; SameSite=Lax`
@@ -98,7 +98,7 @@ export default createMiddleware(async ({ request, next }) => {
   // no locale prefix: serve English, detect locale for UX hints
   const detected = detectLocaleFromHeaders(request.headers)
   const response = await next()
-  if (response && detected !== DEFAULT_LOCALE) {
+  if (response?.headers && detected !== DEFAULT_LOCALE) {
     response.headers.set(
       'Set-Cookie',
       `locale=${detected}; Path=/; Max-Age=31536000; SameSite=Lax`

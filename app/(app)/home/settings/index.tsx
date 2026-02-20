@@ -4,7 +4,9 @@ import { Linking } from 'react-native'
 import { ScrollView, SizableText, styled, useMedia, View, XStack, YStack } from 'tamagui'
 
 import { APP_NAME_LOWERCASE, DOMAIN } from '~/constants/app'
+import { ConnectedLocaleSwitcher } from '~/features/locale/LocaleSwitcher'
 import { useSettingsData, type SettingItem } from '~/features/settings/useSettingsData'
+import { useT } from '~/i18n/context'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { CaretRightIcon } from '~/interface/icons/phosphor/CaretRightIcon'
 import { SepHeading } from '~/interface/text/Headings'
@@ -12,6 +14,34 @@ import { SepHeading } from '~/interface/text/Headings'
 const SettingRow = memo(
   ({ item, isActive }: { item: SettingItem; isActive: boolean }) => {
     const Icon = item.icon
+
+    // language item with inline locale switcher
+    if (item.id === 'language') {
+      return (
+        <SettingRowFrame active={isActive}>
+          {Icon && (
+            <View
+              width={22}
+              height={22}
+              items="center"
+              justify="center"
+              opacity={isActive ? 1 : 0.7}
+            >
+              <Icon size="$6" color={isActive ? '$color12' : '$color11'} />
+            </View>
+          )}
+          <SizableText
+            size="$4"
+            fontWeight={isActive ? '600' : '400'}
+            color={isActive ? '$color12' : '$color11'}
+            flex={1}
+          >
+            {item.title}
+          </SizableText>
+          <ConnectedLocaleSwitcher size="small" />
+        </SettingRowFrame>
+      )
+    }
 
     const content = (
       <SettingRowFrame active={isActive} {...(item.onPress && { onPress: item.onPress })}>
@@ -83,6 +113,7 @@ const LogoAndVersion = memo(() => {
 export function SettingsSidebarContent() {
   const pathname = usePathname()
   const { sections } = useSettingsData()
+  const t = useT()
 
   const isItemActive = (item: SettingItem) => {
     if (!item.href || item.external) return false
@@ -91,10 +122,10 @@ export function SettingsSidebarContent() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <HeadInfo title="Settings" />
+      <HeadInfo title={t('settings.title')} />
       <YStack p="$4" gap="$4" select="none">
         <SizableText size="$7" fontWeight="700" px="$3">
-          Settings
+          {t('settings.title')}
         </SizableText>
 
         {sections.map((section) => (
@@ -114,6 +145,23 @@ export function SettingsSidebarContent() {
 
 const MobileSettingRow = memo(({ item }: { item: SettingItem }) => {
   const Icon = item.icon
+
+  // language item with inline locale switcher
+  if (item.id === 'language') {
+    return (
+      <MobileSettingRowFrame>
+        <XStack gap="$3" items="center" flex={1}>
+          {Icon && (
+            <View width={24} items="center" justify="center">
+              <Icon size={20} color="$color11" />
+            </View>
+          )}
+          <SizableText size="$5">{item.title}</SizableText>
+        </XStack>
+        <ConnectedLocaleSwitcher />
+      </MobileSettingRowFrame>
+    )
+  }
 
   const content = (
     <MobileSettingRowFrame {...(item.onPress && { onPress: item.onPress })}>
@@ -160,10 +208,11 @@ const MobileSettingRow = memo(({ item }: { item: SettingItem }) => {
 
 function MobileSettingsContent() {
   const { sections } = useSettingsData()
+  const t = useT()
 
   return (
     <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-      <HeadInfo title="Settings" />
+      <HeadInfo title={t('settings.title')} />
       <YStack flex={1} flexBasis="auto" pb="$10" pt="$4">
         {sections.map((section) => (
           <YStack key={section.title} mb="$6">

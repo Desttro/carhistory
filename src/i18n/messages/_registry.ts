@@ -1,30 +1,31 @@
+import { messages as arMessages } from './ar'
+import { messages as csMessages } from './cs'
+import { messages as deMessages } from './de'
+import { messages as enMessages } from './en'
+import { messages as esMessages } from './es'
+import { messages as frMessages } from './fr'
+import { messages as itMessages } from './it'
+import { messages as plMessages } from './pl'
+import { messages as ruMessages } from './ru'
+import { messages as zhMessages } from './zh'
+
 import type { SupportedLocale } from '../locales'
+
+const messageMap: Record<SupportedLocale, Record<string, string>> = {
+  en: enMessages as unknown as Record<string, string>,
+  es: esMessages,
+  de: deMessages,
+  fr: frMessages,
+  it: itMessages,
+  ru: ruMessages,
+  pl: plMessages,
+  cs: csMessages,
+  zh: zhMessages,
+  ar: arMessages,
+}
 
 export async function loadMessages(
   locale: SupportedLocale
 ): Promise<Record<string, string>> {
-  switch (locale) {
-    case 'en':
-      return (await import('./en')).messages as unknown as Record<string, string>
-    case 'es':
-      return (await import('./es')).messages
-    case 'de':
-      return (await import('./de')).messages
-    case 'fr':
-      return (await import('./fr')).messages
-    case 'it':
-      return (await import('./it')).messages
-    case 'ru':
-      return (await import('./ru')).messages
-    case 'pl':
-      return (await import('./pl')).messages
-    case 'cs':
-      return (await import('./cs')).messages
-    case 'zh':
-      return (await import('./zh')).messages
-    case 'ar':
-      return (await import('./ar')).messages
-    default:
-      return (await import('./en')).messages as unknown as Record<string, string>
-  }
+  return messageMap[locale] ?? messageMap.en
 }

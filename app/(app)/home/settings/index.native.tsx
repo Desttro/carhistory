@@ -5,6 +5,7 @@ import { isWeb, ScrollView, SizableText, styled, View, XStack, YStack } from 'ta
 
 import { APP_NAME_LOWERCASE, DOMAIN } from '~/constants/app'
 import { HotUpdaterDebugInfo } from '~/features/hot-updater/HotUpdaterDebugInfo'
+import { ConnectedLocaleSwitcher } from '~/features/locale/LocaleSwitcher'
 import { useSettingsData, type SettingItem } from '~/features/settings/useSettingsData'
 import { CaretRightIcon } from '~/interface/icons/phosphor/CaretRightIcon'
 import { PageLayout } from '~/interface/pages/PageLayout'
@@ -12,6 +13,23 @@ import { SepHeading } from '~/interface/text/Headings'
 
 const SettingRow = memo(({ item }: { item: SettingItem }) => {
   const Icon = item.icon
+
+  // language item with inline locale switcher
+  if (item.id === 'language') {
+    return (
+      <SettingRowFrame>
+        <XStack gap="$3" items="center" flex={1}>
+          {Icon && (
+            <View width={24} items="center" justify="center">
+              <Icon size={20} color="$color11" />
+            </View>
+          )}
+          <SizableText size="$5">{item.title}</SizableText>
+        </XStack>
+        <ConnectedLocaleSwitcher />
+      </SettingRowFrame>
+    )
+  }
 
   // toggle item with switch
   if (item.toggle) {
@@ -81,7 +99,7 @@ export const ProfileSettingsPage = () => {
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior="automatic"
       >
-        <YStack flex={1} flexBasis="auto" pb="$10">
+        <YStack flex={1} flexBasis="auto" pb="$10" maxW={600} width="100%" mx="auto">
           {sections.map((section) => (
             <YStack key={section.title} mb="$6">
               <SepHeading>{section.title}</SepHeading>

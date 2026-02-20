@@ -210,6 +210,8 @@
     "@rocicorp/zero-sqlite3"
   ],
   "env": {
+    "APPLE_CLIENT_ID": true,
+    "APPLE_CLIENT_SECRET": true,
     "AWS_ACCESS_KEY_ID": "",
     "AWS_SECRET_ACCESS_KEY": "",
     "APNS_ENDPOINT": "https://api.sandbox.push.apple.com",
@@ -230,7 +232,9 @@
     "DEPLOY_SSH_KEY": "",
     "DEPLOY_DB": "",
     "ONE_SERVER_URL": true,
-    "POSTMARK_SERVER_TOKEN": true,
+    "GOOGLE_CLIENT_ID": true,
+    "GOOGLE_CLIENT_SECRET": true,
+    "RESEND_API_KEY": true,
     "POLAR_ACCESS_TOKEN": "",
     "POLAR_MODE": "",
     "POLAR_WEBHOOK_SECRET": "",

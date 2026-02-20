@@ -112,13 +112,13 @@ export const messages = {
   'titleBrand.manufacturer buyback': 'Manufacturer Buyback',
 
   // settings
+  'settings.title': 'Settings',
   'settings.account': 'Account',
   'settings.support': 'Support',
   'settings.other': 'Other',
   'settings.theme': 'Theme: {theme}',
   'settings.pushNotifications': 'Push Notifications',
   'settings.editProfile': 'Edit Profile',
-  'settings.blockedUsers': 'Blocked Users',
   'settings.helpSupport': 'Help & Support',
   'settings.documentation': 'Documentation',
   'settings.termsOfService': 'Terms of Service',

@@ -111,13 +111,13 @@ export const messages: Record<keyof Messages, string> = {
   'titleBrand.manufacturer buyback': '厂家回购',
 
   // settings
+  'settings.title': '设置',
   'settings.account': '账户',
   'settings.support': '支持',
   'settings.other': '其他',
   'settings.theme': '主题：{theme}',
   'settings.pushNotifications': '推送通知',
   'settings.editProfile': '编辑资料',
-  'settings.blockedUsers': '已屏蔽用户',
   'settings.helpSupport': '帮助与支持',
   'settings.documentation': '文档',
   'settings.termsOfService': '服务条款',

@@ -1,5 +1,5 @@
-import { createStorageValue } from '@take-out/helpers'
-import { useEffect, useMemo, useState } from 'react'
+import { getLocales } from 'expo-localization'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { I18nManager, Platform } from 'react-native'
 
 import { userWithState } from '~/data/queries/user'
@@ -11,18 +11,31 @@ import { I18n } from './engine'
 import { DEFAULT_LOCALE, LOCALE_META, isRTL, isValidLocale } from './locales'
 import { loadMessages } from './messages/_registry'
 import { messages as enMessages } from './messages/en'
+import { storedLocale } from './stored-locale'
 
 import type { SupportedLocale } from './locales'
 import type { ReactNode } from 'react'
 
 const isWeb = Platform.OS === 'web'
 
-const storedLocale = createStorageValue<SupportedLocale>('user-locale')
+function getDeviceLocale(): SupportedLocale | null {
+  try {
+    for (const loc of getLocales()) {
+      const tag = loc.languageCode ?? loc.languageTag?.split('-')[0]
+      if (tag && isValidLocale(tag)) return tag
+    }
+  } catch {
+    // ssr or unavailable
+  }
+  return null
+}
 
 function resolveLocale(zeroLocale?: string | null): SupportedLocale {
   if (zeroLocale && isValidLocale(zeroLocale)) return zeroLocale
   const stored = storedLocale.get()
   if (stored && isValidLocale(stored)) return stored
+  const device = getDeviceLocale()
+  if (device) return device
   return DEFAULT_LOCALE
 }
 
@@ -35,7 +48,16 @@ export function AppI18nProvider({ children }: { children: ReactNode }) {
     { enabled: Boolean(userId) }
   )
   const zeroLocale = userData?.state?.[0]?.locale
-  const locale = resolveLocale(zeroLocale)
+
+  // user-initiated locale change triggers immediate re-render
+  const [userLocale, setUserLocale] = useState<SupportedLocale | null>(null)
+
+  const locale = userLocale ?? resolveLocale(zeroLocale)
+
+  const handleLocaleChange = useCallback((newLocale: SupportedLocale) => {
+    setUserLocale(newLocale)
+    storedLocale.set(newLocale)
+  }, [])
 
   const [messages, setMessages] = useState<Record<string, string>>(
     enMessages as unknown as Record<string, string>
@@ -83,5 +105,9 @@ export function AppI18nProvider({ children }: { children: ReactNode }) {
     return instance
   }, [loadedLocale, messages])
 
-  return <I18nProvider i18n={i18n}>{children}</I18nProvider>
+  return (
+    <I18nProvider i18n={i18n} onLocaleChange={handleLocaleChange}>
+      {children}
+    </I18nProvider>
+  )
 }

@@ -79,16 +79,9 @@ export function useSettingsData() {
           href: '/home/settings/edit-profile',
         },
         {
-          id: 'blocked-users',
-          title: t('settings.blockedUsers'),
-          icon: LockIcon,
-          href: '/home/settings/blocked-users',
-        },
-        {
           id: 'language',
           title: t('settings.language'),
           icon: GlobeIcon,
-          href: '/home/settings/edit-profile' as any,
         },
       ],
     },

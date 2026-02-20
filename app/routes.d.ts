@@ -44,7 +44,6 @@ declare module 'one' {
         | `/(app)/home/search/`
         | `/(app)/home/settings`
         | `/(app)/home/settings/`
-        | `/(app)/home/settings/blocked-users`
         | `/(app)/home/settings/edit-profile`
         | `/(app)/home/vin-lookup`
         | `/(app)/home/vin-lookup/`
@@ -90,7 +89,6 @@ declare module 'one' {
         | `/home/search/`
         | `/home/settings`
         | `/home/settings/`
-        | `/home/settings/blocked-users`
         | `/home/settings/edit-profile`
         | `/home/vin-lookup`
         | `/home/vin-lookup/`

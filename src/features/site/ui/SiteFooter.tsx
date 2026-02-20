@@ -1,5 +1,6 @@
 import { SizableText, XStack, YStack } from 'tamagui'
 
+import { LocaleSwitcher } from '~/features/locale/LocaleSwitcher'
 import { Link } from '~/interface/app/Link'
 import { PageContainer } from '~/interface/layout/PageContainer'
 
@@ -8,7 +9,7 @@ export const SiteFooter = () => {
     <YStack py="$6" mt="auto">
       <PageContainer>
         <YStack mx="auto" width="100%" maxW={840} px="$4" gap="$4">
-          <XStack gap="$4" flexWrap="wrap" justify="center">
+          <XStack gap="$4" flexWrap="wrap" justify="center" items="center">
             <Link href="/home/vin-lookup">
               <SizableText size="$3" color="$color11" hoverStyle={{ color: '$color12' }}>
                 VIN Lookup
@@ -46,6 +47,10 @@ export const SiteFooter = () => {
                 Help
               </SizableText>
             </Link>
+            <SizableText size="$3" color="$color8">
+              •
+            </SizableText>
+            <LocaleSwitcher size="small" />
           </XStack>
         </YStack>
       </PageContainer>

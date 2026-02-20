@@ -3,6 +3,7 @@ import { ScrollView, Separator, Sheet, Spacer, XStack, YStack } from 'tamagui'
 
 import { LoginButton } from '~/features/auth/ui/LoginButton'
 import { LoginListItem } from '~/features/auth/ui/LoginListItem'
+import { LocaleSwitcher } from '~/features/locale/LocaleSwitcher'
 import { SocialLinksRow } from '~/features/site/ui/SocialLinksRow'
 import { Link } from '~/interface/app/Link'
 import { Logo } from '~/interface/app/Logo'
@@ -56,6 +57,7 @@ export const SiteHeader = memo(() => {
                 <Button>Docs</Button>
               </Link> */}
 
+              <LocaleSwitcher size="small" />
               <ThemeSwitch />
             </XStack>
 
@@ -108,6 +110,7 @@ const SiteHeaderMenu = memo(() => {
               <Logo />
               <XStack gap="$2" items="center">
                 {/* <PromoLinksRow /> */}
+                <LocaleSwitcher size="small" />
                 <ThemeSwitch />
               </XStack>
             </XStack>

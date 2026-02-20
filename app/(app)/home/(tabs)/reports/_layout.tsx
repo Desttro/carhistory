@@ -1,7 +1,5 @@
 import { Slot, Stack } from 'one'
 
-import { HeaderBackButton } from '~/interface/buttons/HeaderBackButton'
-
 export const ReportsLayout = () => {
   if (process.env.VITE_NATIVE) {
     return (
@@ -16,14 +14,12 @@ export const ReportsLayout = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="[reportId]">
-          <Stack.Header>
-            <Stack.Header.Title>Report</Stack.Header.Title>
-            <Stack.Header.Left asChild>
-              <HeaderBackButton />
-            </Stack.Header.Left>
-          </Stack.Header>
-        </Stack.Screen>
+        <Stack.Screen
+          name="[reportId]"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     )
   }

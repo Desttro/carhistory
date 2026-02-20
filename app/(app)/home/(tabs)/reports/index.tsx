@@ -19,8 +19,8 @@ export function ReportsPage() {
   }
 
   return (
-    <PageLayout>
-      <YStack flex={1} gap="$4" px="$4" py="$6" maxW={700} width="100%" self="center">
+    <PageLayout scroll tabBarOffset>
+      <YStack gap="$4" px="$4" py="$6" maxW={700} width="100%" self="center" $md={{ maxW: 800, px: '$8' }}>
         <YStack gap="$2" items="center">
           <FileTextIcon size={32} color="$color10" />
           <H2 size="$8" fontWeight="700" text="center">
@@ -32,7 +32,7 @@ export function ReportsPage() {
         </YStack>
 
         {isLoading && (
-          <YStack flex={1} items="center" justify="center" py="$8">
+          <YStack items="center" justify="center" py="$12">
             <Spinner size="large" />
           </YStack>
         )}

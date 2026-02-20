@@ -5,4 +5,6 @@ export type PageLayoutProps = {
   useImage?: boolean
   bottomOffset?: number
   useInsets?: boolean
+  scroll?: boolean
+  tabBarOffset?: boolean
 }

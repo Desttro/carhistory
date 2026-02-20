@@ -243,7 +243,7 @@ export function TabBar({ state, navigation, onExpandedMenuPress }: TabBarProps) 
     return {
       height,
       borderRadius,
-      width: SCREEN_WIDTH - 150,
+      width: Math.min(SCREEN_WIDTH - 150, 500),
     }
   })
 
@@ -274,7 +274,7 @@ export function TabBar({ state, navigation, onExpandedMenuPress }: TabBarProps) 
   })
 
   const animatedIndicatorStyle = useAnimatedStyle(() => {
-    const containerWidth = SCREEN_WIDTH - 150
+    const containerWidth = Math.min(SCREEN_WIDTH - 150, 500)
     const tabWidth = containerWidth / TAB_COUNT
     const indicatorWidth = tabWidth - 10
     const offset = (tabWidth - indicatorWidth) / 2

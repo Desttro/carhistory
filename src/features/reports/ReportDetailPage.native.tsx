@@ -1,9 +1,11 @@
 import { useParams, useRouter } from 'one'
 import { memo, useMemo } from 'react'
-import { ScrollView } from 'react-native'
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { H2, H3, H4, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
 import { vehicleReportById } from '~/data/queries/vehicleReport'
+import { useTabBarBottomPadding } from '~/features/app/tabBarConstants'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { Button } from '~/interface/buttons/Button'
 import { CarIcon } from '~/interface/icons/phosphor/CarIcon'
@@ -16,6 +18,7 @@ import { ShieldCheckIcon } from '~/interface/icons/phosphor/ShieldCheckIcon'
 import { UserIcon } from '~/interface/icons/phosphor/UserIcon'
 import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
 import { WrenchIcon } from '~/interface/icons/phosphor/WrenchIcon'
+import { AnimatedBlurHeader, HEADER_HEIGHT } from '~/interface/headers/AnimatedBlurHeader.native'
 import { KeyValueRow } from '~/interface/lists/KeyValueRow'
 import { PageLayout } from '~/interface/pages/PageLayout'
 import { useQuery } from '~/zero/client'
@@ -28,6 +31,15 @@ export const ReportDetailPage = memo(() => {
   const { reportId = '' } = useParams<{ reportId?: string }>()
   const router = useRouter()
   const [vehicleReport, status] = useQuery(vehicleReportById, { reportId })
+  const insets = useSafeAreaInsets()
+  const tabBarPadding = useTabBarBottomPadding()
+  const scrollY = useSharedValue(0)
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y
+    },
+  })
 
   const report = vehicleReport?.canonicalJson as CanonicalReport | undefined
   const isLoading = status.type === 'unknown'
@@ -118,15 +130,24 @@ export const ReportDetailPage = memo(() => {
   return (
     <PageLayout>
       <HeadInfo title={title} />
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <YStack gap="$4" p="$4" mx="auto" width="100%" $platform-web={{ maxW: 800 }}>
-          <VehicleHeader report={report} />
-          <SummaryStats report={report} hasIssues={hasIssues} />
-          {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
-          <Timeline events={report.events} />
-          <SourceProviders providers={report.sourceProviders} />
-        </YStack>
-      </ScrollView>
+      <AnimatedBlurHeader scrollY={scrollY} title={title} showBackButton />
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingTop: HEADER_HEIGHT + insets.top + 8,
+          paddingBottom: tabBarPadding,
+          paddingHorizontal: 16,
+          gap: 16,
+        }}
+      >
+        <VehicleHeader report={report} />
+        <SummaryStats report={report} hasIssues={hasIssues} />
+        {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
+        <Timeline events={report.events} />
+        <SourceProviders providers={report.sourceProviders} />
+      </Animated.ScrollView>
     </PageLayout>
   )
 })
@@ -429,12 +450,6 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
       borderWidth={1}
       borderColor={borderColor}
       gap="$1"
-      $platform-web={{
-        cursor: 'default',
-        hoverStyle: {
-          borderColor: isNegative ? '$red6' : '$color6',
-        },
-      }}
     >
       <XStack justify="space-between" items="center">
         <SizableText size="$2" color="$color10" fontFamily="$mono">

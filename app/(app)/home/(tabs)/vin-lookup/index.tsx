@@ -41,8 +41,8 @@ export function VinLookupPage() {
   }, [vinParam, vin, checkResult, isChecking, checkVin])
 
   return (
-    <PageLayout>
-      <YStack flex={1} gap="$6" px="$4" py="$6" maxW={600} width="100%" self="center">
+    <PageLayout scroll tabBarOffset>
+      <YStack gap="$6" px="$4" py="$6" maxW={600} width="100%" self="center" $md={{ maxW: 700, px: '$8' }}>
         <YStack gap="$2" items="center">
           <MagnifyingGlassIcon size={32} color="$color10" />
           <H2 size="$8" fontWeight="700" text="center">

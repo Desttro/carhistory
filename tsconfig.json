@@ -3,12 +3,12 @@
     "rootDir": ".",
     "outDir": "dist",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": [
+        "./src/*"
+      ]
     },
     "forceConsistentCasingInFileNames": true,
     "verbatimModuleSyntax": true,
-    // blocked by expo-modules-core
-    // "erasableSyntaxOnly": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
     "target": "ES2022",
@@ -26,12 +26,29 @@
     "preserveConstEnums": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "types": ["node", "react", "vite/client", "bun", "one/env"],
-    "lib": ["dom", "esnext"]
+    "types": [
+      "node",
+      "react",
+      "vite/client",
+      "bun",
+      "one/env"
+    ],
+    "lib": [
+      "dom",
+      "esnext"
+    ]
   },
-  "include": ["./src", "./scripts", "./app", "./sst-env.d.ts"],
-  "exclude": ["./packages"],
+  "include": [
+    "./src",
+    "./scripts",
+    "./app",
+    "./sst-env.d.ts"
+  ],
+  "exclude": [
+    "./packages"
+  ],
   "typeAcquisition": {
     "enable": true
-  }
+  },
+  "extends": "expo/tsconfig.base"
 }

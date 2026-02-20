@@ -60,7 +60,7 @@ export default {
     icon: getAppIcon(),
     ios: {
       buildNumber: buildVersion,
-      supportsTablet: false,
+      supportsTablet: true,
       bundleIdentifier: getBundleId(),
       icon: getAppIcon(),
       config: {

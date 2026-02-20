@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1771287697036,
+      "when": 1771625224381,
       "tag": "0000_initial_schema",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1771474379073,
-      "tag": "0001_lumpy_ronan",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1771618963124,
-      "tag": "0002_sharp_moira_mactaggert",
       "breakpoints": true
     }
   ]

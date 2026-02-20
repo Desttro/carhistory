@@ -32,11 +32,41 @@ CREATE TABLE "creditTransaction" (
 	CONSTRAINT "creditTransaction_platform_txid_unique" UNIQUE("platform","platformTransactionId")
 );
 --> statement-breakpoint
+CREATE TABLE "customerProvider" (
+	"id" text PRIMARY KEY NOT NULL,
+	"userId" text NOT NULL,
+	"provider" text NOT NULL,
+	"externalCustomerId" text NOT NULL,
+	"externalData" jsonb,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"updatedAt" timestamp,
+	CONSTRAINT "customerProvider_userId_provider_unique" UNIQUE("userId","provider"),
+	CONSTRAINT "customerProvider_provider_extId_unique" UNIQUE("provider","externalCustomerId")
+);
+--> statement-breakpoint
 CREATE TABLE "jwks" (
 	"id" text PRIMARY KEY NOT NULL,
 	"publicKey" text NOT NULL,
 	"privateKey" text NOT NULL,
 	"createdAt" timestamp NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "order" (
+	"id" text PRIMARY KEY NOT NULL,
+	"userId" text NOT NULL,
+	"productId" text NOT NULL,
+	"type" text NOT NULL,
+	"status" text DEFAULT 'completed' NOT NULL,
+	"credits" integer NOT NULL,
+	"amountCents" integer,
+	"currency" text,
+	"provider" text NOT NULL,
+	"providerOrderId" text NOT NULL,
+	"providerEventType" text,
+	"rawPayload" jsonb,
+	"creditTransactionId" text,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "order_provider_orderId_unique" UNIQUE("provider","providerOrderId")
 );
 --> statement-breakpoint
 CREATE TABLE "parsedReport" (
@@ -60,6 +90,18 @@ CREATE TABLE "parsedReport" (
 	"providerScoreRangeLow" integer,
 	"providerScoreRangeHigh" integer,
 	"rawParsedJson" jsonb
+);
+--> statement-breakpoint
+CREATE TABLE "productProvider" (
+	"id" text PRIMARY KEY NOT NULL,
+	"productId" text NOT NULL,
+	"provider" text NOT NULL,
+	"externalProductId" text NOT NULL,
+	"externalData" jsonb,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"updatedAt" timestamp,
+	CONSTRAINT "productProvider_provider_extId_unique" UNIQUE("provider","externalProductId"),
+	CONSTRAINT "productProvider_productId_provider_unique" UNIQUE("productId","provider")
 );
 --> statement-breakpoint
 CREATE TABLE "promo" (
@@ -86,6 +128,16 @@ CREATE TABLE "reportHtml" (
 	"fileSizeBytes" integer,
 	"reportDate" timestamp,
 	"uploadedAt" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "reportShareToken" (
+	"id" text PRIMARY KEY NOT NULL,
+	"vehicleReportId" text NOT NULL,
+	"userId" text NOT NULL,
+	"token" text NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"revokedAt" timestamp,
+	CONSTRAINT "reportShareToken_token_unique" UNIQUE("token")
 );
 --> statement-breakpoint
 CREATE TABLE "session" (
@@ -227,6 +279,22 @@ CREATE TABLE "post" (
 	"updatedAt" timestamp
 );
 --> statement-breakpoint
+CREATE TABLE "product" (
+	"id" text PRIMARY KEY NOT NULL,
+	"slug" text NOT NULL,
+	"name" text NOT NULL,
+	"description" text,
+	"credits" integer NOT NULL,
+	"priceCents" integer NOT NULL,
+	"currency" text DEFAULT 'usd' NOT NULL,
+	"badge" text,
+	"sortOrder" integer DEFAULT 0 NOT NULL,
+	"isActive" boolean DEFAULT true NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"updatedAt" timestamp,
+	CONSTRAINT "product_slug_unique" UNIQUE("slug")
+);
+--> statement-breakpoint
 CREATE TABLE "report" (
 	"id" text PRIMARY KEY NOT NULL,
 	"reporterId" text NOT NULL,
@@ -313,11 +381,15 @@ CREATE TABLE "vehicleReport" (
 ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "creditTransaction_userId_idx" ON "creditTransaction" USING btree ("userId");--> statement-breakpoint
+CREATE INDEX "order_userId_idx" ON "order" USING btree ("userId");--> statement-breakpoint
+CREATE INDEX "order_productId_idx" ON "order" USING btree ("productId");--> statement-breakpoint
 CREATE INDEX "parsedReport_vehicleReportId_idx" ON "parsedReport" USING btree ("vehicleReportId");--> statement-breakpoint
 CREATE INDEX "parsedReport_vehicleId_idx" ON "parsedReport" USING btree ("vehicleId");--> statement-breakpoint
 CREATE INDEX "promo_code_idx" ON "promo" USING btree ("code");--> statement-breakpoint
 CREATE INDEX "reportHtml_vehicleId_idx" ON "reportHtml" USING btree ("vehicleId");--> statement-breakpoint
 CREATE INDEX "reportHtml_contentHash_idx" ON "reportHtml" USING btree ("contentHash");--> statement-breakpoint
+CREATE INDEX "reportShareToken_token_idx" ON "reportShareToken" USING btree ("token");--> statement-breakpoint
+CREATE INDEX "reportShareToken_vehicleReportId_idx" ON "reportShareToken" USING btree ("vehicleReportId");--> statement-breakpoint
 CREATE INDEX "timelineEvent_vehicleReportId_idx" ON "timelineEvent" USING btree ("vehicleReportId");--> statement-breakpoint
 CREATE INDEX "timelineEvent_eventType_idx" ON "timelineEvent" USING btree ("eventType");--> statement-breakpoint
 CREATE INDEX "timelineEvent_eventDate_idx" ON "timelineEvent" USING btree ("eventDate");--> statement-breakpoint
@@ -333,6 +405,8 @@ CREATE INDEX "notification_userId_read_idx" ON "notification" USING btree ("user
 CREATE INDEX "notification_createdAt_idx" ON "notification" USING btree ("createdAt");--> statement-breakpoint
 CREATE INDEX "post_userId_idx" ON "post" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX "post_createdAt_idx" ON "post" USING btree ("createdAt");--> statement-breakpoint
+CREATE INDEX "product_slug_idx" ON "product" USING btree ("slug");--> statement-breakpoint
+CREATE INDEX "product_active_sort_idx" ON "product" USING btree ("isActive","sortOrder");--> statement-breakpoint
 CREATE INDEX "report_reporterId_idx" ON "report" USING btree ("reporterId");--> statement-breakpoint
 CREATE INDEX "report_reportedUserId_idx" ON "report" USING btree ("reportedUserId");--> statement-breakpoint
 CREATE INDEX "report_reportedPostId_idx" ON "report" USING btree ("reportedPostId");--> statement-breakpoint

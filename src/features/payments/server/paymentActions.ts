@@ -1,5 +1,6 @@
 import { eq, and } from 'drizzle-orm'
 
+import { analyticsActions } from '~/data/server/actions/analyticsActions'
 import { getDb } from '~/database'
 import { creditTransaction, order, productProvider } from '~/database/schema-private'
 import { product } from '~/database/schema-public'
@@ -133,6 +134,13 @@ export async function processPurchase(
     createdAt: new Date().toISOString(),
   })
 
+  analyticsActions().logEvent(userId, 'credits_purchased', {
+    userId,
+    credits: resolved.credits,
+    platform,
+    amountCents,
+  })
+
   console.info(
     `[payments] added ${resolved.credits} credits for user ${userId} via ${platform}`
   )
@@ -218,6 +226,12 @@ export async function processRefund(
     providerEventType: platformEventType,
     rawPayload: rawPayload as Record<string, unknown> | null,
     createdAt: new Date().toISOString(),
+  })
+
+  analyticsActions().logEvent(userId, 'credits_refunded', {
+    userId,
+    credits: resolved.credits,
+    platform,
   })
 
   console.info(

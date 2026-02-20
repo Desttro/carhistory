@@ -3,6 +3,7 @@ import { closeIntercept, createRoute, useParams } from 'one'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog, ScrollView, SizableText, VisuallyHidden, XStack, YStack } from 'tamagui'
 
+import { analytics } from '~/features/analytics/analytics'
 import { postDetail } from '~/data/queries/post'
 import { useAuth } from '~/features/auth/client/authClient'
 import { CommentInput } from '~/features/feed/CommentInput'
@@ -69,6 +70,7 @@ export default function PostDetailModal() {
         content: content.trim(),
         createdAt: Date.now(),
       })
+      analytics.track('comment_created', { postId: feedId, contentLength: content.trim().length })
       setContent('')
       setIsSubmitting(false)
 

@@ -114,6 +114,30 @@ export type AnalyticsEvent =
         platform?: string
       }
     }
+  | { type: 'user_login'; properties: { method: 'email' | 'phone' | 'social' | 'demo' | 'admin' } }
+  | { type: 'user_logout'; properties: {} }
+  | { type: 'onboarding_completed'; properties: {} }
+  | { type: 'vin_searched'; properties: { vin: string; success: boolean; error?: string } }
+  | {
+      type: 'report_purchased'
+      properties: { vin: string; reportId?: string; success: boolean; error?: string }
+    }
+  | {
+      type: 'credit_purchase_initiated'
+      properties: { slug: string; platform: 'polar' | 'revenuecat' }
+    }
+  | {
+      type: 'credits_purchased'
+      properties: { userId: string; credits: number; platform: string; amountCents?: number }
+    }
+  | { type: 'credits_refunded'; properties: { userId: string; credits: number; platform: string } }
+  | { type: 'comment_created'; properties: { postId: string; contentLength: number } }
+  | { type: 'post_reported'; properties: { postId: string; reason: string } }
+  | {
+      type: 'profile_shared'
+      properties: { targetUserId: string; method: 'clipboard' | 'share_sheet' }
+    }
+  | { type: 'search_performed'; properties: { query: string; resultCount: number } }
 
 // helper type to extract properties for a specific event type
 export type EventProperties<T extends AnalyticsEvent['type']> = Extract<

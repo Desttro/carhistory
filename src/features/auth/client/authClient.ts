@@ -3,6 +3,7 @@ import { href } from 'one'
 import { useMemo } from 'react'
 
 import { SERVER_URL } from '~/constants/urls'
+import { analytics } from '~/features/analytics/analytics'
 import { setUser } from '~/features/user/getUser'
 import { showToast } from '~/interface/toast/Toast'
 
@@ -19,6 +20,11 @@ const betterAuthClient = createBetterAuthClient({
   createUser: (user) => user as AppUser,
   onAuthStateChange: (state) => {
     setUser(state.user)
+    if (state.user) {
+      analytics.identify(state.user.id, { email: state.user.email, name: state.user.name })
+    } else {
+      analytics.reset()
+    }
   },
   onAuthError: (error: any) => {
     showToast(`Auth error: ${error.message || JSON.stringify(error)}`, {

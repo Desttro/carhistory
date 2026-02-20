@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { Share } from 'react-native'
 
+import { analytics } from '~/features/analytics/analytics'
 import { showError } from '~/interface/dialogs/actions'
 import { showToast } from '~/interface/toast/helpers'
 
@@ -24,11 +25,10 @@ export function useShareProfile() {
         }
       }
 
-      // Analytics event removed - 'profile_shared' not in event types
-      // analytics.track('profile_shared', {
-      //   targetUserId: user.id,
-      //   platform: Platform.OS,
-      // })
+      analytics.track('profile_shared', {
+        targetUserId: user.id,
+        method: !process.env.VITE_NATIVE ? 'clipboard' : 'share_sheet',
+      })
     } catch (error) {
       console.error('Error sharing profile:', error)
       showError(error, 'Share Profile')

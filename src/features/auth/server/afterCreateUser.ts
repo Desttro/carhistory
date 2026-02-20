@@ -4,6 +4,7 @@ import { DEMO_EMAIL } from '~/constants/app'
 import { getDb } from '~/database'
 import { user as userTable, whitelist } from '~/database/schema-private'
 import { userCredits, userPublic, userState } from '~/database/schema-public'
+import { analyticsActions } from '~/data/server/actions/analyticsActions'
 import { syncPolarCustomer } from '~/features/payments/server/polarCustomerSync'
 import { syncRevenueCatSubscriber } from '~/features/payments/server/revenuecatCustomerSync'
 
@@ -129,6 +130,8 @@ export async function afterCreateUser(user: { id: string; email: string }) {
         name: userPrivate.name || undefined,
       }),
     ])
+
+    analyticsActions().logEvent(userId, 'user_signup', { method: 'email', source: 'otp' })
 
     console.info(`[afterCreateUser] ✅ User ${email} setup complete`)
     return userPrivate

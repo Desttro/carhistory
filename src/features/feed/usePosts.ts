@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { isWeb, useDebounceValue } from 'tamagui'
 
 import { feedPosts, postsPaginated, searchPosts } from '~/data/queries/post'
+import { analytics } from '~/features/analytics/analytics'
 import { useQuery } from '~/zero/client'
 
 import type { Post } from '~/data/types'
@@ -228,6 +229,18 @@ export function usePostsSearch(pageSize = 12) {
 
   const isSearching = Boolean(debouncedSearchText) && status.type === 'unknown' && !cursor
   const hasMore = posts ? posts.length === pageSize : false
+
+  // track search queries when results arrive
+  const lastTrackedSearch = useRef('')
+  useEffect(() => {
+    if (debouncedSearchText && posts && debouncedSearchText !== lastTrackedSearch.current) {
+      lastTrackedSearch.current = debouncedSearchText
+      analytics.track('search_performed', {
+        query: debouncedSearchText,
+        resultCount: posts.length,
+      })
+    }
+  }, [debouncedSearchText, posts])
 
   return {
     posts: allPostsData,

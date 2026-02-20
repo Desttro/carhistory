@@ -3,6 +3,7 @@ import { Menu } from '@tamagui/menu'
 import { router } from 'one'
 import { useIsTouchDevice } from 'tamagui'
 
+import { analytics } from '~/features/analytics/analytics'
 import { saveRemoteImage } from '~/helpers/media/saveImage'
 import { Button } from '~/interface/buttons/Button'
 import { dialogConfirm, showError } from '~/interface/dialogs/actions'
@@ -53,6 +54,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
         reason,
         details: '',
       })
+      analytics.track('post_reported', { postId: post.id, reason })
       showToast('Thanks for reporting', { type: 'success' })
     } catch (error) {
       showError(error, 'Report Post')
@@ -76,6 +78,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
         createdAt: Date.now(),
         blockedId: post.userId,
       })
+      analytics.track('user_blocked', { targetUserId: post.userId })
       showToast('User blocked')
     } catch (error) {
       showError(error, 'Block User')

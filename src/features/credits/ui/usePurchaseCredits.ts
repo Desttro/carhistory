@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { analytics } from '~/features/analytics/analytics'
 import { authClient } from '~/features/auth/client/authClient'
 
 export function usePurchaseCredits() {
@@ -11,6 +12,7 @@ export function usePurchaseCredits() {
     setError(null)
 
     try {
+      analytics.track('credit_purchase_initiated', { slug, platform: 'polar' })
       // this redirects to Polar checkout
       await authClient.checkout({ slug })
     } catch (err) {

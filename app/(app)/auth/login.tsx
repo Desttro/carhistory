@@ -10,6 +10,7 @@ import {
   YStack,
 } from 'tamagui'
 
+import { analytics } from '~/features/analytics/analytics'
 import { APP_NAME } from '~/constants/app'
 import { LoginAdminButton } from '~/features/auth/ui/LoginAdminButton'
 import { LoginDemoButton } from '~/features/auth/ui/LoginDemoButton'
@@ -28,6 +29,7 @@ export const LoginPage = () => {
   const [showOnboarding, setShowOnboarding] = useState(() => !isWeb)
 
   const handleOnboardingComplete = useCallback(() => {
+    analytics.track('onboarding_completed', {})
     onboardingStorage.set(true)
     setShowOnboarding(false)
   }, [])

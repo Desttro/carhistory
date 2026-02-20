@@ -1,6 +1,7 @@
 import { router } from 'one'
 import { useCallback, useState } from 'react'
 
+import { analytics } from '~/features/analytics/analytics'
 import { REPORT_CREDIT_COST } from '~/features/credits/constants'
 import { useCredits } from '~/features/credits/useCredits'
 import { useUser } from '~/features/user/useUser'
@@ -44,15 +45,20 @@ export function useVinLookup() {
       const data = (await res.json()) as VinCheckResult
 
       if (!data.success) {
-        setError(data.error || 'No records found for this VIN')
+        const errorMsg = data.error || 'No records found for this VIN'
+        analytics.track('vin_searched', { vin: normalizedVin, success: false, error: errorMsg })
+        setError(errorMsg)
         return
       }
 
+      analytics.track('vin_searched', { vin: normalizedVin, success: true })
       // include the VIN in the result for use in pricing redirects
       setCheckResult({ ...data, vin: normalizedVin })
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to check VIN'
+      analytics.track('vin_searched', { vin: normalizedVin, success: false, error: errorMsg })
       console.info('vin check error:', err)
-      setError(err instanceof Error ? err.message : 'Failed to check VIN')
+      setError(errorMsg)
     } finally {
       setIsChecking(false)
     }
@@ -103,9 +109,17 @@ export function useVinLookup() {
       const data = (await res.json()) as PurchaseResult
 
       if (!data.success) {
-        setError(data.error || 'Failed to purchase report')
+        const errorMsg = data.error || 'Failed to purchase report'
+        analytics.track('report_purchased', { vin: normalizedVin, success: false, error: errorMsg })
+        setError(errorMsg)
         return
       }
+
+      analytics.track('report_purchased', {
+        vin: normalizedVin,
+        reportId: data.reportId,
+        success: true,
+      })
 
       // credits balance updates automatically via Zero sync
       showToast('Report purchased successfully')
@@ -114,8 +128,10 @@ export function useVinLookup() {
         router.push(`/home/reports/${data.reportId}`)
       }
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to purchase report'
+      analytics.track('report_purchased', { vin: normalizedVin, success: false, error: errorMsg })
       console.info('purchase report error:', err)
-      setError(err instanceof Error ? err.message : 'Failed to purchase report')
+      setError(errorMsg)
     } finally {
       setIsPurchasing(false)
     }

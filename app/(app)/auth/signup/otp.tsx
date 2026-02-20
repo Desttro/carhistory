@@ -3,6 +3,7 @@ import { useParams } from 'one'
 import { useEffect, useState } from 'react'
 import { SizableText, useEvent, YStack } from 'tamagui'
 
+import { analytics } from '~/features/analytics/analytics'
 import { otpLogin, validateLoginOtpCode } from '~/features/auth/client/otpLogin'
 import { OtpInput } from '~/features/auth/ui/OtpInput'
 import { Button } from '~/interface/buttons/Button'
@@ -76,6 +77,7 @@ export const OtpPage = () => {
         return
       }
 
+      analytics.track('user_login', { method: params.method === 'phone' ? 'phone' : 'email' })
       pauseTimer()
     } catch {
       // error handled by auth client

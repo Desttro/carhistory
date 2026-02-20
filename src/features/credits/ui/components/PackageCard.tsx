@@ -36,7 +36,7 @@ export const PackageCard = memo(
       <CardFrame popular={isPopular} bestValue={!isPopular && isBestValue}>
         {badgeVariant && <PackageBadge variant={badgeVariant} />}
 
-        <YStack gap="$3" items="center" py="$3">
+        <YStack gap="$3" items="center" py="$3" flex={1}>
           <SparkleIcon size={28} color={isBestValue && !isPopular ? '$green10' : '$accent10'} />
 
           <YStack items="center" gap="$1">
@@ -77,6 +77,7 @@ const CardFrame = styled(YStack, {
   borderWidth: 1,
   borderColor: '$color4',
   gap: '$3',
+  flex: 1,
 
   variants: {
     popular: {

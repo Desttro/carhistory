@@ -116,7 +116,10 @@ export function RevenueCatProvider({ children }: { children: ReactNode }) {
         const fetchedOfferings = await Purchases.getOfferings()
         if (!cancelled) {
           setOfferings(fetchedOfferings)
-          console.info('[revenuecat] offerings fetched:', Object.keys(fetchedOfferings.all))
+          console.info(
+            '[revenuecat] offerings fetched:',
+            Object.keys(fetchedOfferings.all)
+          )
         }
       } catch (error) {
         console.info('[revenuecat] identity sync error:', error)

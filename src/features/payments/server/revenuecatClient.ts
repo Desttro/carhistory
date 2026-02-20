@@ -63,18 +63,15 @@ export interface RevenueCatCustomer {
   experiment: Record<string, unknown> | null
 }
 
-export async function getCustomer(
-  appUserId: string
-): Promise<RevenueCatCustomer | null> {
+export async function getCustomer(appUserId: string): Promise<RevenueCatCustomer | null> {
   if (!REVENUECAT_API_KEY || !REVENUECAT_PROJECT_ID) {
     console.info('[revenuecat] no API key/project configured, skipping getCustomer')
     return null
   }
 
-  const res = await fetch(
-    v2Url(`/customers/${encodeURIComponent(appUserId)}`),
-    { headers: headers() }
-  )
+  const res = await fetch(v2Url(`/customers/${encodeURIComponent(appUserId)}`), {
+    headers: headers(),
+  })
 
   if (res.status === 404) return null
 
@@ -105,7 +102,9 @@ export async function getCustomerPurchases(
   appUserId: string
 ): Promise<RevenueCatPurchasesResponse | null> {
   if (!REVENUECAT_API_KEY || !REVENUECAT_PROJECT_ID) {
-    console.info('[revenuecat] no API key/project configured, skipping getCustomerPurchases')
+    console.info(
+      '[revenuecat] no API key/project configured, skipping getCustomerPurchases'
+    )
     return null
   }
 

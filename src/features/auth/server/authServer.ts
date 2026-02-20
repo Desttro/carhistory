@@ -5,7 +5,7 @@ import { betterAuth } from 'better-auth'
 import { admin, bearer, emailOTP, jwt, magicLink, phoneNumber } from 'better-auth/plugins'
 import { eq, and } from 'drizzle-orm'
 
-import { DOMAIN } from '~/constants/app'
+import { APP_NAME, DOMAIN } from '~/constants/app'
 import { getDb } from '~/database'
 import { database } from '~/database/database'
 import { productProvider } from '~/database/schema-private'
@@ -32,6 +32,7 @@ import {
 import { APP_SCHEME } from '../constants'
 import { afterCreateUser } from './afterCreateUser'
 import { storeOTP } from './lastOTP'
+import { sendEmail } from './sendEmail'
 
 console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH_URL)
 
@@ -132,7 +133,15 @@ export const authServer = betterAuth({
 
     magicLink({
       sendMagicLink: async ({ email, url }) => {
-        console.info('Magic link email would be sent to:', email, 'with URL:', url)
+        if (process.env.NODE_ENV === 'development') {
+          console.info('Magic link email would be sent to:', email, 'with URL:', url)
+        } else {
+          await sendEmail({
+            to: email,
+            subject: `${APP_NAME} sign-in link`,
+            html: `<p>Click the link below to sign in to ${APP_NAME}:</p><p><a href="${url}">Sign in</a></p><p>If you didn't request this, you can safely ignore this email.</p>`,
+          })
+        }
       },
     }),
 
@@ -140,12 +149,18 @@ export const authServer = betterAuth({
 
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
-        console.info(`\n${'='.repeat(60)}`)
-        console.info(`📧 OTP CODE for ${email}: ${otp}`)
-        console.info(`${'='.repeat(60)}\n`)
-
-        // Store in dev for testing
-        storeOTP(email, otp)
+        if (process.env.NODE_ENV === 'development') {
+          console.info(`\n${'='.repeat(60)}`)
+          console.info(`📧 OTP CODE for ${email}: ${otp}`)
+          console.info(`${'='.repeat(60)}\n`)
+          storeOTP(email, otp)
+        } else {
+          await sendEmail({
+            to: email,
+            subject: `${APP_NAME} verification code: ${otp}`,
+            html: `<p>Your ${APP_NAME} verification code is:</p><p style="font-size:32px;font-weight:bold;letter-spacing:4px">${otp}</p><p>This code expires in 5 minutes. If you didn't request this, you can safely ignore this email.</p>`,
+          })
+        }
       },
     }),
 

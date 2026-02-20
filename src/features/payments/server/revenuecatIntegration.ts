@@ -157,7 +157,9 @@ export async function handleRevenueCatWebhook(
     case 'SUBSCRIBER_ALIAS':
     case 'UNCANCELLATION':
     case 'PRODUCT_CHANGE':
-      console.info(`[revenuecat] ${event.type} for ${event.app_user_id}, no action needed`)
+      console.info(
+        `[revenuecat] ${event.type} for ${event.app_user_id}, no action needed`
+      )
       break
 
     default:

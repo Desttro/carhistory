@@ -127,6 +127,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': '退出登录',
   'settings.language': '语言',
 
+  // edit profile
+  'editProfile.discardDialog.title': '放弃更改？',
+  'editProfile.discardDialog.description':
+    '您有未保存的更改。确定要放弃吗？',
+  'editProfile.discardDialog.stay': '留下',
+  'editProfile.discardDialog.discard': '放弃',
+  'editProfile.name': '姓名',
+  'editProfile.namePlaceholder': '张三',
+  'editProfile.username': '用户名',
+  'editProfile.usernamePlaceholder': 'zhangsan',
+  'editProfile.usernameUnavailable': '用户名不可用',
+  'editProfile.usernameInvalid':
+    '至少3个字符，以字母开头，仅限字母/数字/_',
+  'editProfile.saving': '保存中...',
+
   // theme labels
   'theme.dark': '深色',
   'theme.light': '浅色',

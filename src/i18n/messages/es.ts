@@ -131,6 +131,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'Cerrar sesión',
   'settings.language': 'Idioma',
 
+  // edit profile
+  'editProfile.discardDialog.title': '¿Descartar cambios?',
+  'editProfile.discardDialog.description':
+    'Tienes cambios sin guardar. ¿Estás seguro de que quieres descartarlos?',
+  'editProfile.discardDialog.stay': 'Quedarse',
+  'editProfile.discardDialog.discard': 'Descartar',
+  'editProfile.name': 'Nombre',
+  'editProfile.namePlaceholder': 'Juan García',
+  'editProfile.username': 'Nombre de usuario',
+  'editProfile.usernamePlaceholder': 'juangarcia',
+  'editProfile.usernameUnavailable': 'El nombre de usuario no está disponible',
+  'editProfile.usernameInvalid':
+    'Mínimo 3 caracteres, empezar con letra, solo letras/números/_',
+  'editProfile.saving': 'Guardando...',
+
   // theme labels
   'theme.dark': 'Oscuro',
   'theme.light': 'Claro',

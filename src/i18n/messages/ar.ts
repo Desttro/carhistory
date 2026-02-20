@@ -133,6 +133,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'تسجيل الخروج',
   'settings.language': 'اللغة',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'تجاهل التغييرات؟',
+  'editProfile.discardDialog.description':
+    'لديك تغييرات غير محفوظة. هل أنت متأكد من رغبتك في تجاهلها؟',
+  'editProfile.discardDialog.stay': 'البقاء',
+  'editProfile.discardDialog.discard': 'تجاهل',
+  'editProfile.name': 'الاسم',
+  'editProfile.namePlaceholder': 'أحمد محمد',
+  'editProfile.username': 'اسم المستخدم',
+  'editProfile.usernamePlaceholder': 'ahmedmohamed',
+  'editProfile.usernameUnavailable': 'اسم المستخدم غير متاح',
+  'editProfile.usernameInvalid':
+    'الحد الأدنى 3 أحرف، يبدأ بحرف، أحرف/أرقام/_ فقط',
+  'editProfile.saving': 'جارٍ الحفظ...',
+
   // theme labels
   'theme.dark': 'داكن',
   'theme.light': 'فاتح',

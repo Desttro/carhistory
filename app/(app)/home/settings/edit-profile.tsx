@@ -3,6 +3,7 @@ import { Keyboard } from 'react-native'
 import { isWeb, Spinner, View, XStack, YStack } from 'tamagui'
 
 import { useProfileEdit } from '~/features/user/useProfileEdit'
+import { useT } from '~/i18n/context'
 import { Button } from '~/interface/buttons/Button'
 import { Dialog } from '~/interface/dialogs/Dialog'
 import { Input } from '~/interface/forms/Input'
@@ -15,6 +16,7 @@ import { Text } from '~/interface/text/Text'
 import { AvatarUpload } from '~/interface/upload/AvatarUpload'
 
 export const ProfileEditPage = () => {
+  const t = useT()
   const {
     user,
     username,
@@ -61,13 +63,13 @@ export const ProfileEditPage = () => {
         minH={200}
       >
         <Dialog.Header
-          title="Discard changes?"
-          description="You have unsaved changes. Are you sure you want to discard them?"
+          title={t('editProfile.discardDialog.title')}
+          description={t('editProfile.discardDialog.description')}
         />
         <XStack justify="flex-end" gap="$2">
-          <Button onPress={() => blocker.reset?.()}>Stay</Button>
+          <Button onPress={() => blocker.reset?.()}>{t('editProfile.discardDialog.stay')}</Button>
           <Button variant="action" onPress={handleDiscard}>
-            Discard
+            {t('editProfile.discardDialog.discard')}
           </Button>
         </XStack>
       </Dialog>
@@ -99,7 +101,7 @@ export const ProfileEditPage = () => {
               <YStack>
                 <XStack justify="space-between" items="center" mb="$2">
                   <Text size="$3" fontWeight="500" color="$color11">
-                    Name
+                    {t('editProfile.name')}
                   </Text>
                   <Text size="$3" color="$color9">
                     {name.length}/40
@@ -108,7 +110,7 @@ export const ProfileEditPage = () => {
                 <Input
                   width="100%"
                   glass
-                  placeholder="Nate"
+                  placeholder={t('editProfile.namePlaceholder')}
                   value={name}
                   onChangeText={handleNameChange}
                   autoCapitalize="words"
@@ -119,7 +121,7 @@ export const ProfileEditPage = () => {
               <YStack>
                 <XStack justify="space-between" items="center" mb="$2">
                   <Text size="$3" fontWeight="500" color="$color11">
-                    Username
+                    {t('editProfile.username')}
                   </Text>
                   <Text size="$3" color="$color9">
                     {username.length}/30
@@ -129,7 +131,7 @@ export const ProfileEditPage = () => {
                   <Input
                     width="100%"
                     glass
-                    placeholder="johndoe"
+                    placeholder={t('editProfile.usernamePlaceholder')}
                     value={username}
                     onChangeText={handleUsernameChange}
                     autoCapitalize="none"
@@ -148,11 +150,11 @@ export const ProfileEditPage = () => {
                 </View>
                 {isUnavailable && !isCheckingAvailability ? (
                   <Text size="$2" mt="$1" color="$red10">
-                    Username is not available
+                    {t('editProfile.usernameUnavailable')}
                   </Text>
                 ) : isUsernameInvalid ? (
                   <Text size="$2" mt="$1" color="$red10">
-                    Must be 3+ chars, start with letter, only letters/numbers/_
+                    {t('editProfile.usernameInvalid')}
                   </Text>
                 ) : null}
               </YStack>
@@ -164,7 +166,7 @@ export const ProfileEditPage = () => {
                   onPress={handleSave}
                   disabled={!canSave}
                 >
-                  {isSaving ? 'Saving...' : 'Save'}
+                  {isSaving ? t('editProfile.saving') : t('common.save')}
                 </Button>
               )}
             </YStack>
@@ -180,7 +182,7 @@ export const ProfileEditPage = () => {
                 disabled={!canSave}
                 opacity={!canSave ? 0.5 : 1}
               >
-                {isSaving ? 'Saving...' : 'Save'}
+                {isSaving ? t('editProfile.saving') : t('common.save')}
               </Button>
             </KeyboardStickyFooter>
           )}

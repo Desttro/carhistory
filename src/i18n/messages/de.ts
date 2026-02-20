@@ -132,6 +132,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'Abmelden',
   'settings.language': 'Sprache',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'Änderungen verwerfen?',
+  'editProfile.discardDialog.description':
+    'Du hast ungespeicherte Änderungen. Bist du sicher, dass du sie verwerfen möchtest?',
+  'editProfile.discardDialog.stay': 'Bleiben',
+  'editProfile.discardDialog.discard': 'Verwerfen',
+  'editProfile.name': 'Name',
+  'editProfile.namePlaceholder': 'Max Mustermann',
+  'editProfile.username': 'Benutzername',
+  'editProfile.usernamePlaceholder': 'maxmustermann',
+  'editProfile.usernameUnavailable': 'Benutzername ist nicht verfügbar',
+  'editProfile.usernameInvalid':
+    'Mindestens 3 Zeichen, mit Buchstabe beginnen, nur Buchstaben/Zahlen/_',
+  'editProfile.saving': 'Wird gespeichert...',
+
   // theme labels
   'theme.dark': 'Dunkel',
   'theme.light': 'Hell',

@@ -132,6 +132,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'Esci',
   'settings.language': 'Lingua',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'Annullare le modifiche?',
+  'editProfile.discardDialog.description':
+    'Hai modifiche non salvate. Sei sicuro di volerle annullare?',
+  'editProfile.discardDialog.stay': 'Resta',
+  'editProfile.discardDialog.discard': 'Annulla',
+  'editProfile.name': 'Nome',
+  'editProfile.namePlaceholder': 'Mario Rossi',
+  'editProfile.username': 'Nome utente',
+  'editProfile.usernamePlaceholder': 'mariorossi',
+  'editProfile.usernameUnavailable': 'Nome utente non disponibile',
+  'editProfile.usernameInvalid':
+    'Minimo 3 caratteri, iniziare con lettera, solo lettere/numeri/_',
+  'editProfile.saving': 'Salvataggio...',
+
   // theme labels
   'theme.dark': 'Scuro',
   'theme.light': 'Chiaro',

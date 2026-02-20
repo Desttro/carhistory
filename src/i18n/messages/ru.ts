@@ -133,6 +133,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'Выйти',
   'settings.language': 'Язык',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'Отменить изменения?',
+  'editProfile.discardDialog.description':
+    'У вас есть несохранённые изменения. Вы уверены, что хотите их отменить?',
+  'editProfile.discardDialog.stay': 'Остаться',
+  'editProfile.discardDialog.discard': 'Отменить',
+  'editProfile.name': 'Имя',
+  'editProfile.namePlaceholder': 'Иван Иванов',
+  'editProfile.username': 'Имя пользователя',
+  'editProfile.usernamePlaceholder': 'ivanivanov',
+  'editProfile.usernameUnavailable': 'Имя пользователя недоступно',
+  'editProfile.usernameInvalid':
+    'Минимум 3 символа, начинать с буквы, только буквы/цифры/_',
+  'editProfile.saving': 'Сохранение...',
+
   // theme labels
   'theme.dark': 'Тёмная',
   'theme.light': 'Светлая',

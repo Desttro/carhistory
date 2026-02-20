@@ -132,6 +132,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'Se déconnecter',
   'settings.language': 'Langue',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'Abandonner les modifications ?',
+  'editProfile.discardDialog.description':
+    'Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir les abandonner ?',
+  'editProfile.discardDialog.stay': 'Rester',
+  'editProfile.discardDialog.discard': 'Abandonner',
+  'editProfile.name': 'Nom',
+  'editProfile.namePlaceholder': 'Jean Dupont',
+  'editProfile.username': "Nom d'utilisateur",
+  'editProfile.usernamePlaceholder': 'jeandupont',
+  'editProfile.usernameUnavailable': "Le nom d'utilisateur n'est pas disponible",
+  'editProfile.usernameInvalid':
+    'Minimum 3 caractères, commencer par une lettre, uniquement lettres/chiffres/_',
+  'editProfile.saving': 'Enregistrement...',
+
   // theme labels
   'theme.dark': 'Sombre',
   'theme.light': 'Clair',

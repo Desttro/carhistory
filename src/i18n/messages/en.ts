@@ -128,6 +128,21 @@ export const messages = {
   'settings.logOut': 'Log Out',
   'settings.language': 'Language',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'Discard changes?',
+  'editProfile.discardDialog.description':
+    'You have unsaved changes. Are you sure you want to discard them?',
+  'editProfile.discardDialog.stay': 'Stay',
+  'editProfile.discardDialog.discard': 'Discard',
+  'editProfile.name': 'Name',
+  'editProfile.namePlaceholder': 'John Smith',
+  'editProfile.username': 'Username',
+  'editProfile.usernamePlaceholder': 'johndoe',
+  'editProfile.usernameUnavailable': 'Username is not available',
+  'editProfile.usernameInvalid':
+    'Must be 3+ chars, start with letter, only letters/numbers/_',
+  'editProfile.saving': 'Saving...',
+
   // theme labels
   'theme.dark': 'Dark',
   'theme.light': 'Light',

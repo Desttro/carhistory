@@ -133,6 +133,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'Odhlásit se',
   'settings.language': 'Jazyk',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'Zahodit změny?',
+  'editProfile.discardDialog.description':
+    'Máte neuložené změny. Opravdu je chcete zahodit?',
+  'editProfile.discardDialog.stay': 'Zůstat',
+  'editProfile.discardDialog.discard': 'Zahodit',
+  'editProfile.name': 'Jméno',
+  'editProfile.namePlaceholder': 'Jan Novák',
+  'editProfile.username': 'Uživatelské jméno',
+  'editProfile.usernamePlaceholder': 'jannovak',
+  'editProfile.usernameUnavailable': 'Uživatelské jméno není dostupné',
+  'editProfile.usernameInvalid':
+    'Minimálně 3 znaky, začít písmenem, pouze písmena/čísla/_',
+  'editProfile.saving': 'Ukládání...',
+
   // theme labels
   'theme.dark': 'Tmavý',
   'theme.light': 'Světlý',

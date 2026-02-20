@@ -133,6 +133,21 @@ export const messages: Record<keyof Messages, string> = {
   'settings.logOut': 'Wyloguj się',
   'settings.language': 'Język',
 
+  // edit profile
+  'editProfile.discardDialog.title': 'Odrzucić zmiany?',
+  'editProfile.discardDialog.description':
+    'Masz niezapisane zmiany. Czy na pewno chcesz je odrzucić?',
+  'editProfile.discardDialog.stay': 'Zostań',
+  'editProfile.discardDialog.discard': 'Odrzuć',
+  'editProfile.name': 'Imię i nazwisko',
+  'editProfile.namePlaceholder': 'Jan Kowalski',
+  'editProfile.username': 'Nazwa użytkownika',
+  'editProfile.usernamePlaceholder': 'jankowalski',
+  'editProfile.usernameUnavailable': 'Nazwa użytkownika jest niedostępna',
+  'editProfile.usernameInvalid':
+    'Minimum 3 znaki, zaczynaj od litery, tylko litery/cyfry/_',
+  'editProfile.saving': 'Zapisywanie...',
+
   // theme labels
   'theme.dark': 'Ciemny',
   'theme.light': 'Jasny',

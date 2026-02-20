@@ -6,6 +6,7 @@ import {
   createStyledContext,
   isWeb,
   styled,
+  useMedia,
   withStaticProperties,
 } from 'tamagui'
 
@@ -75,6 +76,14 @@ const InputFrame = styled(TInput, {
   borderWidth: 0,
   outlineWidth: 0,
   py: '$2',
+
+  variants: {
+    compact: {
+      true: {
+        letterSpacing: 1,
+      },
+    },
+  } as const,
 })
 
 const Area = InputFrame.styleable<{
@@ -82,11 +91,13 @@ const Area = InputFrame.styleable<{
 }>((props, ref) => {
   const { setFocused } = FocusContext.useStyledContext()
   const { onChangeText, ...rest } = props
+  const media = useMedia()
 
   return (
     <View flex={1}>
       <InputFrame
         ref={ref}
+        compact={!media.sm}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         onChange={

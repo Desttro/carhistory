@@ -48,7 +48,8 @@ export const VinSearchForm = memo(
             returnKeyType="search"
           />
 
-          <View pr="$2">
+          {/* inline button: visible on $sm+ (tablet/desktop) */}
+          <View pr="$2" display="none" $sm={{ display: 'flex' }}>
             <Button
               size="medium"
               variant="action"
@@ -62,6 +63,22 @@ export const VinSearchForm = memo(
             </Button>
           </View>
         </VinInput>
+
+        {/* stacked button: visible on small screens only */}
+        <View display="flex" $sm={{ display: 'none' }}>
+          <Button
+            size="large"
+            variant="action"
+            onPress={handleSubmit}
+            disabled={!isValid || isLoading}
+            width="100%"
+            icon={
+              isLoading ? <Spinner size="small" /> : <MagnifyingGlassIcon size={16} />
+            }
+          >
+            {isLoading ? 'Checking...' : 'Check VIN'}
+          </Button>
+        </View>
 
         <XStack items="center" gap="$2" px="$1">
           <View flex={1} height={3} bg="$color4" rounded="$2" overflow="hidden">

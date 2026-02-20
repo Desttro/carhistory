@@ -61,7 +61,7 @@ export const PricingSheet = memo(
 
     return (
       <YStack gap="$4">
-        {isLoggedIn && (
+        {isLoggedIn && context !== 'pricing-page' && (
           <XStack gap="$2" items="center" justify="center" py="$2">
             <CoinsIcon size={20} color="$color11" />
             <SizableText size="$4" color="$color11">
@@ -105,26 +105,42 @@ export const PricingSheet = memo(
               maxW: inline ? 400 : 900,
             }}
           >
-            {products.map((pkg) => {
-              const price = `$${(pkg.priceCents / 100).toFixed(2)}`
-              const pricePerCredit =
-                pkg.credits > 1
-                  ? `$${(pkg.priceCents / 100 / pkg.credits).toFixed(2)}`
-                  : undefined
+            {(() => {
+              const singlePkg = products.find((p) => p.credits === 1)
+              const basePricePerCredit = singlePkg
+                ? singlePkg.priceCents / 100
+                : 0
+              const maxCredits = Math.max(...products.map((p) => p.credits))
 
-              return (
-                <YStack key={pkg.slug} $md={{ flex: inline ? undefined : 1 }}>
-                  <PackageCard
-                    credits={pkg.credits}
-                    price={price}
-                    pricePerCredit={pricePerCredit}
-                    onPress={() => handlePurchase(pkg.slug)}
-                    isLoading={isLoading && selectedSlug === pkg.slug}
-                    isPopular={pkg.badge === 'popular'}
-                  />
-                </YStack>
-              )
-            })}
+              return products.map((pkg) => {
+                const price = `$${(pkg.priceCents / 100).toFixed(2)}`
+                const ppc = pkg.priceCents / 100 / pkg.credits
+                const pricePerCredit =
+                  pkg.credits > 1 ? `$${ppc.toFixed(2)}` : undefined
+                const savingsPercent =
+                  pkg.credits > 1 && basePricePerCredit > 0
+                    ? Math.round(
+                        ((basePricePerCredit - ppc) / basePricePerCredit) * 100
+                      )
+                    : 0
+                const isBestValue = pkg.credits === maxCredits && pkg.credits > 1
+
+                return (
+                  <YStack key={pkg.slug} $md={{ flex: inline ? undefined : 1 }}>
+                    <PackageCard
+                      credits={pkg.credits}
+                      price={price}
+                      pricePerCredit={pricePerCredit}
+                      onPress={() => handlePurchase(pkg.slug)}
+                      isLoading={isLoading && selectedSlug === pkg.slug}
+                      isPopular={pkg.badge === 'popular'}
+                      savingsPercent={savingsPercent}
+                      isBestValue={isBestValue}
+                    />
+                  </YStack>
+                )
+              })
+            })()}
           </YStack>
         </YStack>
 

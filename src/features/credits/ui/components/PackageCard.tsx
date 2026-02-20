@@ -1,9 +1,10 @@
 import { memo } from 'react'
-import { SizableText, styled, YStack } from 'tamagui'
+import { SizableText, styled, XStack, YStack } from 'tamagui'
 
 import { Button } from '~/interface/buttons/Button'
 import { SparkleIcon } from '~/interface/icons/phosphor/SparkleIcon'
 
+import { Chip } from './Chip'
 import { PackageBadge } from './PackageBadge'
 import { PriceDisplay } from './PriceDisplay'
 
@@ -14,6 +15,8 @@ export interface PackageCardProps {
   onPress: () => void
   isLoading?: boolean
   isPopular?: boolean
+  savingsPercent?: number
+  isBestValue?: boolean
 }
 
 export const PackageCard = memo(
@@ -24,13 +27,17 @@ export const PackageCard = memo(
     onPress,
     isLoading,
     isPopular,
+    savingsPercent,
+    isBestValue,
   }: PackageCardProps) => {
+    const badgeVariant = isPopular ? 'popular' : isBestValue ? 'bestValue' : undefined
+
     return (
-      <CardFrame popular={isPopular}>
-        {isPopular && <PackageBadge variant="popular" />}
+      <CardFrame popular={isPopular} bestValue={!isPopular && isBestValue}>
+        {badgeVariant && <PackageBadge variant={badgeVariant} />}
 
         <YStack gap="$3" items="center" py="$3">
-          <SparkleIcon size={28} color="$accent10" />
+          <SparkleIcon size={28} color={isBestValue && !isPopular ? '$green10' : '$accent10'} />
 
           <YStack items="center" gap="$1">
             <SizableText size="$8" fontWeight="700" color="$color12">
@@ -42,6 +49,16 @@ export const PackageCard = memo(
           </YStack>
 
           <PriceDisplay price={price} pricePerCredit={pricePerCredit} />
+
+          {!!savingsPercent && savingsPercent > 0 && (
+            <XStack>
+              <Chip size="$2" bg="$green4" circular>
+                <Chip.Text size="$1" fontWeight="700" color="$green11">
+                  Save {savingsPercent}%
+                </Chip.Text>
+              </Chip>
+            </XStack>
+          )}
         </YStack>
 
         <Button variant="action" size="large" onPress={onPress} disabled={isLoading}>
@@ -66,6 +83,13 @@ const CardFrame = styled(YStack, {
       true: {
         borderColor: '$accent8',
         borderWidth: 2,
+      },
+    },
+    bestValue: {
+      true: {
+        borderColor: '$green8',
+        borderWidth: 2,
+        bg: '$green2',
       },
     },
   } as const,

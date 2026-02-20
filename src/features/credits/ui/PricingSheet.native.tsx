@@ -100,7 +100,7 @@ export const PricingSheet = memo(
 
     return (
       <YStack gap="$4">
-        {isLoggedIn && (
+        {isLoggedIn && context !== 'pricing-page' && (
           <XStack gap="$2" items="center" justify="center" py="$2">
             <CoinsIcon size={20} color="$color11" />
             <SizableText size="$4" color="$color11">
@@ -135,33 +135,62 @@ export const PricingSheet = memo(
               </SizableText>
             </YStack>
           ) : (
-            <YStack gap="$3">
-              {packagesWithProduct.map(({ product: pkg, rcPackage }) => {
-                const price = rcPackage?.product.priceString || 'N/A'
-                const priceNum = rcPackage?.product.price || 0
-                const pricePerCredit =
-                  pkg.credits > 0 && priceNum > 0
-                    ? `$${(priceNum / pkg.credits).toFixed(2)}`
-                    : undefined
-
-                return (
-                  <PackageCard
-                    key={pkg.slug}
-                    credits={pkg.credits}
-                    price={price}
-                    pricePerCredit={pricePerCredit}
-                    onPress={() => {
-                      if (rcPackage) {
-                        handlePurchase(rcPackage, pkg.id)
-                      } else if (!isLoggedIn) {
-                        handleLoginClick()
-                      }
-                    }}
-                    isLoading={isPurchasing && selectedProductId === pkg.id}
-                    isPopular={pkg.badge === 'popular'}
-                  />
+            <YStack
+              gap="$3"
+              $md={{
+                flexDirection: inline ? 'column' : 'row',
+                gap: '$4',
+                maxW: inline ? 400 : 900,
+              }}
+            >
+              {(() => {
+                const singleEntry = packagesWithProduct.find(
+                  (e) => e.product.credits === 1
                 )
-              })}
+                const basePricePerCredit = singleEntry?.rcPackage?.product.price || 0
+                const maxCredits = Math.max(
+                  ...packagesWithProduct.map((e) => e.product.credits)
+                )
+
+                return packagesWithProduct.map(({ product: pkg, rcPackage }) => {
+                  const price = rcPackage?.product.priceString || 'N/A'
+                  const priceNum = rcPackage?.product.price || 0
+                  const ppc = pkg.credits > 0 ? priceNum / pkg.credits : 0
+                  const pricePerCredit =
+                    pkg.credits > 0 && priceNum > 0
+                      ? `$${ppc.toFixed(2)}`
+                      : undefined
+                  const savingsPercent =
+                    pkg.credits > 1 && basePricePerCredit > 0
+                      ? Math.round(
+                          ((basePricePerCredit - ppc) / basePricePerCredit) * 100
+                        )
+                      : 0
+                  const isBestValue =
+                    pkg.credits === maxCredits && pkg.credits > 1
+
+                  return (
+                    <YStack key={pkg.slug} $md={{ flex: inline ? undefined : 1 }}>
+                      <PackageCard
+                        credits={pkg.credits}
+                        price={price}
+                        pricePerCredit={pricePerCredit}
+                        onPress={() => {
+                          if (rcPackage) {
+                            handlePurchase(rcPackage, pkg.id)
+                          } else if (!isLoggedIn) {
+                            handleLoginClick()
+                          }
+                        }}
+                        isLoading={isPurchasing && selectedProductId === pkg.id}
+                        isPopular={pkg.badge === 'popular'}
+                        savingsPercent={savingsPercent}
+                        isBestValue={isBestValue}
+                      />
+                    </YStack>
+                  )
+                })
+              })()}
             </YStack>
           )}
         </YStack>

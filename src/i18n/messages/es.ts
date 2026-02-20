@@ -140,6 +140,11 @@ export const messages: Record<keyof Messages, string> = {
   'auth.login': 'Iniciar sesión',
   'auth.account': 'Cuenta',
 
+  // profile
+  'profile.reports': 'Informes',
+  'profile.vehicles': 'Vehículos',
+  'profile.memberSince': 'Miembro desde',
+
   // nav
   'nav.home': 'Inicio',
   'nav.reports': 'Informes',

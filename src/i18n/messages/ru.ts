@@ -142,6 +142,11 @@ export const messages: Record<keyof Messages, string> = {
   'auth.login': 'Войти',
   'auth.account': 'Аккаунт',
 
+  // profile
+  'profile.reports': 'Отчёты',
+  'profile.vehicles': 'Автомобили',
+  'profile.memberSince': 'Участник с',
+
   // nav
   'nav.home': 'Главная',
   'nav.reports': 'Отчёты',

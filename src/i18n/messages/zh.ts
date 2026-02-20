@@ -136,6 +136,11 @@ export const messages: Record<keyof Messages, string> = {
   'auth.login': '登录',
   'auth.account': '账户',
 
+  // profile
+  'profile.reports': '报告',
+  'profile.vehicles': '车辆',
+  'profile.memberSince': '加入时间',
+
   // nav
   'nav.home': '首页',
   'nav.reports': '报告',

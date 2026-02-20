@@ -142,6 +142,11 @@ export const messages: Record<keyof Messages, string> = {
   'auth.login': 'Přihlásit se',
   'auth.account': 'Účet',
 
+  // profile
+  'profile.reports': 'Zprávy',
+  'profile.vehicles': 'Vozidla',
+  'profile.memberSince': 'Členem od',
+
   // nav
   'nav.home': 'Domů',
   'nav.reports': 'Zprávy',

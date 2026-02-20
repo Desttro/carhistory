@@ -27,8 +27,6 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
   const { width } = useWindowDimensions()
   const columns = width > 768 ? 3 : 3
 
-  const postsCount = posts?.length || 0
-
   const handleImagePress = (postId: string) => {
     galleryEmitter.emit({
       items:
@@ -67,7 +65,6 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
           <ProfileHeader
             userInfo={user}
             isOwnProfile={isOwnProfile}
-            postsCount={postsCount}
           />
 
           {isLoading && !posts?.length ? (

@@ -137,6 +137,11 @@ export const messages = {
   'auth.login': 'Login',
   'auth.account': 'Account',
 
+  // profile
+  'profile.reports': 'Reports',
+  'profile.vehicles': 'Vehicles',
+  'profile.memberSince': 'Member Since',
+
   // nav
   'nav.home': 'Home',
   'nav.reports': 'Reports',

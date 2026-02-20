@@ -27,8 +27,6 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
   const [user] = useUser(userId)
   const { posts, isLoading, isLoadingMore, loadMore, refresh } = usePostsByUserId(userId)
 
-  const postsCount = posts?.length || 0
-
   const columns = useMemo(() => {
     return Array.from({ length: NUM_COLUMNS }, (_, colIndex) => {
       return (posts || []).filter((_, index) => index % NUM_COLUMNS === colIndex)
@@ -100,10 +98,9 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
       <ProfileHeader
         userInfo={user}
         isOwnProfile={isOwnProfile}
-        postsCount={postsCount}
       />
     )
-  }, [user, isOwnProfile, postsCount])
+  }, [user, isOwnProfile])
 
   const listContent = (
     <LegendList

@@ -1,21 +1,27 @@
+import { render } from '@react-email/components'
+import type { ReactElement } from 'react'
 import { Resend } from 'resend'
 
-import { APP_NAME, DOMAIN } from '~/constants/app'
+import { APP_NAME } from '~/constants/app'
 import { RESEND_API_KEY } from '~/server/env-server'
+
+const NOTIFICATIONS_DOMAIN = 'notifications.carhistory.io'
 
 const resend = new Resend(RESEND_API_KEY)
 
 export async function sendEmail({
   to,
   subject,
-  html,
+  react,
 }: {
   to: string
   subject: string
-  html: string
+  react: ReactElement
 }) {
+  const html = await render(react)
+
   const { error } = await resend.emails.send({
-    from: `${APP_NAME} <noreply@${DOMAIN}>`,
+    from: `${APP_NAME} <noreply@${NOTIFICATIONS_DOMAIN}>`,
     to,
     subject,
     html,

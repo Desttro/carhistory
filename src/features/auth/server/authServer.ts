@@ -31,6 +31,8 @@ import {
 
 import { APP_SCHEME } from '../constants'
 import { afterCreateUser } from './afterCreateUser'
+import { createMagicLinkEmail } from './emails/MagicLinkEmail'
+import { createVerificationCodeEmail } from './emails/VerificationCodeEmail'
 import { storeOTP } from './lastOTP'
 import { sendEmail } from './sendEmail'
 
@@ -138,8 +140,8 @@ export const authServer = betterAuth({
         } else {
           await sendEmail({
             to: email,
-            subject: `${APP_NAME} sign-in link`,
-            html: `<p>Click the link below to sign in to ${APP_NAME}:</p><p><a href="${url}">Sign in</a></p><p>If you didn't request this, you can safely ignore this email.</p>`,
+            subject: `Sign in to ${APP_NAME}`,
+            react: createMagicLinkEmail({ url, email }),
           })
         }
       },
@@ -158,7 +160,7 @@ export const authServer = betterAuth({
           await sendEmail({
             to: email,
             subject: `${APP_NAME} verification code: ${otp}`,
-            html: `<p>Your ${APP_NAME} verification code is:</p><p style="font-size:32px;font-weight:bold;letter-spacing:4px">${otp}</p><p>This code expires in 5 minutes. If you didn't request this, you can safely ignore this email.</p>`,
+            react: createVerificationCodeEmail({ code: otp, email }),
           })
         }
       },

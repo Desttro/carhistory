@@ -125,21 +125,34 @@ export async function syncPolarProduct(polarProduct: Product) {
   }
 }
 
+// concurrency guard to prevent overlapping syncs
+let syncInProgress = false
+
 // sync all polar products
 export async function syncAllPolarProducts() {
-  const { result } = await polarClient.products.list({})
-  const products = result.items
-
-  console.info(`[product-sync] syncing ${products.length} polar products`)
-
-  for (const p of products) {
-    await syncPolarProduct(p)
+  if (syncInProgress) {
+    console.info('[product-sync] sync already in progress, skipping')
+    return
   }
 
-  // seed revenuecat mappings after polar products exist
-  await seedRevenueCatMappings()
+  syncInProgress = true
+  try {
+    const { result } = await polarClient.products.list({})
+    const products = result.items
 
-  console.info('[product-sync] sync complete')
+    console.info(`[product-sync] syncing ${products.length} polar products`)
+
+    for (const p of products) {
+      await syncPolarProduct(p)
+    }
+
+    // seed revenuecat mappings after polar products exist
+    await seedRevenueCatMappings()
+
+    console.info('[product-sync] sync complete')
+  } finally {
+    syncInProgress = false
+  }
 }
 
 // create productProvider rows for revenuecat using known mappings

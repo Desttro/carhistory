@@ -35,9 +35,14 @@ import { storeOTP } from './lastOTP'
 
 console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH_URL)
 
-syncAllPolarProducts().catch((err) => {
-  console.info('[product-sync] startup sync failed:', err)
-})
+// debounce product sync to prevent HMR re-evaluation thrashing
+let syncTimeout: ReturnType<typeof setTimeout> | undefined
+clearTimeout(syncTimeout)
+syncTimeout = setTimeout(() => {
+  syncAllPolarProducts().catch((err) => {
+    console.info('[product-sync] startup sync failed:', err)
+  })
+}, 500)
 
 export const authServer = betterAuth({
   // using BETTER_AUTH_URL instead of baseUrl

@@ -14,7 +14,7 @@ import { useQuery } from '~/zero/client'
 
 import { PackageCard } from './components/PackageCard'
 
-import type { PurchasesPackage } from 'react-native-purchases'
+import type { PurchasesError, PurchasesPackage } from 'react-native-purchases'
 
 export interface PricingSheetProps {
   // for inline display (not in dialog)
@@ -79,15 +79,19 @@ export const PricingSheet = memo(
 
         await refreshCustomerInfo()
 
-        Alert.alert('Purchase Complete', 'Your credits have been added to your account!')
-      } catch (error: any) {
-        if (error.userCancelled) {
+        Alert.alert(
+          'Purchase Complete',
+          'Your credits will appear shortly. It may take a moment to process.'
+        )
+      } catch (error) {
+        const purchaseError = error as PurchasesError
+        if (purchaseError.userCancelled) {
           console.info('[Purchase] user cancelled')
         } else {
           console.info('[Purchase] error:', error)
           Alert.alert(
             'Purchase Failed',
-            error.message || 'An error occurred during purchase'
+            purchaseError.message || 'An error occurred during purchase'
           )
         }
       } finally {

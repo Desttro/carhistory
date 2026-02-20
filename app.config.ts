@@ -30,7 +30,7 @@ const getAppIcon = () => {
 }
 
 const appVersion = '3.0.0'
-const buildVersion = '48'
+const buildVersion = '49'
 
 export default {
   expo: {

@@ -27,7 +27,7 @@ interface RevenueCatEvent {
   subscriber_attributes?: Record<string, { value: string; updated_at_ms: number }>
 }
 
-interface RevenueCatWebhookPayload {
+export interface RevenueCatWebhookPayload {
   api_version: string
   event: RevenueCatEvent
 }
@@ -61,7 +61,7 @@ function priceInCents(price?: number): number | undefined {
   return price ? Math.round(price * 100) : undefined
 }
 
-// handler for purchase events (INITIAL_PURCHASE, NON_RENEWING_PURCHASE)
+// handler for purchase events
 async function handlePurchase(event: RevenueCatEvent, payload: RevenueCatWebhookPayload) {
   const userId = resolveUserId(event)
   if (!userId) {
@@ -87,10 +87,8 @@ async function handlePurchase(event: RevenueCatEvent, payload: RevenueCatWebhook
   }
 }
 
-// handler for refund events (CANCELLATION with CUSTOMER_SUPPORT reason)
+// handler for refund/cancellation events — deducts credits for all cancel reasons
 async function handleRefund(event: RevenueCatEvent, payload: RevenueCatWebhookPayload) {
-  if (event.cancel_reason !== 'CUSTOMER_SUPPORT') return
-
   const userId = resolveUserId(event)
   if (!userId) {
     console.info(
@@ -130,11 +128,24 @@ export async function handleRevenueCatWebhook(
   switch (event.type) {
     case 'INITIAL_PURCHASE':
     case 'NON_RENEWING_PURCHASE':
+    case 'RENEWAL':
       await handlePurchase(event, payload)
       break
 
     case 'CANCELLATION':
       await handleRefund(event, payload)
+      break
+
+    case 'TRANSFER':
+      console.info(
+        `[revenuecat] user transfer: ${event.original_app_user_id} -> ${event.app_user_id}`
+      )
+      break
+
+    case 'EXPIRATION':
+      console.info(
+        `[revenuecat] expiration for ${event.app_user_id}, product: ${event.product_id}`
+      )
       break
 
     case 'BILLING_ISSUE':
@@ -143,8 +154,14 @@ export async function handleRevenueCatWebhook(
       )
       break
 
+    case 'SUBSCRIBER_ALIAS':
+    case 'UNCANCELLATION':
+    case 'PRODUCT_CHANGE':
+      console.info(`[revenuecat] ${event.type} for ${event.app_user_id}, no action needed`)
+      break
+
     default:
-      console.info(`[revenuecat] ignoring event type: ${event.type}`)
+      console.info(`[revenuecat] unknown event type: ${event.type}`)
   }
 
   return { success: true }

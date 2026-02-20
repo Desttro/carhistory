@@ -90,6 +90,7 @@ jobs:
           POLAR_MODE: ${{ secrets.POLAR_MODE }}
           POLAR_WEBHOOK_SECRET: ${{ secrets.POLAR_WEBHOOK_SECRET }}
           REVENUECAT_API_KEY: ${{ secrets.REVENUECAT_API_KEY }}
+          REVENUECAT_PROJECT_ID: ${{ secrets.REVENUECAT_PROJECT_ID }}
           REVENUECAT_WEBHOOK_AUTH: ${{ secrets.REVENUECAT_WEBHOOK_AUTH }}
           VITE_DEMO_MODE: ${{ secrets.VITE_DEMO_MODE }}
           VITE_POSTHOG_API_KEY: ${{ secrets.VITE_POSTHOG_API_KEY }}

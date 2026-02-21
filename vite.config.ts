@@ -104,6 +104,8 @@ export default {
       'satori',
       // cheerio has CommonJS deps (boolbase) that don't work with SSR bundling
       'cheerio',
+      // resend has CommonJS deps (svix) that don't work with SSR bundling
+      'resend',
     ],
   },
 

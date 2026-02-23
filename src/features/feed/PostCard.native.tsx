@@ -35,6 +35,7 @@ export const PostCard = memo(({ post }: PostCardProps) => {
   const isOwnProfile = authorId === user?.id
 
   const handleImagePress = () => {
+    // @ts-expect-error route removed, component only used from deleted feed route
     router.push(`/home/feed/post/${post.id}`)
   }
 
@@ -107,6 +108,7 @@ export const PostCard = memo(({ post }: PostCardProps) => {
       </Pressable>
 
       <XStack items="center" gap="$3" p="$2">
+        {/* @ts-expect-error route removed, component only used from deleted feed route */}
         <Link href={`/home/feed/post/${post.id}`} asChild>
           <XStack items="center" gap="$2">
             <ChatCircleDotsIcon size={26} color="$color" />
@@ -118,7 +120,11 @@ export const PostCard = memo(({ post }: PostCardProps) => {
           </XStack>
         </Link>
         {post.comments?.[0] && (
-          <Link href={`/home/feed/post/${post.id}`} flex={1}>
+          <Link
+            // @ts-expect-error route removed, component only used from deleted feed route
+            href={`/home/feed/post/${post.id}`}
+            flex={1}
+          >
             <PostCommentPreview comment={post.comments[0]} />
           </Link>
         )}

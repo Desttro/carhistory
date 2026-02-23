@@ -128,9 +128,6 @@ export const FeedDropdown = memo(({ isOpen, onClose }: FeedDropdownProps) => {
         case 'settings':
           router.push('/home/settings')
           break
-        case 'favorites':
-          router.push('/home/feed')
-          break
         case 'notifications':
         case 'saved':
           showToast('Coming soon', { type: 'info' })

@@ -42,6 +42,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
 
   const handleViewProfile = () => {
     if (!post) return
+    // @ts-expect-error route removed, component only used from deleted feed route
     router.push(`/home/feed/profile/${post.userId}`)
   }
 

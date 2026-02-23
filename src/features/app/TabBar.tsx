@@ -76,11 +76,7 @@ export function TabBar({ state, navigation, onExpandedMenuPress }: TabBarProps) 
   const currentTabName = state.routes[state.index]?.name
   const currentTabIndex = ALL_TABS.findIndex((tab) => tab.name === currentTabName)
   const currentTab = ALL_TABS[currentTabIndex]
-  const shouldHideTabBar =
-    (currentTab?.hideTabBar ||
-      pathname.startsWith('/home/feed/post/') ||
-      pathname.startsWith('/home/profile/post/')) ??
-    false
+  const shouldHideTabBar = currentTab?.hideTabBar ?? false
 
   useEffect(() => {
     if (currentTabIndex >= 0) {

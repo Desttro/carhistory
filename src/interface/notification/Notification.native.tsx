@@ -53,11 +53,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
           | NotificationData
           | undefined
 
-        if (data?.postId) {
-          router.push(`/home/feed/post/${data.postId}`)
-        } else {
-          router.push('/home/notification')
-        }
+        router.push('/home/notification')
       }
     )
 

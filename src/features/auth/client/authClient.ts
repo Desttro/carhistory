@@ -56,7 +56,7 @@ export const useAuth = () => {
     authClient: betterAuthClient.authClient,
     authData,
     loginText: auth.state === 'logged-in' ? 'Account' : 'Login',
-    loginLink: href(auth.state === 'logged-in' ? '/home/feed' : '/auth/login'),
+    loginLink: href(auth.state === 'logged-in' ? '/home/vin-lookup' : '/auth/login'),
   }
 }
 

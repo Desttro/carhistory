@@ -11,7 +11,8 @@ const BASE_URL = 'http://localhost:8081'
 
 // increase timeout for this test since it involves file uploads
 test.describe('Post Flow', () => {
-  test('can create a post with caption and image', async ({ page }) => {
+  // skipped: tests feed route which has been removed
+  test.skip('can create a post with caption and image', async ({ page }) => {
     test.setTimeout(120000)
 
     await loginAsDemo(page)

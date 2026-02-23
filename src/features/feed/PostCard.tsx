@@ -52,6 +52,7 @@ export const PostCard = memo(({ post }: PostCardProps) => {
         <XStack items="center" justify="space-between" pb="$2">
           <XStack gap="$3" width="100%">
             <Link
+              // @ts-expect-error route removed, component only used from deleted feed route
               href={isOwnProfile ? '/home/profile' : `/home/feed/profile/${authorId}`}
             >
               <Avatar image={avatarUrl || ''} name={username || ''} size={32} gradient />
@@ -60,6 +61,7 @@ export const PostCard = memo(({ post }: PostCardProps) => {
               <XStack items="center" justify="space-between">
                 <XStack items="center" gap="$1">
                   <Link
+                    // @ts-expect-error route removed, component only used from deleted feed route
                     href={
                       isOwnProfile ? '/home/profile' : `/home/feed/profile/${authorId}`
                     }
@@ -99,6 +101,7 @@ export const PostCard = memo(({ post }: PostCardProps) => {
             {post.caption}
           </Text>
           <View width="100%" position="relative" mt="$2">
+            {/* @ts-expect-error route removed, component only used from deleted feed route */}
             <Pressable onPress={() => router.push(`/home/feed/post/${post.id}`)}>
               <PostImage
                 postId={post.id}
@@ -110,6 +113,7 @@ export const PostCard = memo(({ post }: PostCardProps) => {
             </Pressable>
           </View>
           <XStack pt="$2" items="center" gap="$2">
+            {/* @ts-expect-error route removed, component only used from deleted feed route */}
             <Link href={`/home/feed/post/${post.id}`}>
               <Button
                 variant="transparent"
@@ -124,6 +128,7 @@ export const PostCard = memo(({ post }: PostCardProps) => {
               </Button>
             </Link>
             {post.comments?.[0] && (
+              // @ts-expect-error route removed, component only used from deleted feed route
               <Link href={`/home/feed/post/${post.id}`} flex={1}>
                 <PostCommentPreview comment={post.comments[0]} />
               </Link>

@@ -49,6 +49,7 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
             return (
               <Pressable
                 key={item.id}
+                // @ts-expect-error route removed, dead code path
                 onPress={() => router.push(`/home/profile/post/${item.id}`)}
               >
                 <Animated.Image

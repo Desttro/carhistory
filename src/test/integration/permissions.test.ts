@@ -76,7 +76,8 @@ test.describe('Permissions', () => {
     await cleanupTestBlocks()
   })
 
-  test('notBlockedByViewer: blocking hides posts, unblocking restores them', async ({
+  // skipped: tests feed route which has been removed
+  test.skip('notBlockedByViewer: blocking hides posts, unblocking restores them', async ({
     page,
   }) => {
     test.setTimeout(60000)
@@ -138,7 +139,8 @@ test.describe('Permissions', () => {
     expect(visibleAfterUnblock).toContain(SEED_POST_2)
   })
 
-  test('usePermission: true for own post, false for other user post', async ({
+  // skipped: tests feed route which has been removed
+  test.skip('usePermission: true for own post, false for other user post', async ({
     page,
   }) => {
     test.setTimeout(60000)
@@ -171,7 +173,8 @@ test.describe('Permissions', () => {
     expect(permOther).toBe('false')
   })
 
-  test('usePermission: true for own post after creating one', async ({ page }) => {
+  // skipped: tests feed route which has been removed
+  test.skip('usePermission: true for own post after creating one', async ({ page }) => {
     test.setTimeout(60000)
 
     await loginAsDemo(page)
@@ -228,7 +231,8 @@ test.describe('Permissions', () => {
     await pool.query(`DELETE FROM post WHERE id = $1`, [testPostId])
   })
 
-  test('notBlockedByViewer: blocking multiple users hides all their posts', async ({
+  // skipped: tests feed route which has been removed
+  test.skip('notBlockedByViewer: blocking multiple users hides all their posts', async ({
     page,
   }) => {
     test.setTimeout(60000)

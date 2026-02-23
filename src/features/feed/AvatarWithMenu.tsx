@@ -28,6 +28,7 @@ export const AvatarWithMenu = memo(
     const router = useRouter()
 
     const handleViewProfile = () => {
+      // @ts-expect-error route removed, component only used from deleted feed route
       router.push(`/home/feed/profile/${userId}`)
     }
 

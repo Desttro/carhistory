@@ -6,7 +6,7 @@ import { dialogEmit } from '~/interface/dialogs/shared'
 export const LoginAdminButton = () => {
   const handleSignInAdmin = () => {
     dialogEmit({ type: 'admin-password' })
-    router.replace('/home/feed')
+    router.replace('/home/vin-lookup')
   }
   return (
     <>

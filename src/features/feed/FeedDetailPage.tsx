@@ -40,6 +40,7 @@ export const FeedDetailPage = memo(() => {
   const pageScrollRef = useRef<HTMLElement>(null)
 
   const handleBack = () => {
+    // @ts-expect-error route removed, component only used from deleted feed route
     router.navigate('/home/feed')
   }
 

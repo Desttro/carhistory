@@ -1,10 +1,16 @@
 import { memo } from 'react'
-import { SizableText, Spinner, View, XStack, YStack } from 'tamagui'
+import { AnimatePresence, SizableText, Spinner, View, XStack, YStack } from 'tamagui'
 
+import { animationClamped } from '~/interface/animations/animationClamped'
 import { Button } from '~/interface/buttons/Button'
+import { ArrowClockwiseIcon } from '~/interface/icons/phosphor/ArrowClockwiseIcon'
+import { InfoIcon } from '~/interface/icons/phosphor/InfoIcon'
 import { MagnifyingGlassIcon } from '~/interface/icons/phosphor/MagnifyingGlassIcon'
+import { XCircleIcon } from '~/interface/icons/phosphor/XCircleIcon'
 
 import { VinInput } from './VinInput'
+
+import type { VinErrorType } from './useVinLookup'
 
 interface VinSearchFormProps {
   vin: string
@@ -12,10 +18,70 @@ interface VinSearchFormProps {
   onSearch: () => void
   isLoading: boolean
   error?: string | null
+  errorType?: VinErrorType
 }
 
+const VinSearchError = memo(
+  ({
+    error,
+    errorType,
+    onRetry,
+  }: {
+    error: string
+    errorType: VinErrorType
+    onRetry: () => void
+  }) => {
+    const isNoRecords = errorType === 'no-records'
+
+    return (
+      <YStack
+        bg={isNoRecords ? '$orange2' : '$red2'}
+        p="$3"
+        rounded="$4"
+        gap="$2"
+        key="vin-error"
+        enterStyle={{ opacity: 0, y: -8 }}
+        exitStyle={{ opacity: 0, y: -8 }}
+        transition={animationClamped('quick')}
+        opacity={1}
+        y={0}
+      >
+        <XStack items="center" gap="$2">
+          {isNoRecords ? (
+            <InfoIcon size={18} color="$orange10" />
+          ) : (
+            <XCircleIcon size={18} color="$red10" />
+          )}
+          <SizableText
+            size="$4"
+            fontWeight="600"
+            color={isNoRecords ? '$orange10' : '$red10'}
+          >
+            {isNoRecords ? 'No Records Found' : 'Something Went Wrong'}
+          </SizableText>
+        </XStack>
+        <SizableText size="$3" color={isNoRecords ? '$orange11' : '$red11'}>
+          {error}
+        </SizableText>
+        {!isNoRecords && (
+          <Button
+            size="small"
+            variant="outlined"
+            onPress={onRetry}
+            icon={<ArrowClockwiseIcon size={14} />}
+            self="flex-start"
+            mt="$1"
+          >
+            Try Again
+          </Button>
+        )}
+      </YStack>
+    )
+  }
+)
+
 export const VinSearchForm = memo(
-  ({ vin, onVinChange, onSearch, isLoading, error }: VinSearchFormProps) => {
+  ({ vin, onVinChange, onSearch, isLoading, error, errorType }: VinSearchFormProps) => {
     const handleChange = (text: string) => {
       const cleaned = text.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/gi, '')
       onVinChange(cleaned.slice(0, 17))
@@ -98,13 +164,15 @@ export const VinSearchForm = memo(
           </SizableText>
         </XStack>
 
-        {error && (
-          <YStack bg="$red2" p="$3" rounded="$4">
-            <SizableText size="$3" color="$red10">
-              {error}
-            </SizableText>
-          </YStack>
-        )}
+        <AnimatePresence>
+          {error && (
+            <VinSearchError
+              error={error}
+              errorType={errorType ?? 'network'}
+              onRetry={handleSubmit}
+            />
+          )}
+        </AnimatePresence>
       </YStack>
     )
   }

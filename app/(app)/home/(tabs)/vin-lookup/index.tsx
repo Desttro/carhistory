@@ -1,6 +1,6 @@
 import { useSearchParams } from 'one'
 import { useEffect } from 'react'
-import { H2, SizableText, YStack } from 'tamagui'
+import { AnimatePresence, H2, SizableText, YStack } from 'tamagui'
 
 import { useVinLookup } from '~/features/vin-lookup/useVinLookup'
 import { VinCheckResult } from '~/features/vin-lookup/VinCheckResult'
@@ -19,6 +19,7 @@ export function VinLookupPage() {
     isPurchasing,
     checkResult,
     error,
+    errorType,
     checkVin,
     purchaseReport,
     isLoggedIn,
@@ -51,10 +52,11 @@ export function VinLookupPage() {
         gap="$6"
         px="$4"
         py="$6"
-        maxW={600}
+        maxW={700}
         width="100%"
         self="center"
-        $md={{ maxW: 700, px: '$8' }}
+        $md={{ maxW: 800, px: '$8' }}
+        $xl={{ maxW: 900 }}
       >
         <YStack gap="$2" items="center">
           <MagnifyingGlassIcon size={32} color="$color10" />
@@ -73,18 +75,21 @@ export function VinLookupPage() {
           onSearch={checkVin}
           isLoading={isChecking}
           error={error}
+          errorType={errorType}
         />
 
-        {checkResult && (
-          <VinCheckResult
-            result={checkResult}
-            isLoggedIn={isLoggedIn}
-            hasCredits={hasCredits}
-            creditBalance={creditBalance}
-            isPurchasing={isPurchasing}
-            onPurchase={purchaseReport}
-          />
-        )}
+        <AnimatePresence>
+          {checkResult && (
+            <VinCheckResult
+              result={checkResult}
+              isLoggedIn={isLoggedIn}
+              hasCredits={hasCredits}
+              creditBalance={creditBalance}
+              isPurchasing={isPurchasing}
+              onPurchase={purchaseReport}
+            />
+          )}
+        </AnimatePresence>
       </YStack>
     </PageLayout>
   )

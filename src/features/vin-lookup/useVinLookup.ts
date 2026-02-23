@@ -13,6 +13,8 @@ import { VIN_LENGTH } from './validation'
 
 import type { VinCheckResult } from '~/features/bulkvin/types'
 
+export type VinErrorType = 'no-records' | 'network' | 'auth' | 'credits' | null
+
 interface PurchaseResult {
   success: boolean
   reportId?: string
@@ -28,6 +30,7 @@ export function useVinLookup() {
   const [isPurchasing, setIsPurchasing] = useState(false)
   const [checkResult, setCheckResult] = useState<VinCheckResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [errorType, setErrorType] = useState<VinErrorType>(null)
 
   const checkVin = useCallback(async () => {
     const normalizedVin = vin.toUpperCase().trim()
@@ -39,6 +42,7 @@ export function useVinLookup() {
 
     setIsChecking(true)
     setError(null)
+    setErrorType(null)
     setCheckResult(null)
 
     try {
@@ -53,6 +57,7 @@ export function useVinLookup() {
           error: errorMsg,
         })
         setError(errorMsg)
+        setErrorType('no-records')
         return
       }
 
@@ -68,6 +73,7 @@ export function useVinLookup() {
       })
       console.info('vin check error:', err)
       setError(errorMsg)
+      setErrorType('network')
     } finally {
       setIsChecking(false)
     }
@@ -76,6 +82,7 @@ export function useVinLookup() {
   const purchaseReport = useCallback(async () => {
     if (!user) {
       setError('Please log in to purchase a report')
+      setErrorType('auth')
       return
     }
 
@@ -83,6 +90,7 @@ export function useVinLookup() {
       setError(
         `Insufficient credits. You need at least ${REPORT_CREDIT_COST} credit to purchase a report.`
       )
+      setErrorType('credits')
       return
     }
 
@@ -100,6 +108,7 @@ export function useVinLookup() {
 
     setIsPurchasing(true)
     setError(null)
+    setErrorType(null)
 
     try {
       const res = await fetch(`${SERVER_URL}/api/vin/purchase`, {
@@ -158,6 +167,7 @@ export function useVinLookup() {
     setVin('')
     setCheckResult(null)
     setError(null)
+    setErrorType(null)
   }, [])
 
   return {
@@ -167,6 +177,7 @@ export function useVinLookup() {
     isPurchasing,
     checkResult,
     error,
+    errorType,
     checkVin,
     purchaseReport,
     reset,

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { H3, SizableText, XStack, YStack } from 'tamagui'
 
+import { SERVER_URL } from '~/constants/urls'
 import { Link } from '~/interface/app/Link'
 import { Button } from '~/interface/buttons/Button'
 import { ArrowRightIcon } from '~/interface/icons/phosphor/ArrowRightIcon'
@@ -105,7 +106,7 @@ export function LandingVinCheck() {
     setResult(null)
 
     try {
-      const res = await fetch(`/api/vin/check?vin=${encodeURIComponent(normalized)}`)
+      const res = await fetch(`${SERVER_URL}/api/vin/check?vin=${encodeURIComponent(normalized)}`)
       const data = (await res.json()) as VinCheckResult
 
       if (!data.success) {

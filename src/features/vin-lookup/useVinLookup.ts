@@ -1,6 +1,7 @@
 import { router } from 'one'
 import { useCallback, useState } from 'react'
 
+import { SERVER_URL } from '~/constants/urls'
 import { analytics } from '~/features/analytics/analytics'
 import { REPORT_CREDIT_COST } from '~/features/credits/constants'
 import { useCredits } from '~/features/credits/useCredits'
@@ -41,7 +42,7 @@ export function useVinLookup() {
     setCheckResult(null)
 
     try {
-      const res = await fetch(`/api/vin/check?vin=${encodeURIComponent(normalizedVin)}`)
+      const res = await fetch(`${SERVER_URL}/api/vin/check?vin=${encodeURIComponent(normalizedVin)}`)
       const data = (await res.json()) as VinCheckResult
 
       if (!data.success) {
@@ -101,7 +102,7 @@ export function useVinLookup() {
     setError(null)
 
     try {
-      const res = await fetch('/api/vin/purchase', {
+      const res = await fetch(`${SERVER_URL}/api/vin/purchase`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

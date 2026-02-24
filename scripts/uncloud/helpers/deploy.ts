@@ -80,6 +80,7 @@ export async function runHealthCheck() {
 
 async function getSSHCmd(): Promise<string> {
   await ensureEnv()
+  const { buildSSHFlags } = await import('@take-out/scripts/helpers/ssh')
   const deployHost = process.env.DEPLOY_HOST
   if (!deployHost) {
     throw new Error('DEPLOY_HOST not set — cannot build SSH command for rollback')
@@ -88,7 +89,7 @@ async function getSSHCmd(): Promise<string> {
   const sshKey = (
     process.env.DEPLOY_SSH_KEY || `${homedir()}/.ssh/uncloud_deploy`
   ).replace(/^~/, homedir())
-  return `ssh -i ${sshKey} -o StrictHostKeyChecking=no ${deployUser}@${deployHost}`
+  return `ssh ${buildSSHFlags(sshKey)} ${deployUser}@${deployHost}`
 }
 
 async function rollbackToPrevious(): Promise<boolean> {

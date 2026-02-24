@@ -3,6 +3,7 @@ import { homedir } from 'node:os'
 import { join } from 'node:path'
 
 import { run } from './run'
+import { buildSSHFlags, isAgentMode } from './ssh'
 
 export interface UncloudConfig {
   context?: string
@@ -44,12 +45,14 @@ function ensureUncloudContext(host: string, sshKey: string, contextName: string)
   // only create config if it doesn't exist - don't overwrite existing config
   // which may have other contexts
   if (!fs.existsSync(configPath)) {
+    const agentMode = isAgentMode(sshKey)
+    const sshScheme = agentMode ? 'ssh_cli' : 'ssh'
+    const keyLine = agentMode ? '' : `\n        ssh_key_file: ${sshKey}`
     const config = `current_context: ${contextName}
 contexts:
   ${contextName}:
     connections:
-      - ssh: ${host}
-        ssh_key_file: ${sshKey}
+      - ${sshScheme}: ${host}${keyLine}
 `
     fs.writeFileSync(configPath, config)
     console.info(`✅ created uncloud config at ${configPath}`)
@@ -77,7 +80,8 @@ export async function initUncloud(
     // no local context - check if server has uncloud running
   }
 
-  const sshCmd = `ssh -i ${sshKey} -o StrictHostKeyChecking=no ${host}`
+  const sshFlags = buildSSHFlags(sshKey)
+  const sshCmd = `ssh ${sshFlags} ${host}`
 
   // check if server already has uncloud daemon running
   let serverHasUncloud = false
@@ -109,7 +113,10 @@ export async function initUncloud(
   if (options.noCaddy) flags.push('--no-caddy')
   const flagStr = flags.join(' ')
 
-  await run(`echo "y" | uc machine init ${host} -i ${sshKey} ${flagStr}`)
+  const agentMode = isAgentMode(sshKey)
+  const scheme = agentMode ? 'ssh+cli' : 'ssh'
+  const keyFlag = agentMode ? '' : ` -i ${sshKey}`
+  await run(`echo "y" | uc machine init ${scheme}://${host}${keyFlag} ${flagStr}`)
 
   console.info('✅ uncloud initialized')
 }

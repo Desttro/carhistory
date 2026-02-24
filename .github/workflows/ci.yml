@@ -63,6 +63,7 @@ jobs:
           APPLE_CLIENT_ID: ${{ secrets.APPLE_CLIENT_ID }}
           APPLE_CLIENT_SECRET: ${{ secrets.APPLE_CLIENT_SECRET }}
           APPLE_APP_BUNDLE_IDENTIFIER: ${{ secrets.APPLE_APP_BUNDLE_IDENTIFIER }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           APNS_ENDPOINT: ${{ secrets.APNS_ENDPOINT }}

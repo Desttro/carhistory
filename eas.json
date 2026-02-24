@@ -1,7 +1,8 @@
 {
   "cli": {
     "version": ">= 16.19.3",
-    "appVersionSource": "local"
+    "appVersionSource": "local",
+    "requireCommit": false
   },
   "build": {
     "base": {
@@ -12,7 +13,8 @@
         "bun": "1.3.9"
       },
       "env": {
-        "APP_VARIANT": "development"
+        "APP_VARIANT": "development",
+        "APPLE_TEAM_ID": "5J565W44Y8"
       }
     },
     "development": {

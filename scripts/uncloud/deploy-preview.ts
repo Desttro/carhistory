@@ -3,10 +3,12 @@
 import { cmd } from '@take-out/cli'
 
 await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
-  // env is loaded by run:preview wrapper (dotenvx --overload -f .env .env.preview)
+  // env is loaded by op run (op run --env-file=.env --env-file=.env.preview -- ...)
   const { buildMigrations, buildWeb, buildDockerImage } = await import('./helpers/build')
   const { processComposeEnv } = await import('./helpers/processEnv')
-  const { checkSSHKey, testSSHConnection } = await import('./helpers/ssh')
+  const { checkSSHKey, testSSHConnection, buildSSHFlags, isAgentMode } = await import(
+    './helpers/ssh'
+  )
   const { checkUncloudCLI, initUncloud, pushImage, deployStack, showStatus } =
     await import('./helpers/uncloud')
   const { acquireDeployLock, releaseDeployLock } =
@@ -23,8 +25,15 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
   const DEPLOY_SSH_KEY =
     process.env.DEPLOY_SSH_KEY || `${process.env.HOME}/.ssh/uncloud_deploy`
 
+  const pgUser = process.env.POSTGRES_USER || 'user'
+
   function getSSHCmd(host: string, sshKey: string): string {
-    return `ssh -i ${sshKey} -o StrictHostKeyChecking=no ${host}`
+    return `ssh ${buildSSHFlags(sshKey)} ${host}`
+  }
+
+  function buildSCPFlags(sshKey: string): string {
+    if (isAgentMode(sshKey)) return '-o StrictHostKeyChecking=no -o ConnectTimeout=10'
+    return `-i ${sshKey} -o StrictHostKeyChecking=no -o ConnectTimeout=10`
   }
 
   async function tagPreviousImage(host: string, sshKey: string): Promise<void> {
@@ -69,7 +78,7 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
       if (!containerId) return
 
       const { stdout: ready } = await run(
-        `${ssh} "docker exec ${containerId} pg_isready -U takeout 2>&1 || echo NOT_READY"`,
+        `${ssh} "docker exec ${containerId} pg_isready -U ${pgUser} 2>&1 || echo NOT_READY"`,
         { captureOutput: true, silent: true }
       )
 
@@ -80,7 +89,7 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
 
       console.info(colors.gray('  pgdb: issuing CHECKPOINT before stop...'))
       await run(
-        `${ssh} "docker exec ${containerId} psql -U takeout -d postgres -c 'CHECKPOINT;'"`,
+        `${ssh} "docker exec ${containerId} psql -U ${pgUser} -d postgres -c 'CHECKPOINT;'"`,
         { silent: true }
       )
 
@@ -135,25 +144,33 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
     console.info('\n🔐 uploading origin ca certificates...')
 
     const ssh = getSSHCmd(host, sshKey)
+    const scpFlags = buildSCPFlags(sshKey)
 
     try {
-      await run(`${ssh} "mkdir -p /etc/uncloud/certs /var/lib/uncloud/caddy/certs"`, {
-        silent: true,
-      })
-
       await run(
-        `scp -i ${sshKey} -o StrictHostKeyChecking=no ${resolvedCert} ${host}:/etc/uncloud/certs/origin.pem`
-      )
-      await run(
-        `scp -i ${sshKey} -o StrictHostKeyChecking=no ${resolvedKey} ${host}:/etc/uncloud/certs/origin.key`
+        `${ssh} "sudo mkdir -p /etc/uncloud/certs /var/lib/uncloud/caddy/certs"`,
+        { silent: true }
       )
 
-      await run(`${ssh} "cp /etc/uncloud/certs/origin.* /var/lib/uncloud/caddy/certs/"`, {
-        silent: true,
-      })
+      await run(
+        `scp ${scpFlags} ${resolvedCert} ${host}:/tmp/origin.pem`
+      )
+      await run(
+        `scp ${scpFlags} ${resolvedKey} ${host}:/tmp/origin.key`
+      )
 
       await run(
-        `${ssh} "chmod 600 /etc/uncloud/certs/origin.key /var/lib/uncloud/caddy/certs/origin.key"`,
+        `${ssh} "sudo mv /tmp/origin.pem /etc/uncloud/certs/origin.pem && sudo mv /tmp/origin.key /etc/uncloud/certs/origin.key"`,
+        { silent: true }
+      )
+
+      await run(
+        `${ssh} "sudo cp /etc/uncloud/certs/origin.* /var/lib/uncloud/caddy/certs/"`,
+        { silent: true }
+      )
+
+      await run(
+        `${ssh} "sudo chmod 600 /etc/uncloud/certs/origin.key /var/lib/uncloud/caddy/certs/origin.key"`,
         { silent: true }
       )
 
@@ -263,7 +280,11 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
 
     await uploadOriginCACerts(host, DEPLOY_SSH_KEY)
 
-    await pushImage('takeout-web:latest')
+    if (!skipDocker) {
+      await pushImage('takeout-web:latest')
+    } else {
+      console.info('⏭️  skipping image push (--skip-docker)')
+    }
 
     // process environment variables in compose file
     // no need to override ZERO_UPSTREAM_DB/CVR/CHANGE — compose defaults point to pgdb
@@ -296,7 +317,7 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
     console.info(`  ssh ${DEPLOY_USER}@${DEPLOY_HOST}  # ssh to server`)
     console.info('\nto skip builds on redeploy:')
     console.info(
-      '  bun run:preview tko uncloud deploy-preview --skip-build --skip-docker'
+      '  op run --env-file=.env --env-file=.env.preview -- bun tko uncloud deploy-preview --skip-build --skip-docker'
     )
   } finally {
     if (!skipLock) {

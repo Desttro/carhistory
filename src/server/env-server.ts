@@ -8,6 +8,7 @@ if (typeof window !== 'undefined') {
 export const APPLE_CLIENT_ID = ensureEnv('APPLE_CLIENT_ID')
 export const APPLE_CLIENT_SECRET = ensureEnv('APPLE_CLIENT_SECRET')
 export const APPLE_APP_BUNDLE_IDENTIFIER = ensureEnv('APPLE_APP_BUNDLE_IDENTIFIER')
+export const APPLE_TEAM_ID = ensureEnv('APPLE_TEAM_ID', "")
 export const AWS_ACCESS_KEY_ID = ensureEnv('AWS_ACCESS_KEY_ID', "")
 export const AWS_SECRET_ACCESS_KEY = ensureEnv('AWS_SECRET_ACCESS_KEY', "")
 export const APNS_ENDPOINT = ensureEnv('APNS_ENDPOINT', "https://api.sandbox.push.apple.com")

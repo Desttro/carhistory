@@ -216,6 +216,7 @@
     "APPLE_CLIENT_ID": true,
     "APPLE_CLIENT_SECRET": true,
     "APPLE_APP_BUNDLE_IDENTIFIER": true,
+    "APPLE_TEAM_ID": "",
     "AWS_ACCESS_KEY_ID": "",
     "AWS_SECRET_ACCESS_KEY": "",
     "APNS_ENDPOINT": "https://api.sandbox.push.apple.com",

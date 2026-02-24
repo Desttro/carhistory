@@ -77,6 +77,8 @@ export default {
         NSAppleMusicUsageDescription:
           'Allow $(PRODUCT_NAME) to access your music library',
         UIBackgroundModes: ['fetch', 'remote-notification'],
+        CFBundleAllowMixedLocalizations: true, // allows mixed language resources
+        // CFBundleDevelopmentRegion: "en",     // optional – plugin usually sets it
       },
       associatedDomains: ['applinks:carhistory.io', 'applinks:*.carhistory.io'],
     },
@@ -100,11 +102,7 @@ export default {
             },
             {
               scheme: 'https',
-              host: 'www.carhistory.io',
-            },
-            {
-              scheme: 'https',
-              host: 'preview.carhistory.io',
+              host: '*.carhistory.io',
             },
           ],
           category: ['BROWSABLE', 'DEFAULT'],
@@ -189,7 +187,23 @@ export default {
           imageHeight: 80,
         },
       ],
-      ['expo-localization'],
+      [
+        'expo-localization',
+        {
+          // Array works for both platforms (or use { ios: [...], android: [...] } if you ever need different lists)
+          supportedLocales: [
+            'en', // your main / fallback language – put first
+            'pl',
+            'fr',
+            'zh', // Chinese (use 'zh-Hans' or 'zh-Hant' if you need to distinguish)
+            'ru',
+            'cs',
+            'it',
+            'ar',
+            'es',
+          ],
+        },
+      ],
       // enable hot-updater here
       // [
       //   '@hot-updater/react-native',
@@ -198,7 +212,22 @@ export default {
       //   },
       // ],
     ],
+    // 4. (OPTIONAL but recommended) Localized app name + permission strings
+    // Create a `locales/` folder and add one JSON file per language
+    // locales: {
+    //   en: './locales/en.json',
+    //   pl: './locales/pl.json',
+    //   fr: './locales/fr.json',
+    //   zh: './locales/zh.json',
+    //   ru: './locales/ru.json',
+    //   cs: './locales/cs.json',
+    //   it: './locales/it.json',
+    //   ar: './locales/ar.json',
+    //   es: './locales/es.json',
+    // },
     extra: {
+      supportsRTL: true,
+      // forcesRTL: false, // only if you want to force RTL for testing
       eas: {
         projectId: 'c41791cd-523b-440c-b05d-2a06ca9ce8ee',
       },

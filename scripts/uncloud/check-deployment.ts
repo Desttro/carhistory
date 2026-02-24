@@ -50,8 +50,8 @@ Monitors the deployment and exits when all services are healthy or on timeout.
     process.exit(0)
   }
 
-  // load environment from env vars (CI) or .env.production (local)
-  const envFile = '.env.production'
+  // load environment from env vars (CI) or .env.production/.env.preview (local)
+  const envFile = process.env.NODE_ENV === 'preview' ? '.env.preview' : '.env.production'
   let deployHost: string | undefined = process.env.DEPLOY_HOST
   let deployUser: string | undefined = process.env.DEPLOY_USER || 'root'
   let deploySshKey: string | undefined = process.env.DEPLOY_SSH_KEY
@@ -151,7 +151,9 @@ Monitors the deployment and exits when all services are healthy or on timeout.
    */
   async function monitor() {
     const startTime = Date.now()
-    const expectedServices = ['web', 'zero', 'minio']
+    // minio only runs with self-hosted-storage profile (local dev)
+    // preview/production use Cloudflare R2 directly
+    const expectedServices = ['web', 'zero']
 
     console.info('waiting for services to become healthy...')
     console.info('')

@@ -31,16 +31,7 @@ export default {
   },
 
   server: {
-    allowedHosts: [
-      'host.docker.internal',
-      'preview.carhistory.io',
-      'zero-preview.carhistory.io',
-      'carhistory.io',
-      'zero.carhistory.io',
-      'media.carhistory.io',
-      'media-preview.carhistory.io',
-      'appleid.apple.com',
-    ],
+    allowedHosts: ['host.docker.internal', '.carhistory.io', 'appleid.apple.com'],
   },
 
   optimizeDeps: {

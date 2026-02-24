@@ -9,7 +9,6 @@ import { sharedTransition } from '~/helpers/animation/sharedTransition'
 import { useUser } from '~/hooks/useUser'
 import { Pressable } from '~/interface/buttons/Pressable'
 import { PageLayout } from '~/interface/pages/PageLayout'
-import { H5 } from '~/interface/text/Headings'
 
 import { usePostsByUserId } from '../feed/usePosts'
 import { ProfileHeader } from './ProfileHeader'
@@ -75,13 +74,8 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
   const keyExtractor = useCallback((_item: any, index: number) => `column-${index}`, [])
 
   const renderEmpty = useCallback(() => {
-    if (isLoading) return null
-    return (
-      <YStack p="$4" items="center" justify="center" mt="$4">
-        <H5 mt="$3">No posts yet</H5>
-      </YStack>
-    )
-  }, [isLoading])
+    return null
+  }, [])
 
   const renderFooter = useCallback(() => {
     if (isLoadingMore) {

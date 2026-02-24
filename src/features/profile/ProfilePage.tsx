@@ -1,8 +1,7 @@
 import { memo } from 'react'
-import { ScrollView, useWindowDimensions } from 'react-native'
+import { useWindowDimensions } from 'react-native'
 import { YStack } from 'tamagui'
 
-import { useTabBarBottomPadding } from '~/features/app/tabBarConstants'
 import { useUser } from '~/hooks/useUser'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { Pressable } from '~/interface/buttons/Pressable'
@@ -13,7 +12,6 @@ import { Pagination } from '~/interface/navigation/Pagination'
 import { LineShimmer } from '~/interface/shimmer/LineShimmer'
 import { ProfileShimmer } from '~/interface/shimmer/ProfileShimmer'
 import { ShimmerProvider } from '~/interface/shimmer/ShimmerContext'
-import { H5 } from '~/interface/text/Headings'
 
 import { ProfileHeader } from './ProfileHeader'
 import { useProfilePosts } from './useProfilePosts'
@@ -26,7 +24,6 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
     userId,
     pageSize: 12,
   })
-  const tabBarPadding = useTabBarBottomPadding()
   const { width } = useWindowDimensions()
   const columns = width > 768 ? 3 : 3
 
@@ -57,58 +54,46 @@ export const ProfilePage = memo(({ userId, isOwnProfile }: ProfilePageProps) => 
     <>
       <HeadInfo title={title} description={description} openGraph={ogImage} />
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{
-          paddingBottom: tabBarPadding,
-        }}
-      >
-        <YStack px="$4" pb="$10" maxW={760} mx="auto">
-          <ProfileHeader userInfo={user} isOwnProfile={isOwnProfile} />
+      <YStack px="$4" pb="$10" maxW={760} mx="auto">
+        <ProfileHeader userInfo={user} isOwnProfile={isOwnProfile} />
 
-          {isLoading && !posts?.length ? (
-            <ProfileShimmer />
-          ) : posts && posts.length === 0 ? (
-            <YStack p="$4" items="center" justify="center" mt="$4">
-              <H5 mt="$3">No posts yet</H5>
-            </YStack>
-          ) : (
-            <>
-              <SimpleGrid gap="$2">
-                {posts?.map((post) => (
-                  <SimpleGridItem key={post.id} columns={columns}>
-                    <Pressable onPress={() => handleImagePress(post.id.toString())}>
-                      <Image
-                        src={post.image}
-                        width="100%"
-                        aspectRatio={1}
-                        rounded="$3"
-                        objectFit="cover"
-                      />
-                    </Pressable>
-                  </SimpleGridItem>
-                ))}
-              </SimpleGrid>
+        {isLoading && !posts?.length ? (
+          <ProfileShimmer />
+        ) : posts && posts.length === 0 ? null : (
+          <>
+            <SimpleGrid gap="$2">
+              {posts?.map((post) => (
+                <SimpleGridItem key={post.id} columns={columns}>
+                  <Pressable onPress={() => handleImagePress(post.id.toString())}>
+                    <Image
+                      src={post.image}
+                      width="100%"
+                      aspectRatio={1}
+                      rounded="$3"
+                      objectFit="cover"
+                    />
+                  </Pressable>
+                </SimpleGridItem>
+              ))}
+            </SimpleGrid>
 
-              {isLoading && (
-                <ShimmerProvider duration={1500}>
-                  <YStack p="$4" items="center" justify="center">
-                    <LineShimmer height={14} width={120} />
-                  </YStack>
-                </ShimmerProvider>
-              )}
+            {isLoading && (
+              <ShimmerProvider duration={1500}>
+                <YStack p="$4" items="center" justify="center">
+                  <LineShimmer height={14} width={120} />
+                </YStack>
+              </ShimmerProvider>
+            )}
 
-              <Pagination
-                currentPage={currentPage}
-                hasMore={hasMore}
-                onPrevPage={prevPage}
-                onNextPage={nextPage}
-              />
-            </>
-          )}
-        </YStack>
-      </ScrollView>
+            <Pagination
+              currentPage={currentPage}
+              hasMore={hasMore}
+              onPrevPage={prevPage}
+              onNextPage={nextPage}
+            />
+          </>
+        )}
+      </YStack>
     </>
   )
 })

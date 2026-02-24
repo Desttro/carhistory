@@ -1,27 +1,21 @@
-import {
-  VehicleHeader,
-  SummaryStats,
-  TitleBrands,
-  Timeline,
+import { useParams, useRouter } from 'one'
+import { memo } from 'react'
+import { Platform } from 'react-native'
+import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
-  import { useParams, useRouter } from 'one'
-  import { memo } from 'react'
-  import { Platform } from 'react-native'
-  import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
+import { vehicleReportById } from '~/data/queries/vehicleReport'
+import { useT } from '~/i18n/context'
+import { useLocale } from '~/i18n/context'
+import { HeadInfo } from '~/interface/app/HeadInfo'
+import { Button } from '~/interface/buttons/Button'
+import { CaretLeftIcon } from '~/interface/icons/phosphor/CaretLeftIcon'
+import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
+import { ShareFatIcon } from '~/interface/icons/phosphor/ShareFatIcon'
+import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
+import { PageLayout } from '~/interface/pages/PageLayout'
+import { useQuery } from '~/zero/client'
 
-  import { vehicleReportById } from '~/data/queries/vehicleReport'
-  import { useT } from '~/i18n/context'
-  import { useLocale } from '~/i18n/context'
-  import { HeadInfo } from '~/interface/app/HeadInfo'
-  import { Button } from '~/interface/buttons/Button'
-  import { CaretLeftIcon } from '~/interface/icons/phosphor/CaretLeftIcon'
-  import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
-  import { ShareFatIcon } from '~/interface/icons/phosphor/ShareFatIcon'
-  import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
-  import { PageLayout } from '~/interface/pages/PageLayout'
-  import { useQuery } from '~/zero/client'
-  // SourceProviders,
-} from './components/ReportSections'
+// import { SourceProviders } from './components/ReportSections'
 import { useShareReport } from './useShareReport'
 
 import type { CanonicalReport } from './types'

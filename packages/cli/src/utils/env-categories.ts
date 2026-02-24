@@ -102,6 +102,15 @@ export const envCategories: EnvCategory[] = [
         type: 'text',
         placeholder: 'https://cdn.your-app.com',
       },
+      {
+        key: 'CLOUDFLARE_R2_BUCKET',
+        label: 'Storage Bucket',
+        description: 'Default bucket name for file storage',
+        instructions: 'The bucket name in your storage provider',
+        required: false,
+        type: 'text',
+        placeholder: 'my-app-bucket',
+      },
     ],
   },
   {

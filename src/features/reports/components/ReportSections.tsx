@@ -332,7 +332,7 @@ const OwnerSection = memo(
     isFirst: boolean
     isEven: boolean
   }) => {
-    const [isExpanded, setIsExpanded] = useState(isFirst)
+    const [isExpanded, setIsExpanded] = useState(true)
     const t = useT()
     const label =
       ownerNumber === 'unknown'

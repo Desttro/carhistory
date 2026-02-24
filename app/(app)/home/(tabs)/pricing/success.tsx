@@ -1,7 +1,7 @@
 import { useRouter } from 'one'
 import { H2, SizableText, YStack } from 'tamagui'
 
-import { CreditBalanceDisplay } from '~/features/credits/ui/CreditBalanceDisplay'
+import { CreditBalanceDisplay } from '~/features/purchases/ui'
 import { Button } from '~/interface/buttons/Button'
 import { CheckCircleIcon } from '~/interface/icons/phosphor/CheckCircleIcon'
 import { PageLayout } from '~/interface/pages/PageLayout'

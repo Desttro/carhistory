@@ -1,7 +1,15 @@
+import { Polar } from '@polar-sh/sdk'
+
 import { getDb } from '~/database'
 import { customerProvider } from '~/database/schema-private'
+import { POLAR_ACCESS_TOKEN, POLAR_MODE } from '~/server/env-server'
 
-import { polarClient } from './polarClient'
+import type { ProviderAdapter, ProviderProduct } from './types'
+
+export const polarClient = new Polar({
+  accessToken: POLAR_ACCESS_TOKEN,
+  server: POLAR_MODE === 'production' ? 'production' : 'sandbox',
+})
 
 async function storeCustomerMapping(userId: string, polarCustomerId: string) {
   const db = getDb()
@@ -71,4 +79,39 @@ export async function syncPolarCustomer(user: {
   } catch (error) {
     console.error(`[polar-sync] failed for ${user.email}:`, error)
   }
+}
+
+export const polarAdapter: ProviderAdapter = {
+  provider: 'polar',
+
+  async fetchProducts(): Promise<ProviderProduct[]> {
+    const { result } = await polarClient.products.list({})
+    const products: ProviderProduct[] = []
+
+    for (const p of result.items) {
+      const credits = Number(p.metadata?.credits)
+      if (!credits || credits <= 0) continue
+
+      const fixedPrice = p.prices.find((price) => 'priceAmount' in price)
+      const priceCents =
+        fixedPrice && 'priceAmount' in fixedPrice ? fixedPrice.priceAmount : 0
+      const currency =
+        fixedPrice && 'priceCurrency' in fixedPrice ? fixedPrice.priceCurrency : 'usd'
+
+      products.push({
+        externalProductId: p.id,
+        name: p.name,
+        description: p.description ?? undefined,
+        credits,
+        priceCents,
+        currency,
+        isActive: !p.isArchived,
+        externalData: p as unknown as Record<string, unknown>,
+      })
+    }
+
+    return products
+  },
+
+  syncCustomer: syncPolarCustomer,
 }

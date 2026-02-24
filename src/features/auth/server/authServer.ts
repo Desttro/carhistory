@@ -10,14 +10,14 @@ import { getDb } from '~/database'
 import { database } from '~/database/database'
 import { productProvider } from '~/database/schema-private'
 import { product } from '~/database/schema-public'
-import { polarClient } from '~/features/payments/server/polarClient'
+import { polarClient } from '~/features/purchases/server/providers/polar'
 import {
   handleOrderPaid,
   handleOrderRefunded,
   handleProductCreated,
   handleProductUpdated,
-} from '~/features/payments/server/polarIntegration'
-import { syncAllPolarProducts } from '~/features/payments/server/productSync'
+} from '~/features/purchases/server/webhooks/polar'
+import { syncAllProducts } from '~/features/purchases/server/productSync'
 import {
   BETTER_AUTH_SECRET,
   BETTER_AUTH_URL,
@@ -42,7 +42,7 @@ console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH
 let syncTimeout: ReturnType<typeof setTimeout> | undefined
 clearTimeout(syncTimeout)
 syncTimeout = setTimeout(() => {
-  syncAllPolarProducts().catch((err) => {
+  syncAllProducts().catch((err) => {
     console.info('[product-sync] startup sync failed:', err)
   })
 }, 500)

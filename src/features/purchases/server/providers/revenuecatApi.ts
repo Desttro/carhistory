@@ -1,7 +1,5 @@
 import { REVENUECAT_API_KEY, REVENUECAT_PROJECT_ID } from '~/server/env-server'
 
-// --- error class ---
-
 export class RevenueCatApiError extends Error {
   status: number
   isRetryable: boolean
@@ -14,8 +12,6 @@ export class RevenueCatApiError extends Error {
     this.isRetryable = status >= 500 || status === 429
   }
 }
-
-// --- shared headers (single key for both v1 and v2) ---
 
 const headers = () => ({
   Authorization: `Bearer ${REVENUECAT_API_KEY}`,
@@ -118,6 +114,36 @@ export async function getCustomerPurchases(
   if (!res.ok) {
     throw new RevenueCatApiError(
       `revenuecat getCustomerPurchases failed: ${res.status} ${await res.text()}`,
+      res.status
+    )
+  }
+
+  return res.json()
+}
+
+export interface RevenueCatProduct {
+  id: string
+  store_identifier: string
+  type: string
+  app_id: string
+}
+
+export interface RevenueCatProductsResponse {
+  items: RevenueCatProduct[]
+  next_page: string | null
+}
+
+export async function listProducts(): Promise<RevenueCatProductsResponse | null> {
+  if (!REVENUECAT_API_KEY || !REVENUECAT_PROJECT_ID) {
+    console.info('[revenuecat] no API key/project configured, skipping listProducts')
+    return null
+  }
+
+  const res = await fetch(v2Url('/products'), { headers: headers() })
+
+  if (!res.ok) {
+    throw new RevenueCatApiError(
+      `revenuecat listProducts failed: ${res.status} ${await res.text()}`,
       res.status
     )
   }

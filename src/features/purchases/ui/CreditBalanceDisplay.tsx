@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { SizableText, styled, XStack } from 'tamagui'
 
-import { useCredits } from '~/features/credits/useCredits'
+import { useCredits } from '~/features/purchases/useCredits'
 import { CoinsIcon } from '~/interface/icons/phosphor/CoinsIcon'
 
 export interface CreditBalanceDisplayProps {

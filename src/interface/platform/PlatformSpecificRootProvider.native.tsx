@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { useAuth } from '~/features/auth/client/authClient'
-import { RevenueCatProvider } from '~/features/payments/revenuecat'
+import { RevenueCatProvider } from '~/features/purchases/revenuecat'
 
 import { Splash } from '../splash/splash'
 

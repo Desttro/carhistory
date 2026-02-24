@@ -1,4 +1,7 @@
-import { processPurchase, processRefund } from './paymentActions'
+import { getDb } from '~/database'
+import { webhookEvent } from '~/database/schema-private'
+
+import { processPurchase, processRefund } from '../orderProcessor'
 
 type RevenueCatEventType =
   | 'INITIAL_PURCHASE'
@@ -61,7 +64,6 @@ function priceInCents(price?: number): number | undefined {
   return price ? Math.round(price * 100) : undefined
 }
 
-// handler for purchase events
 async function handlePurchase(event: RevenueCatEvent, payload: RevenueCatWebhookPayload) {
   const userId = resolveUserId(event)
   if (!userId) {
@@ -87,7 +89,6 @@ async function handlePurchase(event: RevenueCatEvent, payload: RevenueCatWebhook
   }
 }
 
-// handler for refund/cancellation events — deducts credits for all cancel reasons
 async function handleRefund(event: RevenueCatEvent, payload: RevenueCatWebhookPayload) {
   const userId = resolveUserId(event)
   if (!userId) {
@@ -118,6 +119,33 @@ async function handleRefund(event: RevenueCatEvent, payload: RevenueCatWebhookPa
   }
 }
 
+async function storeWebhookEvent(
+  event: RevenueCatEvent,
+  processedAction: string | null,
+  rawPayload: unknown
+) {
+  try {
+    const db = getDb()
+    const userId = resolveUserId(event)
+    await db
+      .insert(webhookEvent)
+      .values({
+        id: crypto.randomUUID(),
+        provider: 'revenuecat',
+        eventType: event.type,
+        externalEventId: event.id,
+        userId,
+        processed: !!processedAction,
+        processedAction,
+        rawPayload: rawPayload as Record<string, unknown>,
+      })
+      .onConflictDoNothing()
+  } catch (error) {
+    // best-effort — don't fail the webhook handler
+    console.info('[revenuecat] failed to store webhook event:', error)
+  }
+}
+
 export async function handleRevenueCatWebhook(
   payload: RevenueCatWebhookPayload
 ): Promise<{ success: boolean; error?: string }> {
@@ -130,28 +158,33 @@ export async function handleRevenueCatWebhook(
     case 'NON_RENEWING_PURCHASE':
     case 'RENEWAL':
       await handlePurchase(event, payload)
+      await storeWebhookEvent(event, 'purchase', payload)
       break
 
     case 'CANCELLATION':
       await handleRefund(event, payload)
+      await storeWebhookEvent(event, 'refund', payload)
       break
 
     case 'TRANSFER':
       console.info(
         `[revenuecat] user transfer: ${event.original_app_user_id} -> ${event.app_user_id}`
       )
+      await storeWebhookEvent(event, 'ignored', payload)
       break
 
     case 'EXPIRATION':
       console.info(
         `[revenuecat] expiration for ${event.app_user_id}, product: ${event.product_id}`
       )
+      await storeWebhookEvent(event, 'ignored', payload)
       break
 
     case 'BILLING_ISSUE':
       console.info(
         `[revenuecat] billing issue for ${event.app_user_id}, product: ${event.product_id}`
       )
+      await storeWebhookEvent(event, 'ignored', payload)
       break
 
     case 'SUBSCRIBER_ALIAS':
@@ -160,10 +193,12 @@ export async function handleRevenueCatWebhook(
       console.info(
         `[revenuecat] ${event.type} for ${event.app_user_id}, no action needed`
       )
+      await storeWebhookEvent(event, 'ignored', payload)
       break
 
     default:
       console.info(`[revenuecat] unknown event type: ${event.type}`)
+      await storeWebhookEvent(event, null, payload)
   }
 
   return { success: true }

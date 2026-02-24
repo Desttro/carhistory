@@ -5,8 +5,8 @@ import { analyticsActions } from '~/data/server/actions/analyticsActions'
 import { getDb } from '~/database'
 import { user as userTable, whitelist } from '~/database/schema-private'
 import { userCredits, userPublic, userState } from '~/database/schema-public'
-import { syncPolarCustomer } from '~/features/payments/server/polarCustomerSync'
-import { syncRevenueCatSubscriber } from '~/features/payments/server/revenuecatCustomerSync'
+import { syncPolarCustomer } from '~/features/purchases/server/providers/polar'
+import { syncRevenueCatSubscriber } from '~/features/purchases/server/providers/revenuecat'
 import { ADMIN_WHITELIST } from '~/server/constants-server'
 
 export async function afterCreateUser(user: { id: string; email: string }) {

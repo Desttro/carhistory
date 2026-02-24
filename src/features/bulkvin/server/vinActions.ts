@@ -2,8 +2,8 @@ import { eq, and } from 'drizzle-orm'
 
 import { getDb } from '~/database'
 import { vinCheckCache } from '~/database/schema-private'
-import { REPORT_CREDIT_COST } from '~/features/credits/constants'
-import { creditsActions } from '~/features/credits/server/creditsActions'
+import { REPORT_CREDIT_COST } from '~/features/purchases/constants'
+import { creditOperations as creditsActions } from '~/features/purchases/server/creditOperations'
 import { reportActions } from '~/features/reports/server/reportActions'
 import { validateVin } from '~/features/vin-lookup/validation'
 

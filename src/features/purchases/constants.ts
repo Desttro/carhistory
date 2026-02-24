@@ -1,5 +1,8 @@
-// static fallback data for the SSG pricing page (can't access DB at build time)
-export const PRICING_DEFAULTS = [
+export const REPORT_CREDIT_COST = 1
+
+// static fallback for the SSG pricing page (can't access DB at build time)
+// must stay in sync with products in Polar/RC dashboards
+export const PRICING_SSG_FALLBACK = [
   {
     credits: 1,
     slug: 'credits-1',

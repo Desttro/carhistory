@@ -1,6 +1,6 @@
 import { H1, Paragraph, SizableText, XStack, YStack } from 'tamagui'
 
-import { PRICING_DEFAULTS } from '~/features/payments/pricingDefaults'
+import { PRICING_SSG_FALLBACK } from '~/features/purchases/constants'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { Link } from '~/interface/app/Link'
 import { Button } from '~/interface/buttons/Button'
@@ -36,7 +36,7 @@ export function PricingSSGPage() {
             gap: '$4',
           }}
         >
-          {PRICING_DEFAULTS.map((pkg) => {
+          {PRICING_SSG_FALLBACK.map((pkg) => {
             const isPopular = pkg.badge === 'popular'
 
             return (

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { H3, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
-import { PricingSheet } from '~/features/credits/ui/PricingSheet'
+import { PricingSheet } from '~/features/purchases/ui'
 import { animationClamped } from '~/interface/animations/animationClamped'
 import { Button } from '~/interface/buttons/Button'
 import { StatusChip } from '~/interface/chips/StatusChip'

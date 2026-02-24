@@ -364,3 +364,24 @@ export const promo = pgTable(
   },
   (table) => [index('promo_code_idx').on(table.code)]
 )
+
+// webhookEvent - stores every webhook payload from payment providers for auditing
+export const webhookEvent = pgTable(
+  'webhookEvent',
+  {
+    id: text('id').primaryKey(),
+    provider: text('provider').notNull(),
+    eventType: text('eventType').notNull(),
+    externalEventId: text('externalEventId'),
+    userId: text('userId'),
+    processed: boolean('processed').notNull().default(false),
+    processedAction: text('processedAction'), // 'purchase' | 'refund' | 'ignored' | null
+    rawPayload: jsonb('rawPayload').notNull(),
+    receivedAt: timestamp('receivedAt', { mode: 'string' }).defaultNow().notNull(),
+  },
+  (table) => [
+    index('webhookEvent_provider_idx').on(table.provider),
+    index('webhookEvent_userId_idx').on(table.userId),
+    unique('webhookEvent_provider_extId_unique').on(table.provider, table.externalEventId),
+  ]
+)

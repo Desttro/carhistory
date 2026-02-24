@@ -1,6 +1,7 @@
 export { CreditBalanceDisplay } from './CreditBalanceDisplay'
 export { PricingSheet } from './PricingSheet'
-export { usePurchaseCredits } from './usePurchaseCredits'
+export { usePurchase } from './usePurchase'
+export { useProducts } from './useProducts'
 export { Chip } from './components/Chip'
 export { PackageBadge } from './components/PackageBadge'
 export { PackageCard } from './components/PackageCard'

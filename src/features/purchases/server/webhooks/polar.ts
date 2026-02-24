@@ -1,12 +1,42 @@
-import { processPurchase, processRefund } from './paymentActions'
-import { syncPolarProduct } from './productSync'
+import { getDb } from '~/database'
+import { webhookEvent } from '~/database/schema-private'
+
+import { processPurchase, processRefund } from '../orderProcessor'
+import { syncPolarProductFromWebhook } from '../productSync'
 
 import type { WebhookOrderPaidPayload } from '@polar-sh/sdk/models/components/webhookorderpaidpayload'
 import type { WebhookOrderRefundedPayload } from '@polar-sh/sdk/models/components/webhookorderrefundedpayload'
 import type { WebhookProductCreatedPayload } from '@polar-sh/sdk/models/components/webhookproductcreatedpayload'
 import type { WebhookProductUpdatedPayload } from '@polar-sh/sdk/models/components/webhookproductupdatedpayload'
 
-// handler for Polar order.paid webhook
+async function storeWebhookEvent(
+  eventType: string,
+  externalEventId: string | null,
+  userId: string | null,
+  processedAction: string | null,
+  rawPayload: unknown
+) {
+  try {
+    const db = getDb()
+    await db
+      .insert(webhookEvent)
+      .values({
+        id: crypto.randomUUID(),
+        provider: 'polar',
+        eventType,
+        externalEventId,
+        userId,
+        processed: !!processedAction,
+        processedAction,
+        rawPayload: rawPayload as Record<string, unknown>,
+      })
+      .onConflictDoNothing()
+  } catch (error) {
+    // best-effort — don't fail the webhook handler
+    console.info('[polar] failed to store webhook event:', error)
+  }
+}
+
 export async function handleOrderPaid(payload: WebhookOrderPaidPayload) {
   const order = payload.data
 
@@ -15,20 +45,21 @@ export async function handleOrderPaid(payload: WebhookOrderPaidPayload) {
     console.info(
       `[polar] skipping non-purchase order: ${order.id} (reason: ${order.billingReason})`
     )
+    await storeWebhookEvent('order.paid', order.id, order.customer.externalId, 'ignored', payload)
     return
   }
 
-  // get user ID from customer's external_id (set by createCustomerOnSignUp)
   const userId = order.customer.externalId
   if (!userId) {
     console.info(`[polar] order ${order.id} has no customer external_id, skipping`)
+    await storeWebhookEvent('order.paid', order.id, null, 'ignored', payload)
     return
   }
 
-  // use order-level productId for one-time purchases
   const productId = order.productId
   if (!productId) {
     console.info(`[polar] order ${order.id} has no productId, skipping`)
+    await storeWebhookEvent('order.paid', order.id, userId, 'ignored', payload)
     return
   }
 
@@ -43,12 +74,13 @@ export async function handleOrderPaid(payload: WebhookOrderPaidPayload) {
     payload
   )
 
+  await storeWebhookEvent('order.paid', order.id, userId, 'purchase', payload)
+
   if (!result.success && !result.alreadyProcessed) {
     console.info(`[polar] failed to process order ${order.id}: ${result.error}`)
   }
 }
 
-// handler for Polar order.refunded webhook
 export async function handleOrderRefunded(payload: WebhookOrderRefundedPayload) {
   const order = payload.data
 
@@ -57,13 +89,14 @@ export async function handleOrderRefunded(payload: WebhookOrderRefundedPayload) 
     console.info(
       `[polar] refund for order ${order.id} has no customer external_id, skipping`
     )
+    await storeWebhookEvent('order.refunded', order.id, null, 'ignored', payload)
     return
   }
 
-  // use order-level productId for one-time purchases
   const productId = order.productId
   if (!productId) {
     console.info(`[polar] refund for order ${order.id} has no productId, skipping`)
+    await storeWebhookEvent('order.refunded', order.id, userId, 'ignored', payload)
     return
   }
 
@@ -79,6 +112,8 @@ export async function handleOrderRefunded(payload: WebhookOrderRefundedPayload) 
     payload
   )
 
+  await storeWebhookEvent('order.refunded', order.id, userId, 'refund', payload)
+
   if (!result.success && !result.alreadyProcessed) {
     console.info(
       `[polar] failed to process refund for order ${order.id}: ${result.error}`
@@ -86,12 +121,12 @@ export async function handleOrderRefunded(payload: WebhookOrderRefundedPayload) 
   }
 }
 
-// handler for Polar product.created webhook
 export async function handleProductCreated(payload: WebhookProductCreatedPayload) {
-  await syncPolarProduct(payload.data)
+  await syncPolarProductFromWebhook(payload.data)
+  await storeWebhookEvent('product.created', payload.data.id, null, 'ignored', payload)
 }
 
-// handler for Polar product.updated webhook
 export async function handleProductUpdated(payload: WebhookProductUpdatedPayload) {
-  await syncPolarProduct(payload.data)
+  await syncPolarProductFromWebhook(payload.data)
+  await storeWebhookEvent('product.updated', payload.data.id, null, 'ignored', payload)
 }

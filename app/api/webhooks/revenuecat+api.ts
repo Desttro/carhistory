@@ -3,7 +3,7 @@ import { timingSafeEqual } from 'node:crypto'
 import {
   handleRevenueCatWebhook,
   type RevenueCatWebhookPayload,
-} from '~/features/payments/server/revenuecatIntegration'
+} from '~/features/purchases/server/webhooks/revenuecat'
 import { REVENUECAT_WEBHOOK_AUTH } from '~/server/env-server'
 
 import type { Endpoint } from 'one'

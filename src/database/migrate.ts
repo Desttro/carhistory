@@ -28,6 +28,7 @@ const PRIVATE_TABLES = [
   'order',
   'reportShareToken',
   'vinCheckCache',
+  'webhookEvent',
 ]
 
 async function ensureZeroPublication() {

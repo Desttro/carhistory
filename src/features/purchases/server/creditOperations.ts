@@ -5,38 +5,9 @@ import { creditTransaction } from '~/database/schema-private'
 import { userCredits } from '~/database/schema-public'
 
 import type { AuthData } from '~/features/auth/types'
+import type { CreditTransactionType, CreditResult, PaymentMetadata } from '../types'
 
-export type CreditTransactionType =
-  | 'purchase'
-  | 'refund'
-  | 'admin_grant'
-  | 'report_purchase'
-
-export type PaymentPlatform = 'polar' | 'revenuecat'
-
-export interface PaymentMetadata {
-  platform: PaymentPlatform
-  platformTransactionId: string
-  platformEventType: string
-  productId: string
-  amountCents?: number
-  currency?: string
-  rawPayload?: unknown
-}
-
-interface DeductCreditsResult {
-  success: boolean
-  newBalance?: number
-  error?: string
-}
-
-interface AddCreditsResult {
-  success: boolean
-  newBalance?: number
-  error?: string
-}
-
-export const creditsActions = {
+export const creditOperations = {
   getBalance,
   deductCredits,
   addCredits,
@@ -45,7 +16,7 @@ export const creditsActions = {
   ensureUserCreditsExist,
 }
 
-async function ensureUserCreditsExist(userId: string): Promise<void> {
+export async function ensureUserCreditsExist(userId: string): Promise<void> {
   const db = getDb()
 
   await db
@@ -85,7 +56,7 @@ async function _addCredits(
   referenceId?: string,
   description?: string,
   paymentMetadata?: PaymentMetadata
-): Promise<AddCreditsResult> {
+): Promise<CreditResult> {
   if (!userId) {
     return { success: false, error: 'User ID required' }
   }
@@ -116,9 +87,9 @@ async function _addCredits(
     type,
     referenceId,
     description,
-    platform: paymentMetadata?.platform ?? null,
-    platformTransactionId: paymentMetadata?.platformTransactionId ?? null,
-    platformEventType: paymentMetadata?.platformEventType ?? null,
+    platform: paymentMetadata?.provider ?? null,
+    platformTransactionId: paymentMetadata?.providerTransactionId ?? null,
+    platformEventType: paymentMetadata?.providerEventType ?? null,
     productId: paymentMetadata?.productId ?? null,
     amountCents: paymentMetadata?.amountCents ?? null,
     currency: paymentMetadata?.currency ?? null,
@@ -136,7 +107,7 @@ async function _deductCredits(
   referenceId?: string,
   description?: string,
   paymentMetadata?: PaymentMetadata
-): Promise<DeductCreditsResult> {
+): Promise<CreditResult> {
   if (!userId) {
     return { success: false, error: 'User ID required' }
   }
@@ -172,9 +143,9 @@ async function _deductCredits(
     type,
     referenceId,
     description,
-    platform: paymentMetadata?.platform ?? null,
-    platformTransactionId: paymentMetadata?.platformTransactionId ?? null,
-    platformEventType: paymentMetadata?.platformEventType ?? null,
+    platform: paymentMetadata?.provider ?? null,
+    platformTransactionId: paymentMetadata?.providerTransactionId ?? null,
+    platformEventType: paymentMetadata?.providerEventType ?? null,
     productId: paymentMetadata?.productId ?? null,
     amountCents: paymentMetadata?.amountCents ?? null,
     currency: paymentMetadata?.currency ?? null,
@@ -191,7 +162,7 @@ async function addCredits(
   referenceId?: string,
   description?: string,
   paymentMetadata?: PaymentMetadata
-): Promise<AddCreditsResult> {
+): Promise<CreditResult> {
   if (!authData?.id) {
     return { success: false, error: 'Authentication required' }
   }
@@ -205,7 +176,7 @@ async function addCreditsByUserId(
   referenceId?: string,
   description?: string,
   paymentMetadata?: PaymentMetadata
-): Promise<AddCreditsResult> {
+): Promise<CreditResult> {
   return _addCredits(userId, amount, type, referenceId, description, paymentMetadata)
 }
 
@@ -215,7 +186,7 @@ async function deductCredits(
   type: CreditTransactionType,
   referenceId?: string,
   description?: string
-): Promise<DeductCreditsResult> {
+): Promise<CreditResult> {
   if (!authData?.id) {
     return { success: false, error: 'Authentication required' }
   }
@@ -229,6 +200,6 @@ async function deductCreditsByUserId(
   referenceId?: string,
   description?: string,
   paymentMetadata?: PaymentMetadata
-): Promise<DeductCreditsResult> {
+): Promise<CreditResult> {
   return _deductCredits(userId, amount, type, referenceId, description, paymentMetadata)
 }

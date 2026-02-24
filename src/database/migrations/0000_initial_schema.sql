@@ -219,6 +219,19 @@ CREATE TABLE "vinCheckCache" (
 	CONSTRAINT "vinCheckCache_vin_counts_unique" UNIQUE("vin","carfaxRecords","autocheckRecords")
 );
 --> statement-breakpoint
+CREATE TABLE "webhookEvent" (
+	"id" text PRIMARY KEY NOT NULL,
+	"provider" text NOT NULL,
+	"eventType" text NOT NULL,
+	"externalEventId" text,
+	"userId" text,
+	"processed" boolean DEFAULT false NOT NULL,
+	"processedAction" text,
+	"rawPayload" jsonb NOT NULL,
+	"receivedAt" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "webhookEvent_provider_extId_unique" UNIQUE("provider","externalEventId")
+);
+--> statement-breakpoint
 CREATE TABLE "whitelist" (
 	"id" text PRIMARY KEY NOT NULL,
 	"email" varchar(200) NOT NULL,
@@ -411,6 +424,8 @@ CREATE INDEX "timelineEvent_vehicleReportId_idx" ON "timelineEvent" USING btree 
 CREATE INDEX "timelineEvent_eventType_idx" ON "timelineEvent" USING btree ("eventType");--> statement-breakpoint
 CREATE INDEX "timelineEvent_eventDate_idx" ON "timelineEvent" USING btree ("eventDate");--> statement-breakpoint
 CREATE INDEX "vinCheckCache_vin_idx" ON "vinCheckCache" USING btree ("vin");--> statement-breakpoint
+CREATE INDEX "webhookEvent_provider_idx" ON "webhookEvent" USING btree ("provider");--> statement-breakpoint
+CREATE INDEX "webhookEvent_userId_idx" ON "webhookEvent" USING btree ("userId");--> statement-breakpoint
 CREATE INDEX "block_blockerId_idx" ON "block" USING btree ("blockerId");--> statement-breakpoint
 CREATE INDEX "block_blockedId_idx" ON "block" USING btree ("blockedId");--> statement-breakpoint
 CREATE INDEX "comment_postId_idx" ON "comment" USING btree ("postId");--> statement-breakpoint

@@ -1,13 +1,12 @@
 import { PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 
 import { s3Client } from '~/features/upload/s3client'
-import { CLOUDFLARE_R2_BUCKET } from '~/server/env-server'
 
 import { computeContentHash } from './computeHash'
 
 import type { ReportProvider } from '../types'
 
-const DEFAULT_BUCKET = CLOUDFLARE_R2_BUCKET
+const DEFAULT_BUCKET = 'chat'
 
 interface StoreHtmlResult {
   r2Key: string

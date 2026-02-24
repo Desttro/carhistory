@@ -1,26 +1,26 @@
-import { useParams, useRouter } from 'one'
-import { memo } from 'react'
-import { Platform } from 'react-native'
-import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
-
-import { vehicleReportById } from '~/data/queries/vehicleReport'
-import { useT } from '~/i18n/context'
-import { useLocale } from '~/i18n/context'
-import { HeadInfo } from '~/interface/app/HeadInfo'
-import { Button } from '~/interface/buttons/Button'
-import { CaretLeftIcon } from '~/interface/icons/phosphor/CaretLeftIcon'
-import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
-import { ShareFatIcon } from '~/interface/icons/phosphor/ShareFatIcon'
-import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
-import { PageLayout } from '~/interface/pages/PageLayout'
-import { useQuery } from '~/zero/client'
-
 import {
   VehicleHeader,
   SummaryStats,
   TitleBrands,
   Timeline,
-  SourceProviders,
+
+  import { useParams, useRouter } from 'one'
+  import { memo } from 'react'
+  import { Platform } from 'react-native'
+  import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
+
+  import { vehicleReportById } from '~/data/queries/vehicleReport'
+  import { useT } from '~/i18n/context'
+  import { useLocale } from '~/i18n/context'
+  import { HeadInfo } from '~/interface/app/HeadInfo'
+  import { Button } from '~/interface/buttons/Button'
+  import { CaretLeftIcon } from '~/interface/icons/phosphor/CaretLeftIcon'
+  import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
+  import { ShareFatIcon } from '~/interface/icons/phosphor/ShareFatIcon'
+  import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
+  import { PageLayout } from '~/interface/pages/PageLayout'
+  import { useQuery } from '~/zero/client'
+  // SourceProviders,
 } from './components/ReportSections'
 import { useShareReport } from './useShareReport'
 
@@ -177,7 +177,7 @@ export const ReportDetailPage = memo(() => {
         <SummaryStats report={report} hasIssues={hasIssues} locale={locale} />
         {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
         <Timeline events={report.events} />
-        <SourceProviders providers={report.sourceProviders} />
+        {/* <SourceProviders providers={report.sourceProviders} /> */}
       </YStack>
     </PageLayout>
   )

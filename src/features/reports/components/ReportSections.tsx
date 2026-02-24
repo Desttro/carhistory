@@ -507,23 +507,23 @@ const TimelineEvent = memo(({ event }: { event: NormalizedEvent }) => {
   )
 })
 
-export const SourceProviders = memo(({ providers }: { providers: string[] }) => {
-  const t = useT()
+// export const SourceProviders = memo(({ providers }: { providers: string[] }) => {
+//   const t = useT()
 
-  return (
-    <YStack gap="$2" pt="$4" borderTopWidth={1} borderColor="$color4">
-      <SizableText size="$2" color="$color10">
-        {t('report.dataSources')}
-      </SizableText>
-      <XStack gap="$2" flexWrap="wrap">
-        {providers.map((provider) => (
-          <StatusChip
-            key={provider}
-            label={provider.charAt(0).toUpperCase() + provider.slice(1)}
-            size="medium"
-          />
-        ))}
-      </XStack>
-    </YStack>
-  )
-})
+//   return (
+//     <YStack gap="$2" pt="$4" borderTopWidth={1} borderColor="$color4">
+//       <SizableText size="$2" color="$color10">
+//         {t('report.dataSources')}
+//       </SizableText>
+//       <XStack gap="$2" flexWrap="wrap">
+//         {providers.map((provider) => (
+//           <StatusChip
+//             key={provider}
+//             label={provider.charAt(0).toUpperCase() + provider.slice(1)}
+//             size="medium"
+//           />
+//         ))}
+//       </XStack>
+//     </YStack>
+//   )
+// })

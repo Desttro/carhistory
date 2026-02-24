@@ -1,24 +1,24 @@
-import { useParams } from 'one'
-import { memo, useEffect, useState } from 'react'
-import { Platform, ScrollView } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
-
-import { SERVER_URL } from '~/constants/urls'
-import { PublicI18nProvider } from '~/i18n/provider-public'
-import { HeadInfo } from '~/interface/app/HeadInfo'
-import { StatusChip } from '~/interface/chips/StatusChip'
-import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
-import { ShareFatIcon } from '~/interface/icons/phosphor/ShareFatIcon'
-import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
-import { PageLayout } from '~/interface/pages/PageLayout'
-
 import {
   VehicleHeader,
   SummaryStats,
   TitleBrands,
   Timeline,
-  SourceProviders,
+
+  import { useParams } from 'one'
+  import { memo, useEffect, useState } from 'react'
+  import { Platform, ScrollView } from 'react-native'
+  import { useSafeAreaInsets } from 'react-native-safe-area-context'
+  import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
+
+  import { SERVER_URL } from '~/constants/urls'
+  import { PublicI18nProvider } from '~/i18n/provider-public'
+  import { HeadInfo } from '~/interface/app/HeadInfo'
+  import { StatusChip } from '~/interface/chips/StatusChip'
+  import { FileTextIcon } from '~/interface/icons/phosphor/FileTextIcon'
+  import { ShareFatIcon } from '~/interface/icons/phosphor/ShareFatIcon'
+  import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
+  import { PageLayout } from '~/interface/pages/PageLayout'
+  // SourceProviders,
 } from './components/ReportSections'
 
 import type { CanonicalReport } from './types'
@@ -139,7 +139,7 @@ function SharedReportContent() {
           <SummaryStats report={report} hasIssues={hasIssues} locale="en" />
           {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
           <Timeline events={report.events} />
-          <SourceProviders providers={report.sourceProviders} />
+          {/* <SourceProviders providers={report.sourceProviders} /> */}
         </YStack>
       </ScrollView>
     </PageLayout>

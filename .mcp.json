@@ -2,8 +2,18 @@
   "mcpServers": {
     "XcodeBuildMCP": {
       "command": "npx",
-      "args": ["-y", "xcodebuildmcp@1.15.1"],
-      "cwd": "/tmp"
+      "args": [
+        "-y",
+        "xcodebuildmcp@1.15.1"
+      ]
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest"
+      ],
+      "env": {}
     }
   }
 }

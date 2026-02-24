@@ -27,6 +27,7 @@ const PRIVATE_TABLES = [
   'customerProvider',
   'order',
   'reportShareToken',
+  'vinCheckCache',
 ]
 
 async function ensureZeroPublication() {

@@ -103,6 +103,7 @@ export const reportHtml = pgTable(
     contentHash: text('contentHash').notNull(), // sha256 for dedup
     fileSizeBytes: integer('fileSizeBytes'),
     reportDate: timestamp('reportDate', { mode: 'string' }), // when source generated it
+    r2UploadStatus: text('r2UploadStatus').notNull().default('pending'), // 'pending' | 'uploaded' | 'failed'
     uploadedAt: timestamp('uploadedAt', { mode: 'string' }).defaultNow().notNull(),
   },
   (table) => [
@@ -310,6 +311,40 @@ export const reportShareToken = pgTable(
   (table) => [
     index('reportShareToken_token_idx').on(table.token),
     index('reportShareToken_vehicleReportId_idx').on(table.vehicleReportId),
+  ]
+)
+
+// vinCheckCache - caches record counts from free check endpoint for credit-saving reuse
+export const vinCheckCache = pgTable(
+  'vinCheckCache',
+  {
+    id: text('id').primaryKey(),
+    vin: text('vin').notNull(),
+
+    // record counts from the free "check" endpoint
+    carfaxRecords: integer('carfaxRecords').notNull().default(0),
+    autocheckRecords: integer('autocheckRecords').notNull().default(0),
+
+    // vehicle info from check
+    model: text('model'),
+    year: integer('year'),
+
+    // links to reportHtml + parsedReport for reuse (null = check only, no purchase yet)
+    carfaxReportHtmlId: text('carfaxReportHtmlId'),
+    autocheckReportHtmlId: text('autocheckReportHtmlId'),
+    carfaxParsedReportId: text('carfaxParsedReportId'),
+    autocheckParsedReportId: text('autocheckParsedReportId'),
+
+    checkedAt: timestamp('checkedAt', { mode: 'string' }).defaultNow().notNull(),
+    lastVerifiedAt: timestamp('lastVerifiedAt', { mode: 'string' }).defaultNow().notNull(),
+  },
+  (table) => [
+    index('vinCheckCache_vin_idx').on(table.vin),
+    unique('vinCheckCache_vin_counts_unique').on(
+      table.vin,
+      table.carfaxRecords,
+      table.autocheckRecords
+    ),
   ]
 )
 

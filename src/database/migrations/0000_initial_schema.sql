@@ -127,6 +127,7 @@ CREATE TABLE "reportHtml" (
 	"contentHash" text NOT NULL,
 	"fileSizeBytes" integer,
 	"reportDate" timestamp,
+	"r2UploadStatus" text DEFAULT 'pending' NOT NULL,
 	"uploadedAt" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -200,6 +201,22 @@ CREATE TABLE "verification" (
 	"expiresAt" timestamp NOT NULL,
 	"createdAt" timestamp,
 	"updatedAt" timestamp
+);
+--> statement-breakpoint
+CREATE TABLE "vinCheckCache" (
+	"id" text PRIMARY KEY NOT NULL,
+	"vin" text NOT NULL,
+	"carfaxRecords" integer DEFAULT 0 NOT NULL,
+	"autocheckRecords" integer DEFAULT 0 NOT NULL,
+	"model" text,
+	"year" integer,
+	"carfaxReportHtmlId" text,
+	"autocheckReportHtmlId" text,
+	"carfaxParsedReportId" text,
+	"autocheckParsedReportId" text,
+	"checkedAt" timestamp DEFAULT now() NOT NULL,
+	"lastVerifiedAt" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "vinCheckCache_vin_counts_unique" UNIQUE("vin","carfaxRecords","autocheckRecords")
 );
 --> statement-breakpoint
 CREATE TABLE "whitelist" (
@@ -393,6 +410,7 @@ CREATE INDEX "reportShareToken_vehicleReportId_idx" ON "reportShareToken" USING 
 CREATE INDEX "timelineEvent_vehicleReportId_idx" ON "timelineEvent" USING btree ("vehicleReportId");--> statement-breakpoint
 CREATE INDEX "timelineEvent_eventType_idx" ON "timelineEvent" USING btree ("eventType");--> statement-breakpoint
 CREATE INDEX "timelineEvent_eventDate_idx" ON "timelineEvent" USING btree ("eventDate");--> statement-breakpoint
+CREATE INDEX "vinCheckCache_vin_idx" ON "vinCheckCache" USING btree ("vin");--> statement-breakpoint
 CREATE INDEX "block_blockerId_idx" ON "block" USING btree ("blockerId");--> statement-breakpoint
 CREATE INDEX "block_blockedId_idx" ON "block" USING btree ("blockedId");--> statement-breakpoint
 CREATE INDEX "comment_postId_idx" ON "comment" USING btree ("postId");--> statement-breakpoint

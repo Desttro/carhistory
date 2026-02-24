@@ -1,5 +1,5 @@
 {
-  "id": "a646033b-353e-4cff-817c-1bdfc8263009",
+  "id": "99a3c74d-4901-4cf6-a342-12e5c7a5c28a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -874,6 +874,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "r2UploadStatus": {
+          "name": "r2UploadStatus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
         "uploadedAt": {
           "name": "uploadedAt",
           "type": "timestamp",
@@ -1430,6 +1437,121 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.vinCheckCache": {
+      "name": "vinCheckCache",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vin": {
+          "name": "vin",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "carfaxRecords": {
+          "name": "carfaxRecords",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "autocheckRecords": {
+          "name": "autocheckRecords",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "model": {
+          "name": "model",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "year": {
+          "name": "year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "carfaxReportHtmlId": {
+          "name": "carfaxReportHtmlId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "autocheckReportHtmlId": {
+          "name": "autocheckReportHtmlId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "carfaxParsedReportId": {
+          "name": "carfaxParsedReportId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "autocheckParsedReportId": {
+          "name": "autocheckParsedReportId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "checkedAt": {
+          "name": "checkedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "lastVerifiedAt": {
+          "name": "lastVerifiedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "vinCheckCache_vin_idx": {
+          "name": "vinCheckCache_vin_idx",
+          "columns": [
+            {
+              "expression": "vin",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "vinCheckCache_vin_counts_unique": {
+          "name": "vinCheckCache_vin_counts_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "vin",
+            "carfaxRecords",
+            "autocheckRecords"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

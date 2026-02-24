@@ -87,20 +87,12 @@ export const authServer = betterAuth({
   },
 
   trustedOrigins: [
-    // match dev, prod, tauri
+    `https://*.${DOMAIN}`,
     `https://${DOMAIN}`,
+    `wss://*.${DOMAIN}`,
     `http://localhost:${process.env.VITE_PORT_WEB || '8081'}`,
     `http://host.docker.internal:${process.env.VITE_PORT_WEB || '8081'}`,
     `${APP_SCHEME}://`,
-    'https://preview.carhistory.io',
-    'https://zero-preview.carhistory.io',
-    'https://carhistory.io',
-    'https://zero.carhistory.io',
-    'https://media.carhistory.io',
-    'https://media-preview.carhistory.io',
-    'wss://zero-preview.carhistory.io',
-    'wss://zero.carhistory.io',
-    'https://carhistory-dev-saby.carhistory.io',
     'https://appleid.apple.com',
   ],
 

@@ -1,6 +1,6 @@
 import type { Endpoint } from 'one'
 
-const POSTHOG_API = 'https://us.i.posthog.com'
+const POSTHOG_API = process.env.VITE_POSTHOG_HOST || 'https://eu.i.posthog.com'
 const POSTHOG_API_KEY = process.env.VITE_POSTHOG_API_KEY
 
 // rate limit: simple in-memory store (resets on server restart)

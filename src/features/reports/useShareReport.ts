@@ -1,24 +1,23 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Share } from 'react-native'
 
+import { SERVER_URL } from '~/constants/urls'
 import { analytics } from '~/features/analytics/analytics'
 import { showError } from '~/interface/dialogs/actions'
 import { showToast } from '~/interface/toast/helpers'
-
-const BASE_URL = process.env.ONE_SERVER_URL || 'https://carhistory.io'
 
 export function useShareReport(reportId: string) {
   const [shareToken, setShareToken] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const shareUrl = shareToken ? `${BASE_URL}/report/share/${shareToken}` : null
+  const shareUrl = shareToken ? `${SERVER_URL}/report/share/${shareToken}` : null
   const isShared = Boolean(shareToken)
 
   useEffect(() => {
     if (!reportId) return
     let cancelled = false
 
-    fetch(`${BASE_URL}/api/report/share/status?reportId=${reportId}`, {
+    fetch(`${SERVER_URL}/api/report/share/status?reportId=${reportId}`, {
       credentials: 'include',
     })
       .then((res) => res.json())
@@ -44,7 +43,7 @@ export function useShareReport(reportId: string) {
       let token = shareToken
 
       if (!token) {
-        const res = await fetch(`${BASE_URL}/api/report/share`, {
+        const res = await fetch(`${SERVER_URL}/api/report/share`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -58,7 +57,7 @@ export function useShareReport(reportId: string) {
         setShareToken(token)
       }
 
-      const url = `${BASE_URL}/report/share/${token}`
+      const url = `${SERVER_URL}/report/share/${token}`
 
       if (!process.env.VITE_NATIVE) {
         await navigator.clipboard.writeText(url)
@@ -87,7 +86,7 @@ export function useShareReport(reportId: string) {
 
   const revokeShare = useCallback(async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/report/share`, {
+      const res = await fetch(`${SERVER_URL}/api/report/share`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

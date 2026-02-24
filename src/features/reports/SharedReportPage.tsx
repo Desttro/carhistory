@@ -4,6 +4,7 @@ import { Platform, ScrollView } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
+import { SERVER_URL } from '~/constants/urls'
 import { PublicI18nProvider } from '~/i18n/provider-public'
 import { HeadInfo } from '~/interface/app/HeadInfo'
 import { StatusChip } from '~/interface/chips/StatusChip'
@@ -38,8 +39,7 @@ function SharedReportContent() {
       return
     }
 
-    const baseUrl = process.env.ONE_SERVER_URL || ''
-    fetch(`${baseUrl}/api/report/share/${token}`)
+    fetch(`${SERVER_URL}/api/report/share/${token}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.report) {

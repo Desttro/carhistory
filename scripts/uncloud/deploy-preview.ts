@@ -2,7 +2,7 @@
 
 import { cmd } from '@take-out/cli'
 
-await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
+await cmd`Deploy to preview`.run(async ({ run, colors, fs, path, prompt }) => {
   // env is loaded by op run (op run --env-file=.env --env-file=.env.preview -- ...)
   const { buildMigrations, buildWeb, buildDockerImage } = await import('./helpers/build')
   const { processComposeEnv } = await import('./helpers/processEnv')
@@ -18,6 +18,7 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
   const skipBuild = args.includes('--skip-build')
   const skipDocker = args.includes('--skip-docker')
   const skipLock = args.includes('--skip-lock')
+  const fresh = args.includes('--fresh')
 
   const DEPLOY_HOST = process.env.DEPLOY_HOST
   const DEPLOY_USER = process.env.DEPLOY_USER || 'root'
@@ -97,6 +98,31 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
       console.info(colors.gray('  pgdb stopped cleanly'))
     } catch {
       console.info(colors.gray('  pgdb: not running or already stopped'))
+    }
+  }
+
+  async function removeVolumes(host: string, sshKey: string): Promise<void> {
+    const ssh = getSSHCmd(host, sshKey)
+    console.info(colors.red('\n🗑️  removing docker volumes for fresh deploy...'))
+
+    for (const volumePattern of ['pgdb_data', 'zero_data']) {
+      try {
+        const { stdout } = await run(
+          `${ssh} "docker volume ls -q | grep '${volumePattern}' || true"`,
+          { captureOutput: true, silent: true }
+        )
+        const volumes = stdout.trim().split('\n').filter(Boolean)
+        if (volumes.length === 0) {
+          console.info(colors.gray(`  no ${volumePattern} volume found (first deploy?)`))
+          continue
+        }
+        for (const vol of volumes) {
+          await run(`${ssh} "docker volume rm ${vol}"`, { silent: true })
+          console.info(colors.gray(`  removed volume: ${vol}`))
+        }
+      } catch {
+        console.info(colors.gray(`  ${volumePattern}: volume not found or already removed`))
+      }
     }
   }
 
@@ -239,6 +265,16 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
     }
   }
 
+  if (fresh) {
+    console.info(colors.red('\n⚠️  --fresh: this will DELETE all database and zero data on the preview server'))
+    console.info(colors.red('   the preview environment will start completely from scratch\n'))
+    const confirmed = await prompt.confirm({ message: 'are you sure you want to wipe all preview data?' })
+    if (prompt.isCancel(confirmed) || !confirmed) {
+      console.info('cancelled.')
+      process.exit(0)
+    }
+  }
+
   console.info('🎯 deploying takeout to preview\n')
 
   await checkPrerequisites()
@@ -293,6 +329,10 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
     await gracefulStopZero(host, DEPLOY_SSH_KEY)
     await gracefulStopPgdb(host, DEPLOY_SSH_KEY)
 
+    if (fresh) {
+      await removeVolumes(host, DEPLOY_SSH_KEY)
+    }
+
     // deploy with self-hosted-db profile to include pgdb service
     await deployStack(processedCompose, { profile: 'self-hosted-db' })
 
@@ -314,6 +354,8 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
     console.info(
       '  op run --env-file=.env --env-file=.env.preview -- bun tko uncloud deploy-preview --skip-build --skip-docker'
     )
+    console.info('\nto wipe all data and start fresh:')
+    console.info('  bun deploy:preview --fresh')
   } finally {
     if (!skipLock) {
       await releaseDeployLock(ssh)

@@ -1,11 +1,9 @@
 import { useParams, useRouter } from 'one'
 import { memo } from 'react'
-import { Platform, ScrollView } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Platform } from 'react-native'
 import { H2, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
 import { vehicleReportById } from '~/data/queries/vehicleReport'
-import { useTabBarBottomPadding } from '~/features/app/tabBarConstants'
 import { useT } from '~/i18n/context'
 import { useLocale } from '~/i18n/context'
 import { HeadInfo } from '~/interface/app/HeadInfo'
@@ -34,8 +32,6 @@ export const ReportDetailPage = memo(() => {
   const { reportId = '' } = useParams<{ reportId?: string }>()
   const router = useRouter()
   const [vehicleReport, status] = useQuery(vehicleReportById, { reportId })
-  const insets = useSafeAreaInsets()
-  const tabBarPadding = useTabBarBottomPadding()
   const t = useT()
   const locale = useLocale()
   const { shareReport, isLoading: isShareLoading } = useShareReport(reportId)
@@ -131,73 +127,58 @@ export const ReportDetailPage = memo(() => {
     report.titleBrands.length > 0
 
   return (
-    <PageLayout>
+    <PageLayout scroll tabBarOffset>
       <HeadInfo title={title} />
 
-      <ScrollView
-        style={{ flex: 1 }}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={
-          isNative
-            ? {
-                paddingTop: insets.top + 12,
-                paddingBottom: tabBarPadding,
-                paddingHorizontal: 16,
-                gap: 16,
-              }
-            : undefined
-        }
+      {isNative && (
+        <XStack justify="space-between" items="center" px="$4" pt="$3">
+          <Button
+            size="small"
+            circular
+            bg="$color3"
+            icon={<CaretLeftIcon size={20} color="$color12" />}
+            onPress={() => router.back()}
+          />
+          <Button
+            size="small"
+            circular
+            bg="$color3"
+            icon={<ShareFatIcon size={20} color="$color12" />}
+            onPress={shareReport}
+            disabled={isShareLoading}
+          />
+        </XStack>
+      )}
+      <YStack
+        gap="$4"
+        width="100%"
+        self="center"
+        maxW={800}
+        {...(isNative ? { px: '$4' } : { p: '$4' })}
+        $lg={{ maxW: 1040 }}
       >
-        {isNative && (
-          <XStack justify="space-between" items="center">
+        <XStack justify="space-between" items="flex-start">
+          <YStack flex={1}>
+            <VehicleHeader report={report} hasIssues={hasIssues} />
+          </YStack>
+          {!isNative && (
             <Button
               size="small"
-              circular
               bg="$color3"
-              icon={<CaretLeftIcon size={20} color="$color12" />}
-              onPress={() => router.back()}
-            />
-            <Button
-              size="small"
-              circular
-              bg="$color3"
-              icon={<ShareFatIcon size={20} color="$color12" />}
+              icon={<ShareFatIcon size={18} color="$color12" />}
               onPress={shareReport}
               disabled={isShareLoading}
-            />
-          </XStack>
-        )}
-        <YStack
-          gap="$4"
-          width="100%"
-          self="center"
-          maxW={800}
-          {...(isNative ? {} : { p: '$4' })}
-          $lg={{ maxW: 1040 }}
-        >
-          <XStack justify="space-between" items="flex-start">
-            <YStack flex={1}>
-              <VehicleHeader report={report} hasIssues={hasIssues} />
-            </YStack>
-            {!isNative && (
-              <Button
-                size="small"
-                bg="$color3"
-                icon={<ShareFatIcon size={18} color="$color12" />}
-                onPress={shareReport}
-                disabled={isShareLoading}
-                ml="$3"
-              >
-                {t('share.button')}
-              </Button>
-            )}
-          </XStack>
-          <SummaryStats report={report} hasIssues={hasIssues} locale={locale} />
-          {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
-          <Timeline events={report.events} />
-          <SourceProviders providers={report.sourceProviders} />
-        </YStack>
-      </ScrollView>
+              ml="$3"
+            >
+              {t('share.button')}
+            </Button>
+          )}
+        </XStack>
+        <SummaryStats report={report} hasIssues={hasIssues} locale={locale} />
+        {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
+        <Timeline events={report.events} />
+        <SourceProviders providers={report.sourceProviders} />
+      </YStack>
     </PageLayout>
   )
 })

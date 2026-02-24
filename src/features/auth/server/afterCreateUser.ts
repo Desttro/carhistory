@@ -94,7 +94,11 @@ export async function afterCreateUser(user: { id: string; email: string }) {
         .update(userTable)
         .set({ role: 'admin' })
         .where(eq(userTable.id, userId))
-      console.info(`[afterCreateUser] promoted ${email} to admin`)
+      await db
+        .update(userCredits)
+        .set({ balance: 9999 })
+        .where(eq(userCredits.userId, userId))
+      console.info(`[afterCreateUser] promoted ${email} to admin with 9999 credits`)
     }
 
     // Demo users are auto-onboarded for easier testing

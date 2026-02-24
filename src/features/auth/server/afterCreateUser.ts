@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 
 import { DEMO_EMAIL } from '~/constants/app'
+import { ADMIN_WHITELIST } from '~/server/constants-server'
 import { analyticsActions } from '~/data/server/actions/analyticsActions'
 import { getDb } from '~/database'
 import { user as userTable, whitelist } from '~/database/schema-private'
@@ -88,20 +89,12 @@ export async function afterCreateUser(user: { id: string; email: string }) {
 
     const isWhitelisted = whitelistEntry.length > 0
 
-    // Handle admin promotion if needed
-    if (email === 'admin@fleek.xyz') {
-      // Uncomment if you need to promote to admin
-      // console.info(`Promoting to admin...`)
-      // image = 'https://your-admin-image-url'
-      // username = 'admin'
-      // await db
-      //   .update(userTable)
-      //   .set({
-      //     role: 'admin',
-      //     username: 'admin',
-      //     image: 'https://your-admin-image-url',
-      //   })
-      //   .where(eq(userTable.id, userId))
+    if (ADMIN_WHITELIST.has(email)) {
+      await db
+        .update(userTable)
+        .set({ role: 'admin' })
+        .where(eq(userTable.id, userId))
+      console.info(`[afterCreateUser] promoted ${email} to admin`)
     }
 
     // Demo users are auto-onboarded for easier testing

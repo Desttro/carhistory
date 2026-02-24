@@ -15,7 +15,12 @@ import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
 import { PageLayout } from '~/interface/pages/PageLayout'
 import { useQuery } from '~/zero/client'
 
-// import { SourceProviders } from './components/ReportSections'
+import {
+  SummaryStats,
+  Timeline,
+  TitleBrands,
+  VehicleHeader,
+} from './components/ReportSections'
 import { useShareReport } from './useShareReport'
 
 import type { CanonicalReport } from './types'
@@ -171,7 +176,6 @@ export const ReportDetailPage = memo(() => {
         <SummaryStats report={report} hasIssues={hasIssues} locale={locale} />
         {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
         <Timeline events={report.events} />
-        {/* <SourceProviders providers={report.sourceProviders} /> */}
       </YStack>
     </PageLayout>
   )

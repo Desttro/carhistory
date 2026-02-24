@@ -13,7 +13,12 @@ import { ShareFatIcon } from '~/interface/icons/phosphor/ShareFatIcon'
 import { WarningCircleIcon } from '~/interface/icons/phosphor/WarningCircleIcon'
 import { PageLayout } from '~/interface/pages/PageLayout'
 
-//  import { SourceProviders } from './components/ReportSections'
+import {
+  SummaryStats,
+  Timeline,
+  TitleBrands,
+  VehicleHeader,
+} from './components/ReportSections'
 
 import type { CanonicalReport } from './types'
 
@@ -133,7 +138,6 @@ function SharedReportContent() {
           <SummaryStats report={report} hasIssues={hasIssues} locale="en" />
           {report.titleBrands.length > 0 && <TitleBrands brands={report.titleBrands} />}
           <Timeline events={report.events} />
-          {/* <SourceProviders providers={report.sourceProviders} /> */}
         </YStack>
       </ScrollView>
     </PageLayout>

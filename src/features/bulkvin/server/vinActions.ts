@@ -41,6 +41,11 @@ async function checkVin(vin: string): Promise<VinCheckResult> {
     const carfaxRecords = result.carfaxRecords ?? 0
     const autocheckRecords = result.autocheckRecords ?? 0
 
+    // bulkvin returns model as e.g. "2021 BMW 5 SERIES M550I XDRIVE" — year may be embedded
+    const yearNum = typeof result.year === 'number' ? result.year : null
+    const parsedYear =
+      yearNum ?? (result.model ? Number.parseInt(result.model, 10) || null : null)
+
     await db
       .insert(vinCheckCache)
       .values({
@@ -49,14 +54,14 @@ async function checkVin(vin: string): Promise<VinCheckResult> {
         carfaxRecords,
         autocheckRecords,
         model: result.model,
-        year: result.year,
+        year: parsedYear,
       })
       .onConflictDoUpdate({
         target: [vinCheckCache.vin, vinCheckCache.carfaxRecords, vinCheckCache.autocheckRecords],
         set: {
           lastVerifiedAt: new Date().toISOString(),
           model: result.model,
-          year: result.year,
+          year: parsedYear,
         },
       })
   }

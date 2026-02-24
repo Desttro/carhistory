@@ -16,6 +16,7 @@ declare module 'one' {
         | `/(app)/home/(tabs)`
         | `/(app)/home/(tabs)/pricing`
         | `/(app)/home/(tabs)/pricing/`
+        | `/(app)/home/(tabs)/pricing/success`
         | `/(app)/home/(tabs)/profile`
         | `/(app)/home/(tabs)/profile/`
         | `/(app)/home/(tabs)/reports`
@@ -26,6 +27,7 @@ declare module 'one' {
         | `/(app)/home/notification/`
         | `/(app)/home/pricing`
         | `/(app)/home/pricing/`
+        | `/(app)/home/pricing/success`
         | `/(app)/home/profile`
         | `/(app)/home/profile/`
         | `/(app)/home/reports`
@@ -49,6 +51,7 @@ declare module 'one' {
         | `/home/(tabs)`
         | `/home/(tabs)/pricing`
         | `/home/(tabs)/pricing/`
+        | `/home/(tabs)/pricing/success`
         | `/home/(tabs)/profile`
         | `/home/(tabs)/profile/`
         | `/home/(tabs)/reports`
@@ -59,6 +62,7 @@ declare module 'one' {
         | `/home/notification/`
         | `/home/pricing`
         | `/home/pricing/`
+        | `/home/pricing/success`
         | `/home/profile`
         | `/home/profile/`
         | `/home/reports`

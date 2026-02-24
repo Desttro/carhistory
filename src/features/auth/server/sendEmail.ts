@@ -1,9 +1,10 @@
 import { render } from '@react-email/components'
-import type { ReactElement } from 'react'
 import { Resend } from 'resend'
 
 import { APP_NAME } from '~/constants/app'
 import { RESEND_API_KEY } from '~/server/env-server'
+
+import type { ReactElement } from 'react'
 
 const NOTIFICATIONS_DOMAIN = 'notifications.carhistory.io'
 

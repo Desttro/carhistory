@@ -18,7 +18,9 @@ export async function checkSSHKey(sshKeyPath: string): Promise<void> {
       }
       console.info('✅ ssh agent mode (keys available)')
     } catch {
-      throw new Error('ssh agent has no keys — ensure 1Password SSH agent or ssh-agent is running')
+      throw new Error(
+        'ssh agent has no keys — ensure 1Password SSH agent or ssh-agent is running'
+      )
     }
     return
   }

@@ -1,13 +1,13 @@
 import { eq } from 'drizzle-orm'
 
 import { DEMO_EMAIL } from '~/constants/app'
-import { ADMIN_WHITELIST } from '~/server/constants-server'
 import { analyticsActions } from '~/data/server/actions/analyticsActions'
 import { getDb } from '~/database'
 import { user as userTable, whitelist } from '~/database/schema-private'
 import { userCredits, userPublic, userState } from '~/database/schema-public'
 import { syncPolarCustomer } from '~/features/payments/server/polarCustomerSync'
 import { syncRevenueCatSubscriber } from '~/features/payments/server/revenuecatCustomerSync'
+import { ADMIN_WHITELIST } from '~/server/constants-server'
 
 export async function afterCreateUser(user: { id: string; email: string }) {
   try {
@@ -90,10 +90,7 @@ export async function afterCreateUser(user: { id: string; email: string }) {
     const isWhitelisted = whitelistEntry.length > 0
 
     if (ADMIN_WHITELIST.has(email)) {
-      await db
-        .update(userTable)
-        .set({ role: 'admin' })
-        .where(eq(userTable.id, userId))
+      await db.update(userTable).set({ role: 'admin' }).where(eq(userTable.id, userId))
       await db
         .update(userCredits)
         .set({ balance: 9999 })

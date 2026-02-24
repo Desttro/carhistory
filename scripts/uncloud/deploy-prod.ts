@@ -6,9 +6,8 @@ await cmd`Deploy to production`.run(async ({ run, colors, fs, path }) => {
   // env is loaded by run:prod wrapper (dotenvx --overload -f .env .env.production)
   const { buildMigrations, buildWeb, buildDockerImage } = await import('./helpers/build')
   const { processComposeEnv } = await import('./helpers/processEnv')
-  const { checkSSHKey, testSSHConnection, buildSSHFlags, isAgentMode } = await import(
-    './helpers/ssh'
-  )
+  const { checkSSHKey, testSSHConnection, buildSSHFlags, isAgentMode } =
+    await import('./helpers/ssh')
   const { checkUncloudCLI, initUncloud, pushImage, deployStack, showStatus } =
     await import('./helpers/uncloud')
   const { acquireDeployLock, releaseDeployLock } =
@@ -208,17 +207,16 @@ await cmd`Deploy to production`.run(async ({ run, colors, fs, path }) => {
 
     try {
       // create certs directories on server
-      await run(`${ssh} "sudo mkdir -p /etc/uncloud/certs /var/lib/uncloud/caddy/certs"`, {
-        silent: true,
-      })
+      await run(
+        `${ssh} "sudo mkdir -p /etc/uncloud/certs /var/lib/uncloud/caddy/certs"`,
+        {
+          silent: true,
+        }
+      )
 
       // upload certificates via tmp (deploy user may not have direct write access)
-      await run(
-        `scp ${scpFlags} ${resolvedCert} ${host}:/tmp/origin.pem`
-      )
-      await run(
-        `scp ${scpFlags} ${resolvedKey} ${host}:/tmp/origin.key`
-      )
+      await run(`scp ${scpFlags} ${resolvedCert} ${host}:/tmp/origin.pem`)
+      await run(`scp ${scpFlags} ${resolvedKey} ${host}:/tmp/origin.key`)
 
       await run(
         `${ssh} "sudo mv /tmp/origin.pem /etc/uncloud/certs/origin.pem && sudo mv /tmp/origin.key /etc/uncloud/certs/origin.key"`,

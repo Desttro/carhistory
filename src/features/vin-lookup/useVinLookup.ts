@@ -46,7 +46,9 @@ export function useVinLookup() {
     setCheckResult(null)
 
     try {
-      const res = await fetch(`${SERVER_URL}/api/vin/check?vin=${encodeURIComponent(normalizedVin)}`)
+      const res = await fetch(
+        `${SERVER_URL}/api/vin/check?vin=${encodeURIComponent(normalizedVin)}`
+      )
       const data = (await res.json()) as VinCheckResult
 
       if (!data.success) {

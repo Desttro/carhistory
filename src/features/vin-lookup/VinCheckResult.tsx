@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { H3, SizableText, Spinner, XStack, YStack } from 'tamagui'
 
-import { animationClamped } from '~/interface/animations/animationClamped'
 import { PricingSheet } from '~/features/credits/ui/PricingSheet'
+import { animationClamped } from '~/interface/animations/animationClamped'
 import { Button } from '~/interface/buttons/Button'
 import { StatusChip } from '~/interface/chips/StatusChip'
 import { CarIcon } from '~/interface/icons/phosphor/CarIcon'
@@ -104,7 +104,10 @@ export const VinCheckResult = memo(
           )}
           {result.year && <KeyValueRow label="Year" value={String(result.year)} />}
           {result.model && (
-            <KeyValueRow label="Model" value={formatVehicleName(undefined, result.model)} />
+            <KeyValueRow
+              label="Model"
+              value={formatVehicleName(undefined, result.model)}
+            />
           )}
           <KeyValueRow label="Total Records" value={String(totalRecords)} last />
         </YStack>

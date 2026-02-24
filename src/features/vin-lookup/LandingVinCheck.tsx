@@ -106,7 +106,9 @@ export function LandingVinCheck() {
     setResult(null)
 
     try {
-      const res = await fetch(`${SERVER_URL}/api/vin/check?vin=${encodeURIComponent(normalized)}`)
+      const res = await fetch(
+        `${SERVER_URL}/api/vin/check?vin=${encodeURIComponent(normalized)}`
+      )
       const data = (await res.json()) as VinCheckResult
 
       if (!data.success) {

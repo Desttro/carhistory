@@ -6,9 +6,8 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
   // env is loaded by op run (op run --env-file=.env --env-file=.env.preview -- ...)
   const { buildMigrations, buildWeb, buildDockerImage } = await import('./helpers/build')
   const { processComposeEnv } = await import('./helpers/processEnv')
-  const { checkSSHKey, testSSHConnection, buildSSHFlags, isAgentMode } = await import(
-    './helpers/ssh'
-  )
+  const { checkSSHKey, testSSHConnection, buildSSHFlags, isAgentMode } =
+    await import('./helpers/ssh')
   const { checkUncloudCLI, initUncloud, pushImage, deployStack, showStatus } =
     await import('./helpers/uncloud')
   const { acquireDeployLock, releaseDeployLock } =
@@ -152,12 +151,8 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path }) => {
         { silent: true }
       )
 
-      await run(
-        `scp ${scpFlags} ${resolvedCert} ${host}:/tmp/origin.pem`
-      )
-      await run(
-        `scp ${scpFlags} ${resolvedKey} ${host}:/tmp/origin.key`
-      )
+      await run(`scp ${scpFlags} ${resolvedCert} ${host}:/tmp/origin.pem`)
+      await run(`scp ${scpFlags} ${resolvedKey} ${host}:/tmp/origin.key`)
 
       await run(
         `${ssh} "sudo mv /tmp/origin.pem /etc/uncloud/certs/origin.pem && sudo mv /tmp/origin.key /etc/uncloud/certs/origin.key"`,

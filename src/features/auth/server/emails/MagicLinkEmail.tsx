@@ -30,7 +30,9 @@ export const MagicLinkEmail = ({ url, email }: MagicLinkEmailProps) => (
             {APP_NAME}
           </Heading>
           <Hr style={hr} />
-          <Text style={paragraph}>Click the button below to sign in to your account:</Text>
+          <Text style={paragraph}>
+            Click the button below to sign in to your account:
+          </Text>
           <Button style={button} href={url}>
             Sign in to {APP_NAME}
           </Button>
@@ -38,7 +40,8 @@ export const MagicLinkEmail = ({ url, email }: MagicLinkEmailProps) => (
           <code style={code}>{url}</code>
           <Hr style={hr} />
           <Text style={footer}>
-            If you didn&apos;t request this link, you can safely ignore this email. Contact{' '}
+            If you didn&apos;t request this link, you can safely ignore this email.
+            Contact{' '}
             <Link href={`mailto:${ADMIN_EMAIL}`} style={link}>
               {ADMIN_EMAIL}
             </Link>{' '}

@@ -29,16 +29,15 @@ export const VerificationCodeEmail = ({ code, email }: VerificationCodeEmailProp
             {APP_NAME}
           </Heading>
           <Hr style={hr} />
-          <Text style={paragraph}>
-            Enter the following code to verify your identity:
-          </Text>
+          <Text style={paragraph}>Enter the following code to verify your identity:</Text>
           <Section style={codeContainer}>
             <Text style={codeStyle}>{code}</Text>
           </Section>
           <Text style={paragraph}>This code expires in 5 minutes.</Text>
           <Hr style={hr} />
           <Text style={footer}>
-            If you didn&apos;t request this code, you can safely ignore this email. Contact{' '}
+            If you didn&apos;t request this code, you can safely ignore this email.
+            Contact{' '}
             <Link href={`mailto:${ADMIN_EMAIL}`} style={link}>
               {ADMIN_EMAIL}
             </Link>{' '}

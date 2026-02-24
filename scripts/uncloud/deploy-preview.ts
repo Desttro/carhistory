@@ -103,8 +103,25 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path, prompt }) => {
 
   async function removeVolumes(host: string, sshKey: string): Promise<void> {
     const ssh = getSSHCmd(host, sshKey)
-    console.info(colors.red('\n🗑️  removing docker volumes for fresh deploy...'))
+    console.info(colors.red('\n🗑️  removing all containers and volumes for fresh deploy...'))
 
+    // remove all containers first — stopped containers still hold volume references
+    // and docker volume rm refuses to remove volumes referenced by any container
+    try {
+      const { stdout } = await run(
+        `${ssh} "docker ps -aq"`,
+        { captureOutput: true, silent: true }
+      )
+      const containers = stdout.trim().split('\n').filter(Boolean)
+      if (containers.length > 0) {
+        await run(`${ssh} "docker rm -f ${containers.join(' ')}"`, { silent: true })
+        console.info(colors.gray(`  removed ${containers.length} container(s)`))
+      }
+    } catch {
+      console.info(colors.gray('  no containers to remove'))
+    }
+
+    // now remove volumes
     for (const volumePattern of ['pgdb_data', 'zero_data']) {
       try {
         const { stdout } = await run(
@@ -117,11 +134,11 @@ await cmd`Deploy to preview`.run(async ({ run, colors, fs, path, prompt }) => {
           continue
         }
         for (const vol of volumes) {
-          await run(`${ssh} "docker volume rm ${vol}"`, { silent: true })
+          await run(`${ssh} "docker volume rm -f ${vol}"`)
           console.info(colors.gray(`  removed volume: ${vol}`))
         }
-      } catch {
-        console.info(colors.gray(`  ${volumePattern}: volume not found or already removed`))
+      } catch (err) {
+        console.error(colors.red(`  failed to remove ${volumePattern}: ${err instanceof Error ? err.message : err}`))
       }
     }
   }

@@ -111,14 +111,17 @@ export async function upsertProduct(
         .where(eq(product.id, targetProductId))
     }
 
-    await db.insert(productProvider).values({
-      id: crypto.randomUUID(),
-      productId: targetProductId,
-      provider,
-      externalProductId: providerProduct.externalProductId,
-      externalData: providerProduct.externalData,
-      createdAt: now,
-    })
+    await db
+      .insert(productProvider)
+      .values({
+        id: crypto.randomUUID(),
+        productId: targetProductId,
+        provider,
+        externalProductId: providerProduct.externalProductId,
+        externalData: providerProduct.externalData,
+        createdAt: now,
+      })
+      .onConflictDoNothing()
 
     console.info(`[product-sync] created ${provider} product mapping: ${providerProduct.name}`)
   }

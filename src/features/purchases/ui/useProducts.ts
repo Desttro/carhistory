@@ -50,7 +50,7 @@ export function useProducts(options?: UseProductsOptions) {
         // fallback: match by credits count if no provider mapping
         if (!rcPackage) {
           rcPackage = rcPackages.find((rcp) => {
-            const match = rcp.product.identifier.match(/(\d+)_credit/)
+            const match = rcp.product.identifier.match(/credits?[._](\d+)$/)
             return match && parseInt(match[1]) === pkg.credits
           })
         }

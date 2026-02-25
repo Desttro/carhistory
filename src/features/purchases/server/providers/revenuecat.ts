@@ -54,9 +54,8 @@ export const revenuecatAdapter: ProviderAdapter = {
     for (const p of response.items) {
       if (seen.has(p.store_identifier)) continue
 
-      // extract credits from store_identifier naming convention
-      // e.g., cat_history_3_credits -> 3, cat_history_1_credit -> 1
-      const match = p.store_identifier.match(/(\d+)_credits?/)
+      // extract credits from store_identifier, e.g. io.carhistory.app.credits.3
+      const match = p.store_identifier.match(/credits?[._](\d+)$/)
       const credits = match ? parseInt(match[1]) : 0
       if (credits <= 0) continue
 

@@ -97,6 +97,7 @@ export * from './string/pickLast'
 export * from './string/pluralize'
 export * from './string/randomId'
 export * from './string/slugify'
+export * from './string/uuid'
 export * from './string/truncateList'
 
 // time

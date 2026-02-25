@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { and, eq, isNull } from 'drizzle-orm'
 
 import { getDb } from '~/database'
@@ -54,9 +55,9 @@ async function createShareToken(
   }
 
   // create new token
-  const token = crypto.randomUUID()
+  const token = uuid()
   await db.insert(reportShareToken).values({
-    id: crypto.randomUUID(),
+    id: uuid(),
     vehicleReportId: reportId,
     userId,
     token,

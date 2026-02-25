@@ -245,7 +245,7 @@ mutations run on both client and server - they must produce the same result.
 async insert(ctx, post) {
   await ctx.tx.mutate.post.insert({
     ...post,
-    id: randomId(),        // different on each run!
+    id: uuid(),            // different on each run!
     createdAt: Date.now()  // different timing!
   })
 }

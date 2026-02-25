@@ -74,6 +74,7 @@ utility functions and types for the project
   - pluralize
   - randomId
   - slugify
+  - uuid
   - truncateList
 - time
   - formatDate

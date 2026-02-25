@@ -124,7 +124,7 @@ export const mutate = mutations(schema, permissions, {
     await ctx.can(permissions, props)
 
     await ctx.tx.mutate.message.insert({
-      id: randomId(),
+      id: uuid(),
       content: props.content,
       channelId: props.channelId,
       authorId: ctx.authData!.id,

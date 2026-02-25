@@ -1,5 +1,4 @@
-import { randomUUID } from 'node:crypto'
-
+import { uuid } from '@take-out/helpers'
 import { expect, test, type Page } from '@playwright/test'
 import { Pool } from 'pg'
 
@@ -54,7 +53,7 @@ async function waitForPostHidden(page: Page, postId: string, timeout = 5000) {
 }
 
 async function insertBlock(blockerId: string, blockedId: string): Promise<string> {
-  const id = `test-block-${randomUUID()}`
+  const id = `test-block-${uuid()}`
   await pool.query(
     `INSERT INTO block (id, "blockerId", "blockedId", "createdAt")
      VALUES ($1, $2, $3, NOW())`,
@@ -195,7 +194,7 @@ test.describe('Permissions', () => {
     const demoUserId = await getTestValue(page, 'user-id')
 
     // insert a post owned by the demo user directly via pg
-    const testPostId = `test-post-${randomUUID()}`
+    const testPostId = `test-post-${uuid()}`
     await pool.query(
       `INSERT INTO post (id, "userId", image, "imageWidth", "imageHeight", caption, "hiddenByAdmin", "createdAt", "commentCount")
        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), $8)`,

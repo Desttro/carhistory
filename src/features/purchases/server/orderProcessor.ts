@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { sql, eq, and, gte } from 'drizzle-orm'
 
 import { analyticsActions } from '~/data/server/actions/analyticsActions'
@@ -54,7 +55,7 @@ export async function processPurchase(
 
     const newBalance = balanceResult[0]?.balance ?? 0
 
-    const creditTxId = crypto.randomUUID()
+    const creditTxId = uuid()
     await tx.insert(creditTransaction).values({
       id: creditTxId,
       userId,
@@ -72,7 +73,7 @@ export async function processPurchase(
     })
 
     await tx.insert(order).values({
-      id: crypto.randomUUID(),
+      id: uuid(),
       userId,
       productId: resolved.productId,
       type: 'purchase',
@@ -161,7 +162,7 @@ export async function processRefund(
     }
 
     const newBalance = balanceResult[0].balance
-    const creditTxId = crypto.randomUUID()
+    const creditTxId = uuid()
 
     await tx.insert(creditTransaction).values({
       id: creditTxId,
@@ -180,7 +181,7 @@ export async function processRefund(
     })
 
     await tx.insert(order).values({
-      id: crypto.randomUUID(),
+      id: uuid(),
       userId,
       productId: resolved.productId,
       type: 'refund',

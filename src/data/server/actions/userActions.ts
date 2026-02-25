@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { eq, ne, and } from 'drizzle-orm'
 
 import { getDb } from '~/database'
@@ -173,7 +174,7 @@ async function whitelistUsers(emails: string[]) {
   const uniqueEmails = [...new Set(emails.map((e) => e.toLowerCase()))]
 
   const whitelistEntries = uniqueEmails.map((email) => ({
-    id: crypto.randomUUID(),
+    id: uuid(),
     email,
   }))
 

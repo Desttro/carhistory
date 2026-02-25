@@ -82,7 +82,7 @@ async function _addCredits(
   const newBalance = result[0]?.balance ?? 0
 
   await db.insert(creditTransaction).values({
-    id: crypto.randomUUID(),
+    id: uuid(),
     userId,
     amount,
     type,
@@ -138,7 +138,7 @@ async function _deductCredits(
   const newBalance = result[0].balance
 
   await db.insert(creditTransaction).values({
-    id: crypto.randomUUID(),
+    id: uuid(),
     userId,
     amount: -amount,
     type,

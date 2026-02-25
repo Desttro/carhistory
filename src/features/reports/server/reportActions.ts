@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { eq, and, gt, inArray } from 'drizzle-orm'
 
 import { getDb } from '~/database'
@@ -103,7 +104,7 @@ async function createReport(
   }
 
   // --- phase 2: single transaction for all DB writes ---
-  const reportId = crypto.randomUUID()
+  const reportId = uuid()
   const purchasedAt = new Date()
   const expiresAt = new Date(purchasedAt)
   expiresAt.setDate(expiresAt.getDate() + REPORT_VALIDITY_DAYS)
@@ -173,7 +174,7 @@ async function createReport(
         // prepare metadata (pure computation) and insert with pending status
         const metadata = prepareHtmlMetadata(source.html, primaryVin, source.provider)
 
-        reportHtmlId = crypto.randomUUID()
+        reportHtmlId = uuid()
         await tx.insert(reportHtml).values({
           id: reportHtmlId,
           vehicleId: primaryVin,
@@ -200,7 +201,7 @@ async function createReport(
       }
 
       // create parsed report
-      const parsedReportId = crypto.randomUUID()
+      const parsedReportId = uuid()
       await tx.insert(parsedReport).values({
         id: parsedReportId,
         reportHtmlId,
@@ -233,7 +234,7 @@ async function createReport(
     if (merged.events.length > 0) {
       await tx.insert(timelineEvent).values(
         merged.events.map((event) => ({
-          id: crypto.randomUUID(),
+          id: uuid(),
           vehicleReportId: reportId,
           vehicleId: primaryVin,
           eventType: event.eventType,
@@ -339,7 +340,7 @@ async function createReportFromCache(
     return { success: false, error: 'Cached parsed reports have no data' }
   }
 
-  const reportId = crypto.randomUUID()
+  const reportId = uuid()
   const purchasedAt = new Date()
   const expiresAt = new Date(purchasedAt)
   expiresAt.setDate(expiresAt.getDate() + REPORT_VALIDITY_DAYS)
@@ -384,7 +385,7 @@ async function createReportFromCache(
     const mergeInputs: Array<{ report: SourceReport; parsedReportId: string }> = []
 
     for (const cached of validCached) {
-      const newParsedReportId = crypto.randomUUID()
+      const newParsedReportId = uuid()
       await tx.insert(parsedReport).values({
         id: newParsedReportId,
         reportHtmlId: cached.reportHtmlId,
@@ -418,7 +419,7 @@ async function createReportFromCache(
     if (canonical.events.length > 0) {
       await tx.insert(timelineEvent).values(
         canonical.events.map((event) => ({
-          id: crypto.randomUUID(),
+          id: uuid(),
           vehicleReportId: reportId,
           vehicleId: vin,
           eventType: event.eventType,

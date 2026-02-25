@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { eq, and } from 'drizzle-orm'
 
 import { getDb } from '~/database'
@@ -66,7 +67,7 @@ export async function upsertProduct(
     console.info(`[product-sync] updated ${provider} product: ${providerProduct.name}`)
   } else {
     // create new product + mapping
-    const productId = crypto.randomUUID()
+    const productId = uuid()
     const slug = `credits-${providerProduct.credits}`
 
     // check if product with this slug already exists
@@ -114,7 +115,7 @@ export async function upsertProduct(
     await db
       .insert(productProvider)
       .values({
-        id: crypto.randomUUID(),
+        id: uuid(),
         productId: targetProductId,
         provider,
         externalProductId: providerProduct.externalProductId,

@@ -180,7 +180,7 @@ the data you're given.
 ```ts
 // caller generates these values
 await zero.mutate.post.insert({
-  id: randomId(), // generated before mutation
+  id: uuid(), // generated before mutation
   createdAt: Date.now(), // captured before mutation
   userId: currentUser.id,
   content: 'Hello',
@@ -250,8 +250,8 @@ async send(ctx, props: SendMessage) {
 
 // caller generates both IDs
 await zero.mutate.message.send({
-  id: randomId(),
-  nextDraftId: randomId(),  // pre-generate the follow-up ID
+  id: uuid(),
+  nextDraftId: uuid(),  // pre-generate the follow-up ID
   content: 'Hello',
   createdAt: Date.now(),
 })
@@ -268,9 +268,9 @@ async insert(ctx, post) {
   // safe: only runs server-side
   if (ctx.server) {
     ctx.server.asyncTasks.push(async () => {
-      // these can use Date.now(), randomId(), etc.
+      // these can use Date.now(), uuid(), etc.
       await ctx.server.actions.analytics.logEvent({
-        id: randomId(),
+        id: uuid(),
         timestamp: Date.now(),
         event: 'post_created',
       })

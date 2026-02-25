@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { eq, and } from 'drizzle-orm'
 
 import { getDb } from '~/database'
@@ -49,7 +50,7 @@ async function checkVin(vin: string): Promise<VinCheckResult> {
     await db
       .insert(vinCheckCache)
       .values({
-        id: crypto.randomUUID(),
+        id: uuid(),
         vin: validation.normalizedVin,
         carfaxRecords,
         autocheckRecords,
@@ -241,7 +242,7 @@ async function purchaseReport(
     await db
       .insert(vinCheckCache)
       .values({
-        id: crypto.randomUUID(),
+        id: uuid(),
         vin: normalizedVin,
         carfaxRecords,
         autocheckRecords,

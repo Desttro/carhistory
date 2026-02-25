@@ -1,4 +1,4 @@
-import { formatDistanceToNow, randomId } from '@take-out/helpers'
+import { formatDistanceToNow, uuid } from '@take-out/helpers'
 import { useNavigation, useParams, usePathname } from 'one'
 import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useKeyboardHandler } from 'react-native-keyboard-controller'
@@ -121,7 +121,7 @@ export const FeedDetailPage = memo(() => {
 
     try {
       await zero.mutate.comment.insert({
-        id: randomId(),
+        id: uuid(),
         postId: feedId,
         userId: currentUser.id,
         content: content.trim(),

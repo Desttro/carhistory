@@ -1,4 +1,4 @@
-import { isNative, randomId } from '@take-out/helpers'
+import { isNative, uuid } from '@take-out/helpers'
 import { Menu } from '@tamagui/menu'
 import { router } from 'one'
 import { useIsTouchDevice } from 'tamagui'
@@ -72,7 +72,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
 
     try {
       zero.mutate.block.insert({
-        id: randomId(),
+        id: uuid(),
         createdAt: Date.now(),
         blockedId: post.userId,
       })

@@ -1,4 +1,4 @@
-import { randomId } from '@take-out/helpers'
+import { uuid } from '@take-out/helpers'
 
 import { s3Client } from './s3client'
 import { uploadToS3, defaultBucket } from './upload'
@@ -20,7 +20,7 @@ export async function uploadDataUrlToR2(dataUrl: string): Promise<string> {
   const buffer = Buffer.from(base64Data!, 'base64')
 
   const ext = mimeType === 'image/png' ? 'png' : mimeType === 'image/jpeg' ? 'jpg' : 'png'
-  const key = `${folder}/${randomId()}.${ext}`
+  const key = `${folder}/${uuid()}.${ext}`
 
   const result = await uploadToS3(s3Client, {
     bucket: defaultBucket,

@@ -1,4 +1,4 @@
-import { randomId, useEmitterSelector } from '@take-out/helpers'
+import { uuid, useEmitterSelector } from '@take-out/helpers'
 import { useRef, useState } from 'react'
 import { KeyboardController } from 'react-native-keyboard-controller'
 import {
@@ -110,7 +110,7 @@ export const DialogCreatePost = () => {
 
     const trimmedCaption = caption.trim() || undefined
     const imageUrl = uploadedUrl || ''
-    const postId = randomId()
+    const postId = uuid()
 
     setIsPosting(true)
     try {

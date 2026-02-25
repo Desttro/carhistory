@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { eq, sql, and, gte } from 'drizzle-orm'
 
 import { getDb } from '~/database'
@@ -22,7 +23,7 @@ export async function ensureUserCreditsExist(userId: string): Promise<void> {
   await db
     .insert(userCredits)
     .values({
-      id: crypto.randomUUID(),
+      id: uuid(),
       userId,
       balance: 0,
     })

@@ -1,4 +1,5 @@
 import { Polar } from '@polar-sh/sdk'
+import { uuid } from '@take-out/helpers'
 
 import { getDb } from '~/database'
 import { customerProvider } from '~/database/schema-private'
@@ -16,7 +17,7 @@ async function storeCustomerMapping(userId: string, polarCustomerId: string) {
   await db
     .insert(customerProvider)
     .values({
-      id: crypto.randomUUID(),
+      id: uuid(),
       userId,
       provider: 'polar',
       externalCustomerId: polarCustomerId,

@@ -1,6 +1,6 @@
 import { expo } from '@better-auth/expo'
 import { checkout, polar, portal, webhooks } from '@polar-sh/better-auth'
-import { time } from '@take-out/helpers'
+import { time, uuid } from '@take-out/helpers'
 import { betterAuth } from 'better-auth'
 import { admin, bearer, emailOTP, jwt, magicLink, phoneNumber } from 'better-auth/plugins'
 import { eq, and } from 'drizzle-orm'
@@ -74,6 +74,9 @@ export const authServer = betterAuth({
     }),
     ipAddress: {
       ipAddressHeaders: ['cf-connecting-ip', 'x-forwarded-for'],
+    },
+    database: {
+      generateId: () => uuid(),
     },
   },
 

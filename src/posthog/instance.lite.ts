@@ -1,3 +1,5 @@
+import { uuid } from '@take-out/helpers'
+
 import type { PostHogInstance } from './types'
 
 // lightweight posthog client that uses our server proxy
@@ -21,7 +23,7 @@ function getDistinctId(): string {
   }
 
   // generate anonymous id
-  distinctId = `anon_${crypto.randomUUID()}`
+  distinctId = `anon_${uuid()}`
 
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem('ph_distinct_id', distinctId)

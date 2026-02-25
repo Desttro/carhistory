@@ -2,7 +2,7 @@ import { mustGetQuery } from '@rocicorp/zero'
 import { PushProcessor } from '@rocicorp/zero/pg'
 import { handleQueryRequest as zeroHandleQueryRequest } from '@rocicorp/zero/server'
 import { zeroNodePg } from '@rocicorp/zero/server/adapters/pg'
-import { assertString, randomId } from '@take-out/helpers'
+import { assertString, uuid } from '@take-out/helpers'
 import { Pool } from 'pg'
 
 import { createPermissions } from './createPermissions'
@@ -137,7 +137,7 @@ export function createZeroServer<
 
     // now finish
     if (!skipAsyncTasks && asyncTasks.length) {
-      const id = randomId()
+      const id = uuid()
       console.info(`[push] complete, running async tasks ${asyncTasks.length} id ${id}`)
       Promise.all(asyncTasks.map((task) => task()))
         .then(() => {
@@ -244,7 +244,7 @@ export function createZeroServer<
       if (options?.awaitAsyncTasks) {
         await Promise.all(asyncTasks.map((t) => t()))
       } else {
-        const id = randomId()
+        const id = uuid()
         console.info(`[mutate] running async tasks ${asyncTasks.length} id ${id}`)
         Promise.all(asyncTasks.map((t) => t()))
           .then(() => {

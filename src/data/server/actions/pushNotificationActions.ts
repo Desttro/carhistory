@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { and, eq, ne } from 'drizzle-orm'
 
 import { getDb } from '~/database'
@@ -35,7 +36,7 @@ export const createNotification = async (params: CreateNotificationParams) => {
   const { userId, actorId, type, title, body, data } = params
   const db = getDb()
 
-  const notificationId = crypto.randomUUID()
+  const notificationId = uuid()
 
   // insert notification into database (zero will sync to all clients)
   await db.insert(notification).values({

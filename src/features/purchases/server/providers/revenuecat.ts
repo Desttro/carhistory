@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { getDb } from '~/database'
 import { customerProvider } from '~/database/schema-private'
 
@@ -15,7 +16,7 @@ export async function syncRevenueCatSubscriber(user: {
   await db
     .insert(customerProvider)
     .values({
-      id: crypto.randomUUID(),
+      id: uuid(),
       userId: user.id,
       provider: 'revenuecat',
       externalCustomerId: user.id,

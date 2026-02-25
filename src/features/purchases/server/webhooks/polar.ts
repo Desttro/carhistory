@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { getDb } from '~/database'
 import { webhookEvent } from '~/database/schema-private'
 
@@ -21,7 +22,7 @@ async function storeWebhookEvent(
     await db
       .insert(webhookEvent)
       .values({
-        id: crypto.randomUUID(),
+        id: uuid(),
         provider: 'polar',
         eventType,
         externalEventId,

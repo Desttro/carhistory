@@ -1,5 +1,5 @@
 import { number, string, table } from '@rocicorp/zero'
-import { randomId } from '@take-out/helpers'
+import { uuid } from '@take-out/helpers'
 import { mutations, serverWhere } from 'on-zero'
 
 export const schema = table('report')
@@ -33,7 +33,7 @@ export const mutate = mutations(schema, permissions, {
     if (!authData) throw new Error('Not authenticated')
 
     await tx.mutate.report.insert({
-      id: randomId(),
+      id: uuid(),
       reporterId: authData.id,
       reportedPostId: data.postId,
       reportedUserId: undefined,
@@ -57,7 +57,7 @@ export const mutate = mutations(schema, permissions, {
     if (!authData) throw new Error('Not authenticated')
 
     await tx.mutate.report.insert({
-      id: randomId(),
+      id: uuid(),
       reporterId: authData.id,
       reportedUserId: data.userId,
       reportedPostId: undefined,

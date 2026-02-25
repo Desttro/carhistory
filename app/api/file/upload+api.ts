@@ -2,7 +2,7 @@
 // import { ensureAuth } from '~/features/auth/server/ensureAuth'
 // await ensureAuth(req)
 
-import { randomId } from '@take-out/helpers'
+import { uuid } from '@take-out/helpers'
 
 import { s3Client } from '~/features/upload/s3client'
 import { defaultBucket, uploadToS3 } from '~/features/upload/upload'
@@ -23,7 +23,7 @@ export default async function handler(req: Request) {
   // console.info(`[Upload API] File received: ${file.name}, type: ${file.type}, size: ${file.size}`)
 
   try {
-    const key = `${folder}/${randomId()}-${file.name}`
+    const key = `${folder}/${uuid()}-${file.name}`
 
     // for images, read into buffer first
     if (file.type.startsWith('image/')) {

@@ -1,3 +1,4 @@
+import { uuid } from '@take-out/helpers'
 import { eq } from 'drizzle-orm'
 
 import { DEMO_EMAIL } from '~/constants/app'
@@ -72,7 +73,7 @@ export async function afterCreateUser(user: { id: string; email: string }) {
 
     if (existingCredits.length === 0) {
       await db.insert(userCredits).values({
-        id: crypto.randomUUID(),
+        id: uuid(),
         userId,
         balance: 0,
       })

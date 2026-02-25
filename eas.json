@@ -1,19 +1,14 @@
 {
+  "$schema": "https://docs.expo.dev/static/eas.schema.json",
   "cli": {
-    "version": ">= 16.19.3",
+    "version": ">= 18.0.0",
     "appVersionSource": "local",
     "requireCommit": false
   },
   "build": {
     "base": {
-      "android": {
-        "bun": "1.3.9"
-      },
-      "ios": {
-        "bun": "1.3.9"
-      },
+      "bun": "1.3.9",
       "env": {
-        "APP_VARIANT": "development",
         "APPLE_TEAM_ID": "5J565W44Y8"
       }
     },
@@ -21,44 +16,37 @@
       "extends": "base",
       "developmentClient": true,
       "distribution": "internal",
-      "bun": "1.3.9",
       "android": {
         "buildType": "apk"
       },
       "ios": {
         "simulator": true,
         "image": "latest"
+      },
+      "env": {
+        "APP_VARIANT": "development"
       }
     },
     "preview": {
       "extends": "base",
-      "developmentClient": false,
       "distribution": "store",
-      "bun": "1.3.9",
+      "autoIncrement": true,
       "android": {
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_VARIANT": "preview",
-        "ONE_SERVER_URL": "https://preview.carhistory.io",
-        "VITE_ZERO_HOSTNAME": "zero-preview.carhistory.io",
-        "VITE_REVENUECAT_API_PUBLIC": "appl_BrTtKDBvFRvVDoalyblWOYPVEvk"
+        "APP_VARIANT": "preview"
       }
     },
     "production": {
       "extends": "base",
-      "developmentClient": false,
       "distribution": "store",
-      "bun": "1.3.9",
-      "autoIncrement": false,
+      "autoIncrement": true,
       "android": {
         "buildType": "app-bundle"
       },
       "env": {
-        "APP_VARIANT": "production",
-        "ONE_SERVER_URL": "https://carhistory.io",
-        "VITE_ZERO_HOSTNAME": "zero.carhistory.io",
-        "VITE_REVENUECAT_API_PUBLIC": "appl_MFfHjduTDWrIxZhFmhLkBwCVUUc"
+        "APP_VARIANT": "production"
       }
     }
   },

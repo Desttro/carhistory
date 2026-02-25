@@ -5,7 +5,8 @@
       "args": [
         "-y",
         "xcodebuildmcp@1.15.1"
-      ]
+      ],
+      "cwd": "/tmp"
     },
     "chrome-devtools": {
       "type": "stdio",

@@ -253,6 +253,6 @@ export default {
   } satisfies ExpoConfig,
   experiments: {
     typedRoutes: true,
-    // reactCompiler: true,
+    reactCompiler: true,
   },
 }

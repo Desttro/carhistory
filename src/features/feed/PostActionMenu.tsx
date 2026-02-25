@@ -3,7 +3,6 @@ import { Menu } from '@tamagui/menu'
 import { router } from 'one'
 import { useIsTouchDevice } from 'tamagui'
 
-import { analytics } from '~/features/analytics/analytics'
 import { saveRemoteImage } from '~/helpers/media/saveImage'
 import { Button } from '~/interface/buttons/Button'
 import { dialogConfirm, showError } from '~/interface/dialogs/actions'
@@ -42,7 +41,6 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
 
   const handleViewProfile = () => {
     if (!post) return
-    // @ts-expect-error route removed, component only used from deleted feed route
     router.push(`/home/feed/profile/${post.userId}`)
   }
 
@@ -55,7 +53,6 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
         reason,
         details: '',
       })
-      analytics.track('post_reported', { postId: post.id, reason })
       showToast('Thanks for reporting', { type: 'success' })
     } catch (error) {
       showError(error, 'Report Post')
@@ -79,7 +76,6 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
         createdAt: Date.now(),
         blockedId: post.userId,
       })
-      analytics.track('user_blocked', { targetUserId: post.userId })
       showToast('User blocked')
     } catch (error) {
       showError(error, 'Block User')
@@ -136,10 +132,13 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
       <Menu.Portal zIndex={100}>
         <Menu.Content
           transition="quickestLessBouncy"
-          borderRadius="$4"
           enterStyle={{ scale: 0.9, opacity: 0, y: -5 }}
           exitStyle={{ scale: 0.95, opacity: 0, y: -3 }}
-          boxShadow="0 $2 $4 $shadowColor"
+          rounded="$4"
+          p="$2"
+          borderWidth={1}
+          borderColor="$borderColor"
+          boxShadow="0 4px 5px $shadowColor"
         >
           <Menu.Item
             key="save-image"
@@ -149,7 +148,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
           >
             <Menu.ItemTitle>Save Image</Menu.ItemTitle>
             <Menu.ItemIcon
-              ios={{ name: 'arrow.down.circle', pointSize: 18 }}
+              ios={{ name: 'arrow.down.circle' }}
               androidIconName="ic_menu_save"
             >
               <DownloadSimpleIcon size={18} color="$color10" />
@@ -165,7 +164,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
             >
               <Menu.ItemTitle>View Profile</Menu.ItemTitle>
               <Menu.ItemIcon
-                ios={{ name: 'person.circle', pointSize: 18 }}
+                ios={{ name: 'person.circle' }}
                 androidIconName="ic_menu_myplaces"
               >
                 <UserCircleIcon size={18} color="$color10" />
@@ -182,10 +181,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
               textValue="Delete Post"
             >
               <Menu.ItemTitle color="$red10">Delete Post</Menu.ItemTitle>
-              <Menu.ItemIcon
-                ios={{ name: 'trash', pointSize: 18 }}
-                androidIconName="ic_menu_delete"
-              >
+              <Menu.ItemIcon ios={{ name: 'trash' }} androidIconName="ic_menu_delete">
                 <TrashIcon size={18} color="$red10" />
               </Menu.ItemIcon>
             </Menu.Item>
@@ -203,7 +199,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
               >
                 {isNative && (
                   <Menu.ItemIcon
-                    ios={{ name: 'exclamationmark.triangle', pointSize: 18 }}
+                    ios={{ name: 'exclamationmark.triangle' }}
                     androidIconName="ic_menu_report"
                   />
                 )}
@@ -216,12 +212,12 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
                   enterStyle={{ scale: 0.95, opacity: 0 }}
                   exitStyle={{ scale: 0.95, opacity: 0 }}
                   transition="quickestLessBouncy"
-                  elevation="$3"
                   minW={200}
-                  bg="$background"
-                  p="$1.5"
+                  rounded="$4"
+                  p="$2"
                   borderWidth={1}
                   borderColor="$borderColor"
+                  boxShadow="0 4px 5px $shadowColor"
                 >
                   {REPORT_REASONS.map((reason) => (
                     <Menu.Item
@@ -249,13 +245,12 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
               >
                 <Menu.ItemTitle color="$red10">Block User</Menu.ItemTitle>
                 <Menu.ItemIcon
-                  ios={{ name: 'xmark.circle', pointSize: 18 }}
+                  ios={{ name: 'xmark.circle' }}
                   androidIconName="ic_menu_close_clear_cancel"
                 >
                   <XCircleIcon size={18} color="$red10" />
                 </Menu.ItemIcon>
               </Menu.Item>
-              <Menu.Separator />
             </>
           )}
           {isAdmin && (
@@ -267,10 +262,7 @@ export function PostActionMenu({ post, isOwnPost }: PostActionMenuProps) {
               textValue="Hide Post (Admin)"
             >
               <Menu.ItemTitle color="$red10">Hide Post (Admin)</Menu.ItemTitle>
-              <Menu.ItemIcon
-                ios={{ name: 'eye.slash', pointSize: 18 }}
-                androidIconName="ic_menu_view"
-              >
+              <Menu.ItemIcon ios={{ name: 'eye.slash' }} androidIconName="ic_menu_view">
                 <WarningCircleIcon size={18} color="$red10" />
               </Menu.ItemIcon>
             </Menu.Item>

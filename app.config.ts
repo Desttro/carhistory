@@ -30,7 +30,7 @@ const getAppIcon = () => {
 }
 
 const appVersion = '3.0.0'
-const buildVersion = '52'
+const buildVersion = '53'
 
 export default {
   expo: {
@@ -201,6 +201,24 @@ export default {
             'it',
             'ar',
             'es',
+          ],
+        },
+      ],
+      // EAS enables the App Groups capability but does NOT assign the group identifier.
+      // go to apple developer portal → Certificates, Identifiers & Profiles →
+      // edit App ID Configuration for both the main app and Live Activity extension →
+      // App Groups → select group.<bundleId>, then rebuild
+      [
+        'voltra',
+        {
+          groupIdentifier: `group.${getBundleId()}`,
+          widgets: [
+            {
+              id: 'create_report',
+              displayName: 'Create Report',
+              description: 'Quickly create a new report',
+              supportedFamilies: ['systemSmall'],
+            },
           ],
         },
       ],

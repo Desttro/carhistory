@@ -107,8 +107,10 @@ export async function migrate(options: MigrateOptions) {
 
   try {
     await client.query('BEGIN')
-    // use public schema explicitly - pg_dump restores into public, and if a schema
-    // matching the db user exists (e.g. startchat), unqualified names resolve there first
+    // force public schema - if a schema matching the db user exists (e.g. startchat),
+    // postgres resolves unqualified names there first, causing tables to land in the
+    // wrong schema. setting search_path ensures all CREATE TABLE etc go to public.
+    await client.query(`SET search_path = public`)
     await client.query(`
       CREATE TABLE IF NOT EXISTS public.migrations (
         id SERIAL PRIMARY KEY,
@@ -164,12 +166,22 @@ export async function migrate(options: MigrateOptions) {
             await client.query(`RELEASE SAVEPOINT ${sp}`)
           } catch (e: any) {
             await client.query(`ROLLBACK TO SAVEPOINT ${sp}`)
-            // pg "duplicate" class errors: table, column, object, etc
-            if (e?.code?.startsWith('42')) {
+            // only ignore actual "duplicate" errors - NOT all 42xxx errors!
+            // 42xxx is the entire "Syntax Error or Access Rule Violation" class
+            // which includes undefined_table (42P01), syntax_error (42601), etc.
+            // we only want to skip migrations where the object already exists:
+            const duplicateErrorCodes = [
+              '42710', // duplicate_object
+              '42P07', // duplicate_table
+              '42701', // duplicate_column
+              '42P16', // invalid_table_definition (e.g. constraint already exists)
+            ]
+            if (duplicateErrorCodes.includes(e?.code)) {
               console.info(
-                `[migrate] ${migration.name}: ${e.message}, recording as applied`
+                `[migrate] ${migration.name}: ${e.message} (${e.code}), recording as applied`
               )
             } else {
+              // any other error should fail the migration
               throw e
             }
           }
@@ -209,12 +221,19 @@ export async function migrate(options: MigrateOptions) {
     }
   }
 
-  exitProcess()
+  await exitProcess()
 }
 
-function exitProcess() {
+async function exitProcess() {
   if (typeof process === 'undefined') return
   // lambda was complaining about process.exit
   if (isServerless) return
+  // flush stdio before exiting - process.exit() doesn't wait for streams to drain,
+  // which causes silent output loss in docker exec over ssh
+  await new Promise<void>((resolve) => {
+    process.stderr.write('', () => {
+      process.stdout.write('', () => resolve())
+    })
+  })
   process.exit(0)
 }

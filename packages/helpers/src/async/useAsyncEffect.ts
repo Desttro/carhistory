@@ -3,6 +3,7 @@
 import { useEffect, useId, useLayoutEffect } from 'react'
 
 import { EMPTY_OBJECT } from '../constants'
+import { getCurrentComponentStack } from '../react/getCurrentComponentStack'
 import { handleAbortError } from './abortable'
 
 type Cleanup = () => void
@@ -46,7 +47,13 @@ function useAsyncEffectImpl(
 
   effectHook(() => {
     // Generate a unique ID for this effect instance for loop detection
-    checkEffectLoop(effectId, options.circuitBreakAfter, options.circuitBreakPeriod)
+    checkEffectLoop(
+      effectId,
+      cb,
+      deps,
+      options.circuitBreakAfter,
+      options.circuitBreakPeriod
+    )
     const controller = new AbortController()
     const signal = controller.signal
 
@@ -77,15 +84,36 @@ function useAsyncEffectImpl(
 let effectRunCounts: Map<string, number[]>
 let checkEffectLoop: (
   effectId: string,
+  cb: AsyncEffectCallback,
+  deps: any[],
   circuitBreakAfter?: number,
   circuitBreakPeriod?: number
 ) => void
+
+function formatDeps(deps: any[]): string {
+  try {
+    return JSON.stringify(
+      deps,
+      (_, v) => {
+        if (typeof v === 'function') return `[Function: ${v.name || 'anonymous'}]`
+        if (typeof v === 'symbol') return v.toString()
+        if (v instanceof Error) return `[Error: ${v.message}]`
+        return v
+      },
+      2
+    )
+  } catch {
+    return `[${deps.length} deps - not serializable]`
+  }
+}
 
 if (process.env.NODE_ENV === 'development') {
   effectRunCounts = new Map<string, number[]>()
 
   checkEffectLoop = (
     effectId: string,
+    cb: AsyncEffectCallback,
+    deps: any[],
     circuitBreakAfter: number = 20,
     circuitBreakPeriod: number = 1000
   ) => {
@@ -104,6 +132,9 @@ if (process.env.NODE_ENV === 'development') {
       const message = `🚨 useAsyncEffect infinite loop detected! Effect ran ${runCount} times in <${circuitBreakPeriod}ms`
       if (process.env.NODE_ENV === 'development') {
         console.error(message)
+        console.error('Effect function:', cb.toString().slice(0, 500))
+        console.error('Dependencies:', formatDeps(deps))
+        console.error('Stack:', getCurrentComponentStack())
         // eslint-disable-next-line no-debugger
         debugger
       } else {
@@ -114,8 +145,11 @@ if (process.env.NODE_ENV === 'development') {
       console.warn(
         `⚠️ useAsyncEffect potential loop: Effect ran ${runCount} times in <${circuitBreakPeriod}ms`
       )
+      console.warn('Effect function:', cb.toString().slice(0, 500))
+      console.warn('Dependencies:', formatDeps(deps))
+      console.warn('Stack:', getCurrentComponentStack())
     }
   }
 } else {
-  checkEffectLoop = () => {}
+  checkEffectLoop = (_id, _cb, _deps, _after, _period) => {}
 }

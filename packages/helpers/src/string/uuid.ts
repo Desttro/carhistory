@@ -1,29 +1,31 @@
-const hex: string[] = []
-for (let i = 0; i < 256; i++) hex.push((i + 0x100).toString(16).slice(1))
+const hex: string[] = new Array(256)
+for (let i = 0; i < 256; i++) hex[i] = (i + 0x100).toString(16).slice(1)
 
 const h = (n: number) => hex[n & 0xff]!
 
-let _msecs = -Infinity
-let _seq = 0
+let lastMs = -Infinity
+let counter = 0
 
 export const uuid = (): string => {
-  const rnds = crypto.getRandomValues(new Uint8Array(16))
-  const r = (i: number) => rnds[i]!
-
   const now = Date.now()
 
-  if (now > _msecs) {
-    _seq = ((r(6) & 0x7f) << 24) | (r(7) << 16) | (r(8) << 8) | r(9)
-    _msecs = now
+  if (now > lastMs) {
+    const buf = new Uint32Array(1)
+    crypto.getRandomValues(buf)
+    counter = buf[0]! >>> 0
+    lastMs = now
   } else {
-    _seq++
-    if (_seq === 0) {
-      _msecs++
+    counter = (counter + 1) >>> 0
+    if (counter === 0) {
+      lastMs++
     }
   }
 
-  const ms = _msecs
-  const seq = _seq
+  const ms = lastMs
+  const seq = counter
+
+  const rnds = crypto.getRandomValues(new Uint8Array(6))
+  const r = (i: number) => rnds[i]!
 
   return (
     h(ms / 0x10000000000) +
@@ -40,11 +42,11 @@ export const uuid = (): string => {
     h(0x80 | ((seq >>> 14) & 0x3f)) +
     h(seq >>> 6) +
     '-' +
-    h(((seq & 0x3f) << 2) | (r(10) & 0x03)) +
-    h(r(11)) +
-    h(r(12)) +
-    h(r(13)) +
-    h(r(14)) +
-    h(r(15))
+    h(((seq & 0x3f) << 2) | (r(0) & 0x03)) +
+    h(r(1)) +
+    h(r(2)) +
+    h(r(3)) +
+    h(r(4)) +
+    h(r(5))
   )
 }

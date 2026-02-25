@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import {
-  Input as TInput,
   View,
   XStack,
   createStyledContext,
@@ -9,6 +8,8 @@ import {
   useMedia,
   withStaticProperties,
 } from 'tamagui'
+
+import { InputBase } from '~/interface/forms/Input'
 
 const FocusContext = createStyledContext({
   setFocused: (_val: boolean) => {},
@@ -63,7 +64,7 @@ const VinInputBoxImpl = VinInputBoxFrame.styleable((props, ref) => {
   )
 })
 
-const InputFrame = styled(TInput, {
+const InputFrame = styled(InputBase, {
   unstyled: true,
   fontFamily: '$mono',
   letterSpacing: 2,

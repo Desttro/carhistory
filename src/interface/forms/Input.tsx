@@ -1,6 +1,8 @@
 import { memo } from 'react'
 import { isWeb, Input as TamaguiInput } from 'tamagui'
 
+export { Input as InputBase } from 'tamagui'
+
 import { GlassView } from '../effects/GlassView'
 
 import type { RefObject } from 'react'

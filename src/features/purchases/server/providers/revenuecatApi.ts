@@ -18,23 +18,30 @@ const headers = () => ({
   'Content-Type': 'application/json',
 })
 
-// --- v1 endpoints (subscriber attributes — no v2 equivalent) ---
+function v2Url(path: string) {
+  return `https://api.revenuecat.com/v2/projects/${encodeURIComponent(REVENUECAT_PROJECT_ID)}${path}`
+}
+
+// --- v2 customer attributes ---
 
 export async function setAttributes(
   appUserId: string,
   attributes: Record<string, { value: string }>
 ) {
-  if (!REVENUECAT_API_KEY) {
-    console.info('[revenuecat] no API key configured, skipping setAttributes')
+  if (!REVENUECAT_API_KEY || !REVENUECAT_PROJECT_ID) {
+    console.info('[revenuecat] no API key/project configured, skipping setAttributes')
     return
   }
 
+  // convert from v1 format { $email: { value } } to v2 array format [{ name, value }]
+  const items = Object.entries(attributes).map(([name, { value }]) => ({ name, value }))
+
   const res = await fetch(
-    `https://api.revenuecat.com/v1/subscribers/${encodeURIComponent(appUserId)}/attributes`,
+    v2Url(`/customers/${encodeURIComponent(appUserId)}/attributes`),
     {
       method: 'POST',
       headers: headers(),
-      body: JSON.stringify({ attributes }),
+      body: JSON.stringify({ attributes: items }),
     }
   )
 
@@ -47,10 +54,6 @@ export async function setAttributes(
 }
 
 // --- v2 endpoints ---
-
-function v2Url(path: string) {
-  return `https://api.revenuecat.com/v2/projects/${encodeURIComponent(REVENUECAT_PROJECT_ID)}${path}`
-}
 
 export interface RevenueCatCustomer {
   id: string

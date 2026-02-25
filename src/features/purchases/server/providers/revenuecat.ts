@@ -10,6 +10,20 @@ export async function syncRevenueCatSubscriber(user: {
   email: string
   name?: string
 }) {
+  // store mapping first — critical for webhook processing
+  const db = getDb()
+  await db
+    .insert(customerProvider)
+    .values({
+      id: crypto.randomUUID(),
+      userId: user.id,
+      provider: 'revenuecat',
+      externalCustomerId: user.id,
+      createdAt: new Date().toISOString(),
+    })
+    .onConflictDoNothing()
+
+  // set attributes best-effort — subscriber may not exist yet in revenuecat
   try {
     const attributes: Record<string, { value: string }> = {
       $email: { value: user.email },
@@ -20,24 +34,9 @@ export async function syncRevenueCatSubscriber(user: {
     }
 
     await setAttributes(user.id, attributes)
-
-    // store mapping (RC app_user_id is our user.id)
-    const db = getDb()
-    await db
-      .insert(customerProvider)
-      .values({
-        id: crypto.randomUUID(),
-        userId: user.id,
-        provider: 'revenuecat',
-        externalCustomerId: user.id,
-        createdAt: new Date().toISOString(),
-      })
-      .onConflictDoNothing()
-
     console.info(`[revenuecat-sync] set attributes for ${user.email}`)
   } catch (error) {
-    // best-effort — subscriber may not exist yet in revenuecat
-    console.info(`[revenuecat-sync] failed for ${user.email}:`, error)
+    console.info(`[revenuecat-sync] setAttributes failed for ${user.email}:`, error)
   }
 }
 
@@ -48,16 +47,20 @@ export const revenuecatAdapter: ProviderAdapter = {
     const response = await listProducts()
     if (!response) return []
 
-    const products: ProviderProduct[] = []
+    // rc returns one entry per store (app_store + play_store) for each product,
+    // deduplicate by store_identifier since credits are the same across stores
+    const seen = new Map<string, ProviderProduct>()
 
     for (const p of response.items) {
+      if (seen.has(p.store_identifier)) continue
+
       // extract credits from store_identifier naming convention
       // e.g., cat_history_3_credits -> 3, cat_history_1_credit -> 1
       const match = p.store_identifier.match(/(\d+)_credits?/)
       const credits = match ? parseInt(match[1]) : 0
       if (credits <= 0) continue
 
-      products.push({
+      seen.set(p.store_identifier, {
         externalProductId: p.store_identifier,
         name: `${credits} Credit${credits > 1 ? 's' : ''}`,
         credits,
@@ -69,7 +72,7 @@ export const revenuecatAdapter: ProviderAdapter = {
       })
     }
 
-    return products
+    return [...seen.values()]
   },
 
   syncCustomer: syncRevenueCatSubscriber,
